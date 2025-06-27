@@ -1,0 +1,6 @@
+@Lab03_IdentityAjaxASP.NETCoreWebAPI_HostAddress = http://localhost:5003
+
+GET {{Lab03_IdentityAjaxASP.NETCoreWebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
