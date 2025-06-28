@@ -1,6 +1,9 @@
-
 using DataAccess;
+using DataAccess.DAO;
+using DataAccess.Interface;
 using Microsoft.EntityFrameworkCore;
+using Repositories.Interface;
+using Repositories.Repository;
 
 namespace Lab03_IdentityAjaxASP.NETCoreWebAPI
 {
@@ -12,8 +15,11 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI
 
             // Add services to the container.
 
-            //builder.Services.AddScoped<IUOW, UOW>();
-            //builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            // Register DI services
+            builder.Services.AddScoped<IUOW, UOW>();
+            builder.Services.AddScoped(typeof(IGenericDAO<>), typeof(GenericDAO<>));
+            builder.Services.AddScoped<IOrchidRepository, OrchidRepository>();
+
             // Get connection string from appsettings.json
             var connectionString = builder.Configuration.GetConnectionString("MyCnn");
 
