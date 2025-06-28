@@ -1,6 +1,8 @@
 ﻿using BusinessObjects;
+using DataAccess.DTO.Orchid;
 using DataAccess.Interface;
 using DataAccess.Paginated;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Interface;
 
 namespace Repositories.Repository
@@ -14,9 +16,19 @@ namespace Repositories.Repository
             _unitOfWork = unitOfWork;
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            // Get the existing orchid by ID
+            Orchid? existingOrchid = _unitOfWork.GetDAO<Orchid>()
+                .Entities
+                .FirstOrDefault(o => o.OrchidId == id);
+
+            // Validate if the orchid exists
+            if (existingOrchid == null) throw new KeyNotFoundException($"Orchid with ID {id} not found.");
+
+            // Remove the existing orchid from the database
+            await _unitOfWork.GetDAO<Orchid>().DeleteAsync(existingOrchid);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<PaginatedList<Orchid>> GetAllAsync(int pageIndex, int pageNumber, string? idSearch, string? nameSearch, string? categorySearch, bool? isNatural)
@@ -57,14 +69,51 @@ namespace Repositories.Repository
             return result;
         }
 
-        public Task InsertAsync(Orchid orchid)
+        public async Task InsertAsync(CreateOrchidDTO orchid)
         {
-            throw new NotImplementedException();
+            Orchid newOrchid = new Orchid
+            {
+                OrchidName = orchid.OrchidName,
+                CategoryId = orchid.CategoryId,
+                IsNatural = orchid.IsNatural,
+                OrchidDescription = orchid.OrchidDescription,
+                OrchidUrl = orchid.OrchidUrl,
+                Price = orchid.Price
+            };
+
+            // Get last OrchidId from the database to assign a new ID
+            int lastIdOrchid = _unitOfWork.GetDAO<Orchid>()
+                .Entities
+                .Max(o => o.OrchidId);
+
+            newOrchid.OrchidId = lastIdOrchid + 1;
+
+            // Insert the new orchid into the database
+            await _unitOfWork.GetDAO<Orchid>().InsertAsync(newOrchid);
+            await _unitOfWork.SaveAsync();
         }
 
-        public Task UpdateAsync(Orchid orchid)
+        public async Task UpdateAsync(int id, UpdateOrchidDTO orchid)
         {
-            throw new NotImplementedException();
+            // Get the existing orchid by ID
+            Orchid? existingOrchid = _unitOfWork.GetDAO<Orchid>()
+                .Entities
+                .FirstOrDefault(o => o.OrchidId == id);
+
+            // Validate if the orchid exists
+            if (existingOrchid == null) throw new KeyNotFoundException($"Orchid with ID {id} not found.");
+
+            // Update the properties of the existing orchid
+            existingOrchid.OrchidDescription = orchid.OrchidDescription;
+            existingOrchid.OrchidName = orchid.OrchidName;
+            existingOrchid.OrchidUrl = orchid.OrchidUrl;
+            existingOrchid.Price = orchid.Price;
+            existingOrchid.IsNatural = orchid.IsNatural;
+            existingOrchid.CategoryId = orchid.CategoryId;
+
+            // Update the existing orchid to the database
+            await _unitOfWork.GetDAO<Orchid>().UpdateAsync(existingOrchid);
+            await _unitOfWork.SaveAsync();
         }
     }
 }

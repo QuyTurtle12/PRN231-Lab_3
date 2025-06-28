@@ -1,7 +1,12 @@
+using System.Text;
+using BusinessObjects;
 using DataAccess;
 using DataAccess.DAO;
 using DataAccess.Interface;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Repositories.Auth;
 using Repositories.Interface;
 using Repositories.Repository;
 
@@ -15,10 +20,48 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI
 
             // Add services to the container.
 
+
+            // Register Cors
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllOrigins",
+                    builder => builder.AllowAnyOrigin()
+                                      .AllowAnyMethod()
+                                      .AllowAnyHeader());
+            });
+
+            builder.Services.AddHttpContextAccessor();
+            // Add JWT Settings
+            var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+            builder.Services.AddSingleton(jwtSettings);
+            builder.Services.AddScoped<JwtService>();
+
+            // Configure JWT Authentication
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidAudience = jwtSettings.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
+                };
+            });
+
             // Register DI services
             builder.Services.AddScoped<IUOW, UOW>();
             builder.Services.AddScoped(typeof(IGenericDAO<>), typeof(GenericDAO<>));
             builder.Services.AddScoped<IOrchidRepository, OrchidRepository>();
+            builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+            builder.Services.AddScoped<JwtService>();
 
             // Get connection string from appsettings.json
             var connectionString = builder.Configuration.GetConnectionString("MyCnn");
@@ -43,8 +86,10 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseCors("AllowAllOrigins");
 
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllers();
 
