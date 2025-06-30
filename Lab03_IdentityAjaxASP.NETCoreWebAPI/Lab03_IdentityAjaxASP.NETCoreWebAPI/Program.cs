@@ -61,6 +61,8 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI
             builder.Services.AddScoped(typeof(IGenericDAO<>), typeof(GenericDAO<>));
             builder.Services.AddScoped<IOrchidRepository, OrchidRepository>();
             builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<JwtService>();
 
             // Get connection string from appsettings.json
