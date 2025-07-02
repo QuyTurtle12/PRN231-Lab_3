@@ -1,0 +1,41 @@
+﻿@page
+@model IdentityAjaxClient.Pages.AuthPage.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-center">Login</h2>
+            </div>
+            <div class="card-body">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <form method="post">
+                    <div class="mb-3">
+                        <label asp-for="LoginDTO.Email" class="form-label"></label>
+                        <input asp-for="LoginDTO.Email" class="form-control" />
+                        <span asp-validation-for="LoginDTO.Email" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="LoginDTO.Password" class="form-label"></label>
+                        <input asp-for="LoginDTO.Password" class="form-control" type="password" />
+                        <span asp-validation-for="LoginDTO.Password" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input asp-for="LoginDTO.RememberMe" class="form-check-input" type="checkbox" />
+                        <label asp-for="LoginDTO.RememberMe" class="form-check-label">Remember Me</label>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

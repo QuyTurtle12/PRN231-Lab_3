@@ -16,6 +16,7 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI.Controllers
         {
             _orderRepository = orderRepository;
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAllOrders(int pageIndex = 1, int pageNumber = 10, string? idSearch = null, DateOnly? fromDate = null, DateOnly? toDate = null, OrderStatusEnum? status = null)
         {
@@ -30,6 +31,7 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpPost]
         public async Task<IActionResult> CreateOrder(CreateOrderDTO orderDto)
         {

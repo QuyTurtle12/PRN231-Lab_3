@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Lab03_IdetityAjax_RazorPage.Pages
+namespace IdentityAjaxClient.Pages
 {
     public class IndexModel : PageModel
     {

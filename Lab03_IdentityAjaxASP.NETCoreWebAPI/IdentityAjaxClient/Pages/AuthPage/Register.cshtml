@@ -1,0 +1,47 @@
+﻿@page
+@model IdentityAjaxClient.Pages.AuthPage.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-center">Register</h2>
+            </div>
+            <div class="card-body">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <form method="post">
+                    <div class="mb-3">
+                        <label asp-for="RegisterDTO.AccountName" class="form-label">Account Name</label>
+                        <input asp-for="RegisterDTO.AccountName" class="form-control" />
+                        <span asp-validation-for="RegisterDTO.AccountName" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="RegisterDTO.Email" class="form-label"></label>
+                        <input asp-for="RegisterDTO.Email" class="form-control" />
+                        <span asp-validation-for="RegisterDTO.Email" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="RegisterDTO.Password" class="form-label"></label>
+                        <input asp-for="RegisterDTO.Password" class="form-control" type="password" />
+                        <span asp-validation-for="RegisterDTO.Password" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="RegisterDTO.ConfirmPassword" class="form-label"></label>
+                        <input asp-for="RegisterDTO.ConfirmPassword" class="form-control" type="password" />
+                        <span asp-validation-for="RegisterDTO.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

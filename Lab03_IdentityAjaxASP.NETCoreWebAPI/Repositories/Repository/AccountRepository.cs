@@ -11,18 +11,26 @@ namespace Repositories.Repository
     public class AccountRepository : IAccountRepository
     {
         private readonly IUOW _uow;
+
         public AccountRepository(IUOW uow)
         {
             _uow = uow;
         }
+
         public async Task<Account?> Login(string email, string password)
         {
             Account? user = await _uow.GetDAO<Account>()
                 .Entities
-                .FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+                .FirstOrDefaultAsync(u => u.Email == email);
 
-            return user;
+            if (user == null) return null;
+
+            // Verify password using BCrypt
+            bool isValid = BCrypt.Net.BCrypt.Verify(password, user.Password);
+
+            return isValid ? user : null;
         }
+
         public async Task<PaginatedList<Account>> GetAllAccounts(
             int pageIndex,
             int pageSize,

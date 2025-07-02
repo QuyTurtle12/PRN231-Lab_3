@@ -1,0 +1,55 @@
+﻿@page
+@model IdentityAjaxClient.Pages.OrchidPage.Management.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Orchid</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Orchid.IsNatural)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Orchid.IsNatural)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Orchid.OrchidDescription)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Orchid.OrchidDescription)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Orchid.OrchidName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Orchid.OrchidName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Orchid.OrchidUrl)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Orchid.OrchidUrl)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Orchid.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Orchid.Price)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Orchid.Category)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Orchid.Category.CategoryId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Orchid.OrchidId">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

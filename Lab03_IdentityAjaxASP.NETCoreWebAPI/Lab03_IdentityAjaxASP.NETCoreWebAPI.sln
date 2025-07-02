@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories", "Repositories\Repositories.csproj", "{BD5A9AF8-178F-4E23-AA94-948E2D8579BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab03_IdetityAjax_RazorPage", "Lab03_IdetityAjax_RazorPage\Lab03_IdetityAjax_RazorPage.csproj", "{94A2CE42-0867-4F4D-82A8-06F166C77945}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityAjaxClient", "IdentityAjaxClient\IdentityAjaxClient.csproj", "{8284BB80-8994-47E3-AA84-5022C205E08D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{BD5A9AF8-178F-4E23-AA94-948E2D8579BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD5A9AF8-178F-4E23-AA94-948E2D8579BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD5A9AF8-178F-4E23-AA94-948E2D8579BC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{94A2CE42-0867-4F4D-82A8-06F166C77945}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{94A2CE42-0867-4F4D-82A8-06F166C77945}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{94A2CE42-0867-4F4D-82A8-06F166C77945}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{94A2CE42-0867-4F4D-82A8-06F166C77945}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8284BB80-8994-47E3-AA84-5022C205E08D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8284BB80-8994-47E3-AA84-5022C205E08D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8284BB80-8994-47E3-AA84-5022C205E08D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8284BB80-8994-47E3-AA84-5022C205E08D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

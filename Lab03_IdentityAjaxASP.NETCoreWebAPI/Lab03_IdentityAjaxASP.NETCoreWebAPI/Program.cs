@@ -20,6 +20,12 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI
 
             // Add services to the container.
 
+            // Configure lowercase URLs
+            builder.Services.AddRouting(options =>
+            {
+                options.LowercaseUrls = true;
+                options.LowercaseQueryStrings = true;
+            });
 
             // Register Cors
             builder.Services.AddCors(options =>

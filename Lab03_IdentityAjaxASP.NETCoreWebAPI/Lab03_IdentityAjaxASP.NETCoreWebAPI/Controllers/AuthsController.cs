@@ -1,4 +1,6 @@
-﻿using DataAccess.DTO.Auth;
+﻿using BusinessObjects;
+using DataAccess.DTO.Account;
+using DataAccess.DTO.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Auth;
@@ -30,6 +32,35 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI.Controllers
             var token = _jwtService.GenerateToken(user);
 
             return Ok(new { token });
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterDTO model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                // Hash the password
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
+
+                CreateAccountDTO account = new CreateAccountDTO
+                {
+                    Email = model.Email,
+                    Password = hashedPassword, // Store hashed password
+                    AccountName = model.AccountName ?? model.Email,
+                    RoleId = model.RoleId
+                };
+
+                await _accountRepository.CreateAccount(account);
+
+                return Ok(new { message = "Registration successful" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred during registration" });
+            }
         }
     }
 }
