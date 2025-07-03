@@ -1,0 +1,173 @@
+﻿@page "{id:int}"
+@model IdentityAjaxClient.Pages.UserPage.Management.DetailsModel
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<div class="container-fluid px-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="display-6 mb-0">User Details</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a asp-page="/Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-page="./Index">User Management</a></li>
+                    <li class="breadcrumb-item active">User Details</li>
+                </ol>
+            </nav>
+        </div>
+        <div>
+            <a asp-page="./Edit" asp-route-id="@Model.Account.AccountId" class="btn btn-outline-primary me-2">
+                <i class="bi bi-pencil"></i> Edit
+            </a>
+            <a asp-page="./Index" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- User Profile Card -->
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-person-badge me-2"></i> User Profile
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="avatar-circle bg-primary bg-opacity-10 text-primary mx-auto mb-3"
+                             style="width: 80px; height: 80px; font-size: 2.5rem;">
+                            <i class="bi bi-person"></i>
+                        </div>
+                        <h4 class="mb-0">@Model.Account.AccountName</h4>
+
+                        @{
+                            var (badgeClass, roleIcon) = Model.Account.Role?.RoleName?.ToLower() switch
+                            {
+                                "admin" => ("bg-danger", "bi-shield-fill"),
+                                "staff" => ("bg-info", "bi-person-badge"),
+                                "customer" => ("bg-success", "bi-person"),
+                                _ => ("bg-secondary", "bi-person")
+                            };
+                        }
+                        <span class="badge @badgeClass mt-2">
+                            <i class="bi @roleIcon me-1"></i>
+                            @Model.Account.Role?.RoleName
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Role Information Card -->
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-shield me-2"></i> Role Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @switch (Model.Account.Role?.RoleName?.ToLower())
+                    {
+                        case "admin":
+                            <p>Administrators have full access to all system features including:</p>
+                            <ul>
+                                <li>User management</li>
+                                <li>System configuration</li>
+                                <li>Product management</li>
+                                <li>Access to all reports</li>
+                            </ul>
+                            break;
+                        case "staff":
+                            <p>Staff members can perform day-to-day operations:</p>
+                            <ul>
+                                <li>Manage products and inventory</li>
+                                <li>Process orders</li>
+                                <li>Handle customer inquiries</li>
+                                <li>Access operational reports</li>
+                            </ul>
+                            break;
+                        case "customer":
+                            <p>Customers can use the online shopping features:</p>
+                            <ul>
+                                <li>Browse and purchase products</li>
+                                <li>Track order history</li>
+                                <li>Manage personal information</li>
+                                <li>Submit reviews and feedback</li>
+                            </ul>
+                            break;
+                        default:
+                            <p>No specific role information available.</p>
+                            break;
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- User Activity Card -->
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-activity me-2"></i> User Account Details
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr>
+                                    <th style="width: 200px;">Account Name</th>
+                                    <td>@Html.DisplayFor(model => model.Account.AccountName)</td>
+                                </tr>
+                                <tr>
+                                    <th>Email Address</th>
+                                    <td>@Html.DisplayFor(model => model.Account.Email)</td>
+                                </tr>
+                                <tr>
+                                    <th>Role</th>
+                                    <td>
+                                        <span class="badge @badgeClass">
+                                            <i class="bi @roleIcon me-1"></i>
+                                            @Model.Account.Role?.RoleName
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .badge {
+            font-weight: 500;
+            padding: 0.5em 0.75em;
+        }
+
+        .card {
+            border: none;
+            border-radius: 0.5rem;
+        }
+
+        .card-header {
+            border-bottom: 1px solid rgba(0,0,0,.05);
+        }
+    </style>
+}

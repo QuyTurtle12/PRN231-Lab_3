@@ -49,6 +49,28 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();
 
+app.Use(async (context, next) =>
+{
+    // Check if session is empty but cookies exist
+    if (context.Session.GetString("JWTToken") == null &&
+        context.Request.Cookies.ContainsKey("JWTToken"))
+    {
+        // Restore session from cookies
+        context.Session.SetString("JWTToken", context.Request.Cookies["JWTToken"]);
+
+        if (context.Request.Cookies.ContainsKey("UserId"))
+            context.Session.SetString("UserId", context.Request.Cookies["UserId"]);
+
+        if (context.Request.Cookies.ContainsKey("UserRole"))
+            context.Session.SetString("UserRole", context.Request.Cookies["UserRole"]);
+
+        if (context.Request.Cookies.ContainsKey("UserName"))
+            context.Session.SetString("UserName", context.Request.Cookies["UserName"]);
+    }
+
+    await next();
+});
+
 app.UseRouting();
 
 app.UseAuthorization();

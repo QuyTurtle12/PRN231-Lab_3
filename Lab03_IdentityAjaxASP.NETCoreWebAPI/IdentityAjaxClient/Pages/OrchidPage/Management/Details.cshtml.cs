@@ -2,21 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessObjects;
+using DataAccess;
+using IdentityAjaxClient.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using BusinessObjects;
-using DataAccess;
 
 namespace IdentityAjaxClient.Pages.OrchidPage.Management
 {
     public class DetailsModel : PageModel
     {
-        private readonly DataAccess.ProductManagementDbContext _context;
+        private readonly HttpClient _httpClient;
 
-        public DetailsModel(DataAccess.ProductManagementDbContext context)
+        public DetailsModel(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClient = httpClientFactory.CreateClient("API");
         }
 
         public Orchid Orchid { get; set; } = default!;
@@ -28,16 +29,33 @@ namespace IdentityAjaxClient.Pages.OrchidPage.Management
                 return NotFound();
             }
 
-            var orchid = await _context.Orchids.FirstOrDefaultAsync(m => m.OrchidId == id);
-            if (orchid == null)
+            try
             {
-                return NotFound();
-            }
-            else
-            {
+                // Fetch orchid details
+                var orchidResponse = await _httpClient.GetAsync($"orchids?idSearch={id}");
+                if (!orchidResponse.IsSuccessStatusCode)
+                {
+                    return NotFound();
+                }
+
+                var orchidPaginatedList = await orchidResponse.Content.ReadFromJsonAsync<PaginationDTO<Orchid>>();
+
+                Orchid? orchid = orchidPaginatedList?.Items.FirstOrDefault();
+
+                if (orchid == null)
+                {
+                    return NotFound();
+                }
+
                 Orchid = orchid;
+
+                return Page();
             }
-            return Page();
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Error loading orchid: " + ex.Message);
+                return Page();
+            }
         }
     }
 }

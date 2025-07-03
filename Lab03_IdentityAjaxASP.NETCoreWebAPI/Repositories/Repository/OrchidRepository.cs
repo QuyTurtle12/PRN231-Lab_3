@@ -31,14 +31,26 @@ namespace Repositories.Repository
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<PaginatedList<Orchid>> GetAllAsync(int pageIndex, int pageNumber, string? idSearch, string? nameSearch, string? categorySearch, bool? isNatural)
+        public async Task<PaginatedList<Orchid>> GetAllAsync(int pageIndex, int pageNumber, string? idSearch, string? nameSearch, string? categoryIdSearch, bool? isNatural)
         {
             // Validate inputs
             if (pageIndex < 1) pageIndex = 1;
             if (pageNumber < 1) pageNumber = 10;
 
             // Initialize the queryable collection from the DAO
-            IQueryable<Orchid> query = _unitOfWork.GetDAO<Orchid>().Entities;
+            IQueryable<Orchid> query = _unitOfWork.GetDAO<Orchid>()
+                .Entities
+                .Include(o => o.Category)
+                .Select(o => new Orchid{
+                    OrchidId = o.OrchidId,
+                    OrchidName = o.OrchidName,
+                    Category = o.Category,
+                    Price = o.Price,
+                    OrchidDescription = o.OrchidDescription,
+                    IsNatural = o.IsNatural,
+                    CategoryId = o.CategoryId,
+                    OrchidUrl = o.OrchidUrl
+                });
 
             // Apply Filters
             if (!string.IsNullOrWhiteSpace(idSearch))
@@ -51,9 +63,9 @@ namespace Repositories.Repository
                 query = query.Where(o => o.OrchidName.Contains(nameSearch));
             }
 
-            if (!string.IsNullOrEmpty(categorySearch))
+            if (!string.IsNullOrEmpty(categoryIdSearch))
             {
-                query = query.Where(o => o.Category != null && o.Category.CategoryName.Contains(categorySearch));
+                query = query.Where(o => o.Category != null && o.CategoryId.ToString() == categoryIdSearch);
             }
 
             if (isNatural.HasValue)

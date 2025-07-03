@@ -31,7 +31,12 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI.Controllers
 
             var token = _jwtService.GenerateToken(user);
 
-            return Ok(new { token });
+            return Ok(new
+            {
+                token,
+                accountId = user.AccountId,
+                roleName = user.Role?.RoleName ?? "Unknown"
+            });
         }
 
         [HttpPost("register")]

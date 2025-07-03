@@ -38,7 +38,14 @@ namespace Repositories.Repository
             if (pageNumber < 1) pageNumber = 10;
 
             // Initialize the queryable collection from the DAO
-            IQueryable<Category> query = _unitOfWork.GetDAO<Category>().Entities;
+            IQueryable<Category> query = _unitOfWork.GetDAO<Category>()
+                .Entities
+                .Select(c => new Category
+                {
+                    CategoryId = c.CategoryId,
+                    CategoryName = c.CategoryName,
+                    Orchids = c.Orchids
+                });
 
             // Apply Filters
             if (!string.IsNullOrWhiteSpace(idSearch))

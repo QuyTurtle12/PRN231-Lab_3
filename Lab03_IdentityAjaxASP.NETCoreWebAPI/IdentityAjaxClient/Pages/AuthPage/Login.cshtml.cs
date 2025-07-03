@@ -46,10 +46,18 @@ namespace IdentityAjaxClient.Pages.AuthPage
                                 Secure = true,
                                 SameSite = SameSiteMode.Strict
                             };
+                            // Store JWT, UserId and UserRole in cookies
                             Response.Cookies.Append("JWTToken", result.Token, cookieOptions);
+                            Response.Cookies.Append("UserId", result.AccountId.ToString(), cookieOptions);
+                            Response.Cookies.Append("UserRole", result.RoleName, cookieOptions);
+                            Response.Cookies.Append("UserName", result.RoleName, cookieOptions);
                         }
 
+                        // Store token and user info in session (for current session)
                         HttpContext.Session.SetString("JWTToken", result.Token);
+                        HttpContext.Session.SetString("UserId", result.AccountId.ToString());
+                        HttpContext.Session.SetString("UserRole", result.RoleName);
+                        HttpContext.Session.SetString("UserName", result.AccountName);
                         return RedirectToPage("/Index");
                     }
                 }
@@ -63,10 +71,5 @@ namespace IdentityAjaxClient.Pages.AuthPage
                 return Page();
             }
         }
-    }
-
-    public class TokenResponse
-    {
-        public string Token { get; set; } = string.Empty;
     }
 }

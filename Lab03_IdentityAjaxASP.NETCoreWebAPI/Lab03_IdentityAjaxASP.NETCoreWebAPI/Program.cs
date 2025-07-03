@@ -96,6 +96,8 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI
 
             app.UseCors("AllowAllOrigins");
 
+            app.UseStaticFiles();
+
             app.UseAuthentication();
             app.UseAuthorization();
 

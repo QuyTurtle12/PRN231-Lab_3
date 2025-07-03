@@ -21,13 +21,13 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(int pageIndex = 1, int pageSize = 10, string? idSearch = null, string? nameSearch = null, string? categorySearch = null, bool? isNatural = null)
+        public async Task<IActionResult> GetAll(int pageIndex = 1, int pageSize = 10, string? idSearch = null, string? nameSearch = null, string? categoryIdSearch = null, bool? isNatural = null)
         {
-            var orchids = await _orchidRepository.GetAllAsync(pageIndex, pageSize, idSearch, nameSearch, categorySearch, isNatural);
+            var orchids = await _orchidRepository.GetAllAsync(pageIndex, pageSize, idSearch, nameSearch, categoryIdSearch, isNatural);
             return Ok(orchids);
         }
 
-        [Authorize(Roles = "3")]
+        [Authorize(Roles = STAFF_ROLE)]
         [HttpPost]
         public async Task<IActionResult> Create(CreateOrchidDTO orchidDto)
         {
@@ -39,7 +39,7 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI.Controllers
             return CreatedAtAction(nameof(GetAll), new { id = 0 }, orchidDto);
         }
 
-        [Authorize(Roles = "3")]
+        [Authorize(Roles = STAFF_ROLE)]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateOrchidDTO orchidDto)
         {
@@ -51,7 +51,7 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI.Controllers
             return Ok();
         }
 
-        [Authorize(Roles = "3")]
+        [Authorize(Roles = STAFF_ROLE)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

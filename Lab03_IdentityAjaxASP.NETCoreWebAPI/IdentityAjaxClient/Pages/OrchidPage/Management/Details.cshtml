@@ -1,55 +1,91 @@
-﻿@page
+﻿@page "{id:int}"
 @model IdentityAjaxClient.Pages.OrchidPage.Management.DetailsModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Orchid Details";
 }
 
-<h1>Details</h1>
+<h1>Orchid Details</h1>
 
-<div>
-    <h4>Orchid</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Orchid.IsNatural)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Orchid.IsNatural)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Orchid.OrchidDescription)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Orchid.OrchidDescription)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Orchid.OrchidName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Orchid.OrchidName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Orchid.OrchidUrl)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Orchid.OrchidUrl)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Orchid.Price)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Orchid.Price)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Orchid.Category)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Orchid.Category.CategoryId)
-        </dd>
-    </dl>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            @if (!string.IsNullOrEmpty(Model.Orchid.OrchidUrl))
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img src="@Model.Orchid.OrchidUrl"
+                             alt="@Model.Orchid.OrchidName"
+                             class="card-img-top img-fluid rounded"
+                             style="object-fit: cover; height: 300px;" />
+                    </div>
+                </div>
+            }
+            <div class="col-md-8">
+                <dl class="row">
+                    <dt class="col-sm-3">
+                        Name
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Orchid.OrchidName)
+                    </dd>
+
+                    <dt class="col-sm-3">
+                        Category
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Orchid.Category.CategoryName)
+                    </dd>
+
+                    <dt class="col-sm-3">
+                        Price
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Model.Orchid.Price?.ToString("C", new System.Globalization.CultureInfo("en-US"))
+                    </dd>
+
+                    <dt class="col-sm-3">
+                        Natural Type
+                    </dt>
+                    <dd class="col-sm-9">
+                        <span class="badge @(Model.Orchid.IsNatural.GetValueOrDefault() ? "bg-success" : "bg-info")">
+                            @(Model.Orchid.IsNatural.GetValueOrDefault() ? "Natural" : "Hybrid")
+                        </span>
+                    </dd>
+
+                    <dt class="col-sm-3">
+                        Description
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Orchid.OrchidDescription)
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="btn-group">
+            <a asp-page="./Edit"
+               asp-route-id="@Model.Orchid.OrchidId"
+               class="btn btn-primary">
+                <i class="bi bi-pencil"></i> Edit
+            </a>
+            <a asp-page="./Index"
+               class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.Orchid.OrchidId">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
-</div>
+
+@section Styles {
+    <style>
+        .card img {
+            transition: transform 0.3s ease;
+        }
+
+            .card img:hover {
+                transform: scale(1.05);
+            }
+    </style>
+}

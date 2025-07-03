@@ -1,10 +1,238 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container-fluid px-4">
+    <!-- Intro Section -->
+    <section class="py-5 text-center rounded bg-light mb-5">
+        <div class="row py-lg-5">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <h1 class="fw-light">Welcome to Orchid Heaven</h1>
+                <p class="lead text-muted">Discover our beautiful collection of rare and exotic orchids. Browse through natural and hybrid varieties from around the world.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search and Filter Form -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white py-3">
+            <h5 class="card-title mb-0">
+                <i class="bi bi-search me-2"></i> Find Your Perfect Orchid
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="nameSearch" name="nameSearch" value="@Model.NameSearch" placeholder="Search by name">
+                        <label for="nameSearch">Orchid Name</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-floating">
+                        <select class="form-select" id="categoryIdSearch" name="categoryIdSearch" asp-for="CategoryIdSearch" asp-items="Model.CategoryList">
+                            <option value="">All Categories</option>
+                        </select>
+                        <label for="categoryIdSearch">Category</label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-floating">
+                        <select class="form-select" id="isNatural" name="isNatural" asp-for="IsNatural">
+                            <option value="">All Types</option>
+                            <option value="true">Natural</option>
+                            <option value="false">Hybrid</option>
+                        </select>
+                        <label for="isNatural">Type</label>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <div class="d-flex gap-2 w-100">
+                        <button type="submit" class="btn btn-primary flex-grow-1">
+                            <i class="bi bi-search me-1"></i> Search
+                        </button>
+                        <a asp-page="./Index" class="btn btn-outline-secondary flex-grow-1">
+                            <i class="bi bi-x-circle me-1"></i> Clear
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="mb-4">
+        @if (!Model.Orchids?.Items.Any() ?? true)
+        {
+            <div class="alert alert-info text-center p-5">
+                <i class="bi bi-search display-1 d-block mb-3 text-muted"></i>
+                <h3>No orchids found</h3>
+                <p class="mb-0">Try adjusting your search criteria or browse our collection without filters.</p>
+            </div>
+        }
+        else
+        {
+            <!-- Counter info -->
+            <p class="text-muted mb-4">
+                Found @Model.Orchids.TotalCount orchid@(Model.Orchids.TotalCount != 1 ? "s" : "") matching your criteria
+            </p>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                @foreach (var item in Model.Orchids.Items)
+                {
+                    <div class="col">
+                        <div class="card h-100 shadow-sm">
+                            <div class="position-relative">
+                                @if (!string.IsNullOrEmpty(item.OrchidUrl))
+                                {
+                                    <img src="@item.OrchidUrl" 
+                                         class="card-img-top" 
+                                         alt="@item.OrchidName"
+                                         style="height: 220px; object-fit: cover;" />
+                                }
+                                else
+                                {
+                                    <div class="bg-light d-flex align-items-center justify-content-center" 
+                                         style="height: 220px;">
+                                        <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                                    </div>
+                                }
+                                <div class="position-absolute top-0 end-0 m-2">
+                                    <span class="badge @(item.IsNatural.GetValueOrDefault() ? "bg-success" : "bg-info")">
+                                        @(item.IsNatural.GetValueOrDefault() ? "Natural" : "Hybrid")
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title mb-2">@item.OrchidName</h5>
+                                <p class="card-text text-muted small mb-2">
+                                    <i class="bi bi-tag me-1"></i> @(item.Category?.CategoryName ?? "No Category")
+                                </p>
+                                <p class="card-text flex-grow-1" style="max-height: 4.5em; overflow: hidden;">
+                                    <small>
+                                        @(item.OrchidDescription?.Length > 100 
+                                            ? item.OrchidDescription[..100] + "..." 
+                                            : item.OrchidDescription)
+                                    </small>
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <span class="fs-5 fw-bold text-primary">
+                                        @item.Price?.ToString("C", new System.Globalization.CultureInfo("en-US"))
+                                    </span>
+                                    <a href="#" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye me-1"></i> View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Pagination -->
+            @if (Model.Orchids.TotalPages > 1)
+            {
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item @(Model.Orchids.PageNumber == 1 ? "disabled" : "")">
+                            <a class="page-link" asp-page="./Index"
+                               asp-route-pageIndex="1"
+                               asp-route-nameSearch="@Model.NameSearch"
+                               asp-route-categoryIdSearch="@Model.CategoryIdSearch"
+                               asp-route-isNatural="@Model.IsNatural">
+                                <i class="bi bi-chevron-double-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item @(Model.Orchids.PageNumber == 1 ? "disabled" : "")">
+                            <a class="page-link" asp-page="./Index"
+                               asp-route-pageIndex="@(Model.Orchids.PageNumber - 1)"
+                               asp-route-nameSearch="@Model.NameSearch"
+                               asp-route-categoryIdSearch="@Model.CategoryIdSearch"
+                               asp-route-isNatural="@Model.IsNatural">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+                        
+                        @{
+                            int startPage = Math.Max(1, Model.Orchids.PageNumber - 2);
+                            int endPage = Math.Min(Model.Orchids.TotalPages, startPage + 4);
+                            startPage = Math.Max(1, endPage - 4);
+                        }
+                        
+                        @for (var i = startPage; i <= endPage; i++)
+                        {
+                            <li class="page-item @(i == Model.Orchids.PageNumber ? "active" : "")">
+                                <a class="page-link" asp-page="./Index"
+                                   asp-route-pageIndex="@i"
+                                   asp-route-nameSearch="@Model.NameSearch"
+                                   asp-route-categoryIdSearch="@Model.CategoryIdSearch"
+                                   asp-route-isNatural="@Model.IsNatural">@i</a>
+                            </li>
+                        }
+                        
+                        <li class="page-item @(Model.Orchids.PageNumber == Model.Orchids.TotalPages ? "disabled" : "")">
+                            <a class="page-link" asp-page="./Index"
+                               asp-route-pageIndex="@(Model.Orchids.PageNumber + 1)"
+                               asp-route-nameSearch="@Model.NameSearch"
+                               asp-route-categoryIdSearch="@Model.CategoryIdSearch"
+                               asp-route-isNatural="@Model.IsNatural">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                        <li class="page-item @(Model.Orchids.PageNumber == Model.Orchids.TotalPages ? "disabled" : "")">
+                            <a class="page-link" asp-page="./Index"
+                               asp-route-pageIndex="@Model.Orchids.TotalPages"
+                               asp-route-nameSearch="@Model.NameSearch"
+                               asp-route-categoryIdSearch="@Model.CategoryIdSearch"
+                               asp-route-isNatural="@Model.IsNatural">
+                                <i class="bi bi-chevron-double-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            }
+        }
+    </div>
 </div>
+
+@section Styles {
+    <style>
+        .card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        }
+        
+        .badge {
+            font-weight: 500;
+            padding: 0.5em 0.75em;
+        }
+        
+        .page-link {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50% !important;
+            margin: 0 3px;
+        }
+        
+        .form-floating > .form-control,
+        .form-floating > .form-select {
+            height: calc(3.5rem + 2px);
+        }
+        
+        .bg-light {
+            background-color: #f8f9fa !important;
+        }
+    </style>
+}

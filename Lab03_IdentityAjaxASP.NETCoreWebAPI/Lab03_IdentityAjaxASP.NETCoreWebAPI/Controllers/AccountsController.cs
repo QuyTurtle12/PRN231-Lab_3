@@ -25,11 +25,11 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI.Controllers
             string? idSearch = null,
             string? nameSearch = null,
             string? emailSearch = null,
-            RoleEnum? roleSearch = null)
+            RoleEnum? roleIdSearch = null)
         {
             try
             {
-                PaginatedList<Account> accounts = await _accountRepository.GetAllAccounts(pageIndex, pageSize, idSearch, nameSearch, emailSearch, roleSearch);
+                PaginatedList<Account> accounts = await _accountRepository.GetAllAccounts(pageIndex, pageSize, idSearch, nameSearch, emailSearch, roleIdSearch);
                 return Ok(accounts);
             }
             catch (Exception ex)

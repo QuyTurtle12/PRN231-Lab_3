@@ -21,6 +21,16 @@ namespace Repositories.Repository
         {
             Account? user = await _uow.GetDAO<Account>()
                 .Entities
+                .Include(u => u.Role)
+                .Select(u => new Account
+                {
+                    AccountId = u.AccountId,
+                    AccountName = u.AccountName,
+                    Password = u.Password,
+                    Email = u.Email,
+                    RoleId = u.RoleId,
+                    Role = u.Role
+                })
                 .FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null) return null;
@@ -131,7 +141,6 @@ namespace Repositories.Repository
             // Assign the updated values from the DTO to the existing account
             existingAccount.AccountName = account.AccountName;
             existingAccount.Email = account.Email;
-            existingAccount.Password = account.Password;
 
             // Save the changes to the database
             await _uow.GetDAO<Account>().UpdateAsync(existingAccount);
