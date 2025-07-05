@@ -1,77 +1,126 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
-using DataAccess;
+using DataAccess.DTO.Category;
+using IdentityAjaxClient.Model;
 
 namespace IdentityAjaxClient.Pages.CategoryPage.Management
 {
     public class EditModel : PageModel
     {
-        private readonly DataAccess.ProductManagementDbContext _context;
+        private readonly HttpClient _httpClient;
+        private readonly ILogger<EditModel> _logger;
 
-        public EditModel(DataAccess.ProductManagementDbContext context)
+        public EditModel(IHttpClientFactory httpClientFactory, ILogger<EditModel> logger)
         {
-            _context = context;
+            _httpClient = httpClientFactory.CreateClient("API");
+            _logger = logger;
         }
 
         [BindProperty]
-        public Category Category { get; set; } = default!;
+        public UpdateCategoryDTO CategoryInput { get; set; } = default!;
+
+        [TempData]
+        public string StatusMessage { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            // Check if user is authorized
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (string.IsNullOrEmpty(userRole) || !userRole.Equals("Staff", StringComparison.OrdinalIgnoreCase))
+            {
+                return RedirectToPage("/Index");
+            }
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var category =  await _context.Categories.FirstOrDefaultAsync(m => m.CategoryId == id);
-            if (category == null)
+            try
             {
-                return NotFound();
+                // Fetch category
+                var categoryResponse = await _httpClient.GetAsync($"categories?idSearch={id}");
+
+                if (!categoryResponse.IsSuccessStatusCode)
+                {
+                    return NotFound();
+                }
+
+                var categoryPaginatedList = await categoryResponse.Content.ReadFromJsonAsync<PaginationDTO<Category>>();
+                var category = categoryPaginatedList?.Items.FirstOrDefault();
+
+                if (category == null)
+                {
+                    return NotFound();
+                }
+
+                CategoryInput = new UpdateCategoryDTO
+                {
+                    Name = category.CategoryName ?? string.Empty
+                };
+
+                return Page();
             }
-            Category = category;
-            return Page();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error fetching category with ID: {id}");
+                TempData["ErrorMessage"] = "Error loading category. Please try again.";
+                return RedirectToPage("./Index");
+            }
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? id)
         {
+            // Check if user is authorized
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (string.IsNullOrEmpty(userRole) || !userRole.Equals("Staff", StringComparison.OrdinalIgnoreCase))
+            {
+                return RedirectToPage("/Index");
+            }
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Attach(Category).State = EntityState.Modified;
+            if (id == null || CategoryInput == null)
+            {
+                return BadRequest("Invalid category ID or input data.");
+            }
 
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CategoryExists(Category.CategoryId))
+
+                // Send PUT request to update the category
+                var response = await _httpClient.PutAsJsonAsync($"categories/{id}", CategoryInput);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    return NotFound();
+                    TempData["SuccessMessage"] = "Category updated successfully!";
+                    return RedirectToPage("./Index");
                 }
                 else
                 {
-                    throw;
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    _logger.LogError("API returned error: {StatusCode}, Content: {Content}",
+                        response.StatusCode, errorContent);
+
+                    if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    {
+                        return NotFound();
+                    }
+
+                    ModelState.AddModelError(string.Empty, "Error updating category. Please try again.");
+                    return Page();
                 }
             }
-
-            return RedirectToPage("./Index");
-        }
-
-        private bool CategoryExists(int id)
-        {
-            return _context.Categories.Any(e => e.CategoryId == id);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error updating category with ID: {id}");
+                ModelState.AddModelError(string.Empty, "An error occurred while updating the category. Please try again.");
+                return Page();
+            }
         }
     }
 }

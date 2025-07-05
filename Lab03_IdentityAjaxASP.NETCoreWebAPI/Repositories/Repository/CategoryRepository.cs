@@ -2,6 +2,7 @@
 using DataAccess.DTO.Category;
 using DataAccess.Interface;
 using DataAccess.Paginated;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Interface;
 
 namespace Repositories.Repository
@@ -18,12 +19,27 @@ namespace Repositories.Repository
         public async Task DeleteAsync(int id)
         {
             // Get the existing category by ID
-            Category? category = _unitOfWork.GetDAO<Category>().Entities.FirstOrDefault(c => c.CategoryId == id);
+            Category? category = _unitOfWork.GetDAO<Category>()
+                .Entities
+                .Include(c => c.Orchids)
+                .Select(c => new Category
+                {
+                    CategoryId = c.CategoryId,
+                    CategoryName = c.CategoryName,
+                    Orchids = c.Orchids
+                })
+                .FirstOrDefault(c => c.CategoryId == id);
 
             // Check if the category exists
             if (category == null)
             {
                 throw new KeyNotFoundException($"Category with ID {id} not found.");
+            }
+
+            // If the category has associated orchids, throw an exception
+            if (category.Orchids != null && category.Orchids.Any())
+            {
+                throw new InvalidOperationException("Cannot delete a category that has associated orchids.");
             }
 
             // Remove the category from the database
@@ -40,6 +56,7 @@ namespace Repositories.Repository
             // Initialize the queryable collection from the DAO
             IQueryable<Category> query = _unitOfWork.GetDAO<Category>()
                 .Entities
+                .Include(c => c.Orchids)
                 .Select(c => new Category
                 {
                     CategoryId = c.CategoryId,

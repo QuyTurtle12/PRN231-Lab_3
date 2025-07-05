@@ -4,218 +4,457 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="container-fluid px-4">
-    <!-- Intro Section -->
-    <section class="py-5 text-center rounded bg-light mb-5">
-        <div class="row py-lg-5">
-            <div class="col-lg-8 col-md-10 mx-auto">
-                <h1 class="fw-light">Welcome to Orchid Heaven</h1>
-                <p class="lead text-muted">Discover our beautiful collection of rare and exotic orchids. Browse through natural and hybrid varieties from around the world.</p>
+<!-- Hero Section -->
+<div class="hero-section position-relative mb-5">
+    <div class="hero-overlay"></div>
+    <div class="container-fluid position-relative py-5 z-1">
+        <div class="row py-5">
+            <div class="col-lg-7 col-md-9 mx-auto text-center py-5">
+                <h1 class="display-4 fw-bold text-white mb-3">Orchid Heaven</h1>
+                <p class="lead text-white mb-4">Discover rare and exotic orchids from around the world</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="#orchid-collection" class="btn btn-primary btn-lg px-4">Explore Collection</a>
+                    <a href="#about-us" class="btn btn-outline-light btn-lg px-4">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Featured Categories -->
+    <section class="mb-5" id="about-us">
+        <h2 class="text-center mb-4 section-title">Welcome to Our Orchid Collection</h2>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="category-card text-center p-4 h-100">
+                    <div class="category-icon mb-3">
+                        <i class="bi bi-flower1 display-3"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Natural Orchids</h3>
+                    <p class="mb-3">Discover our collection of natural orchids cultivated with care and passion.</p>
+                    <a asp-page="./Index" asp-route-isNatural="true" class="btn btn-sm btn-outline-primary">View Collection</a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="category-card text-center p-4 h-100">
+                    <div class="category-icon mb-3">
+                        <i class="bi bi-flower2 display-3"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Hybrid Varieties</h3>
+                    <p class="mb-3">Explore our unique hybrid varieties created by expert horticulturists.</p>
+                    <a asp-page="./Index" asp-route-isNatural="false" class="btn btn-sm btn-outline-primary">View Collection</a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="category-card text-center p-4 h-100">
+                    <div class="category-icon mb-3">
+                        <i class="bi bi-flower3 display-3"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Rare Specimens</h3>
+                    <p class="mb-3">Discover our rare and exotic species from remote locations around the world.</p>
+                    <a asp-page="./Index" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Search and Filter Form -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-header bg-white py-3">
-            <h5 class="card-title mb-0">
-                <i class="bi bi-search me-2"></i> Find Your Perfect Orchid
-            </h5>
-        </div>
-        <div class="card-body">
-            <form method="get" class="row g-3">
-                <div class="col-md-4">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="nameSearch" name="nameSearch" value="@Model.NameSearch" placeholder="Search by name">
-                        <label for="nameSearch">Orchid Name</label>
+    <section class="mb-5" id="orchid-collection">
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-white py-3 border-0">
+                        <h2 class="section-title h4 mb-0">
+                            <i class="bi bi-search me-2"></i> Find Your Perfect Orchid
+                        </h2>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-floating">
-                        <select class="form-select" id="categoryIdSearch" name="categoryIdSearch" asp-for="CategoryIdSearch" asp-items="Model.CategoryList">
-                            <option value="">All Categories</option>
-                        </select>
-                        <label for="categoryIdSearch">Category</label>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-floating">
-                        <select class="form-select" id="isNatural" name="isNatural" asp-for="IsNatural">
-                            <option value="">All Types</option>
-                            <option value="true">Natural</option>
-                            <option value="false">Hybrid</option>
-                        </select>
-                        <label for="isNatural">Type</label>
-                    </div>
-                </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <div class="d-flex gap-2 w-100">
-                        <button type="submit" class="btn btn-primary flex-grow-1">
-                            <i class="bi bi-search me-1"></i> Search
-                        </button>
-                        <a asp-page="./Index" class="btn btn-outline-secondary flex-grow-1">
-                            <i class="bi bi-x-circle me-1"></i> Clear
-                        </a>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Results Section -->
-    <div class="mb-4">
-        @if (!Model.Orchids?.Items.Any() ?? true)
-        {
-            <div class="alert alert-info text-center p-5">
-                <i class="bi bi-search display-1 d-block mb-3 text-muted"></i>
-                <h3>No orchids found</h3>
-                <p class="mb-0">Try adjusting your search criteria or browse our collection without filters.</p>
-            </div>
-        }
-        else
-        {
-            <!-- Counter info -->
-            <p class="text-muted mb-4">
-                Found @Model.Orchids.TotalCount orchid@(Model.Orchids.TotalCount != 1 ? "s" : "") matching your criteria
-            </p>
-
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                @foreach (var item in Model.Orchids.Items)
-                {
-                    <div class="col">
-                        <div class="card h-100 shadow-sm">
-                            <div class="position-relative">
-                                @if (!string.IsNullOrEmpty(item.OrchidUrl))
-                                {
-                                    <img src="@item.OrchidUrl" 
-                                         class="card-img-top" 
-                                         alt="@item.OrchidName"
-                                         style="height: 220px; object-fit: cover;" />
-                                }
-                                else
-                                {
-                                    <div class="bg-light d-flex align-items-center justify-content-center" 
-                                         style="height: 220px;">
-                                        <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
-                                    </div>
-                                }
-                                <div class="position-absolute top-0 end-0 m-2">
-                                    <span class="badge @(item.IsNatural.GetValueOrDefault() ? "bg-success" : "bg-info")">
-                                        @(item.IsNatural.GetValueOrDefault() ? "Natural" : "Hybrid")
-                                    </span>
+                    <div class="card-body">
+                        <form method="get" class="row g-3">
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="nameSearch" name="nameSearch" value="@Model.NameSearch" placeholder="Search by name">
+                                    <label for="nameSearch">Orchid Name</label>
                                 </div>
                             </div>
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title mb-2">@item.OrchidName</h5>
-                                <p class="card-text text-muted small mb-2">
-                                    <i class="bi bi-tag me-1"></i> @(item.Category?.CategoryName ?? "No Category")
-                                </p>
-                                <p class="card-text flex-grow-1" style="max-height: 4.5em; overflow: hidden;">
-                                    <small>
-                                        @(item.OrchidDescription?.Length > 100 
-                                            ? item.OrchidDescription[..100] + "..." 
-                                            : item.OrchidDescription)
-                                    </small>
-                                </p>
-                                <div class="d-flex justify-content-between align-items-center mt-3">
-                                    <span class="fs-5 fw-bold text-primary">
-                                        @item.Price?.ToString("C", new System.Globalization.CultureInfo("en-US"))
-                                    </span>
-                                    <a href="#" class="btn btn-sm btn-outline-primary">
-                                        <i class="bi bi-eye me-1"></i> View Details
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <select class="form-select" id="categoryIdSearch" name="categoryIdSearch" asp-for="CategoryIdSearch" asp-items="Model.CategoryList">
+                                        <option value="">All Categories</option>
+                                    </select>
+                                    <label for="categoryIdSearch">Category</label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-floating">
+                                    <select class="form-select" id="isNatural" name="isNatural" asp-for="IsNatural">
+                                        <option value="">All Types</option>
+                                        <option value="true">Natural</option>
+                                        <option value="false">Hybrid</option>
+                                    </select>
+                                    <label for="isNatural">Type</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <div class="d-flex gap-2 w-100">
+                                    <button type="submit" class="btn btn-primary flex-grow-1">
+                                        <i class="bi bi-search me-1"></i> Search
+                                    </button>
+                                    <a asp-page="./Index" class="btn btn-outline-secondary flex-grow-1">
+                                        <i class="bi bi-x-circle me-1"></i> Clear
                                     </a>
                                 </div>
                             </div>
-                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="row">
+            <div class="col-12">
+                @if (!Model.Orchids?.Items.Any() ?? true)
+                {
+                    <div class="alert alert-info text-center p-5">
+                        <i class="bi bi-search display-1 d-block mb-3 text-muted"></i>
+                        <h3>No orchids found</h3>
+                        <p class="mb-0">Try adjusting your search criteria or browse our collection without filters.</p>
                     </div>
                 }
-            </div>
+                else
+                {
+                    <!-- Counter info -->
+                    <p class="text-muted mb-4">
+                        Found @Model.Orchids.TotalCount orchid@(Model.Orchids.TotalCount != 1 ? "s" : "") matching your criteria
+                    </p>
 
-            <!-- Pagination -->
-            @if (Model.Orchids.TotalPages > 1)
-            {
-                <nav aria-label="Page navigation" class="mt-4">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item @(Model.Orchids.PageNumber == 1 ? "disabled" : "")">
-                            <a class="page-link" asp-page="./Index"
-                               asp-route-pageIndex="1"
-                               asp-route-nameSearch="@Model.NameSearch"
-                               asp-route-categoryIdSearch="@Model.CategoryIdSearch"
-                               asp-route-isNatural="@Model.IsNatural">
-                                <i class="bi bi-chevron-double-left"></i>
-                            </a>
-                        </li>
-                        <li class="page-item @(Model.Orchids.PageNumber == 1 ? "disabled" : "")">
-                            <a class="page-link" asp-page="./Index"
-                               asp-route-pageIndex="@(Model.Orchids.PageNumber - 1)"
-                               asp-route-nameSearch="@Model.NameSearch"
-                               asp-route-categoryIdSearch="@Model.CategoryIdSearch"
-                               asp-route-isNatural="@Model.IsNatural">
-                                <i class="bi bi-chevron-left"></i>
-                            </a>
-                        </li>
-                        
-                        @{
-                            int startPage = Math.Max(1, Model.Orchids.PageNumber - 2);
-                            int endPage = Math.Min(Model.Orchids.TotalPages, startPage + 4);
-                            startPage = Math.Max(1, endPage - 4);
-                        }
-                        
-                        @for (var i = startPage; i <= endPage; i++)
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                        @foreach (var item in Model.Orchids.Items)
                         {
-                            <li class="page-item @(i == Model.Orchids.PageNumber ? "active" : "")">
-                                <a class="page-link" asp-page="./Index"
-                                   asp-route-pageIndex="@i"
-                                   asp-route-nameSearch="@Model.NameSearch"
-                                   asp-route-categoryIdSearch="@Model.CategoryIdSearch"
-                                   asp-route-isNatural="@Model.IsNatural">@i</a>
-                            </li>
+                            <div class="col">
+                                <div class="product-card card h-100 border-0 rounded-4 overflow-hidden">
+                                    <div class="position-relative">
+                                        @if (!string.IsNullOrEmpty(item.OrchidUrl))
+                                        {
+                                            <img src="@item.OrchidUrl" 
+                                                class="card-img-top" 
+                                                alt="@item.OrchidName"
+                                                style="height: 240px; object-fit: cover;" />
+                                        }
+                                        else
+                                        {
+                                            <div class="bg-light d-flex align-items-center justify-content-center" 
+                                                style="height: 240px;">
+                                                <i class="bi bi-flower1 text-muted" style="font-size: 3rem;"></i>
+                                            </div>
+                                        }
+                                        <div class="position-absolute top-0 end-0 m-2">
+                                            <span class="badge @(item.IsNatural.GetValueOrDefault() ? "bg-success" : "bg-info")">
+                                                @(item.IsNatural.GetValueOrDefault() ? "Natural" : "Hybrid")
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body d-flex flex-column">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h5 class="card-title mb-0">@item.OrchidName</h5>
+                                            <span class="fs-5 fw-bold text-primary">
+                                                @item.Price?.ToString("C", new System.Globalization.CultureInfo("en-US"))
+                                            </span>
+                                        </div>
+                                        <p class="card-text text-muted small mb-2">
+                                            <i class="bi bi-tag me-1"></i> @(item.Category?.CategoryName ?? "No Category")
+                                        </p>
+                                        <p class="card-text flex-grow-1" style="max-height: 3em; overflow: hidden;">
+                                            <small>
+                                                @(item.OrchidDescription?.Length > 100 
+                                                    ? item.OrchidDescription[..100] + "..." 
+                                                    : item.OrchidDescription)
+                                            </small>
+                                        </p>
+                                        <div class="d-grid gap-2 mt-3">
+                                            <form method="post" asp-page-handler="AddToCart">
+                                                <input type="hidden" name="orchidId" value="@item.OrchidId" />
+                                                <button type="submit" class="btn btn-primary w-100">
+                                                    <i class="bi bi-cart-plus me-2"></i> Add to Cart
+                                                </button>
+                                            </form>
+                                            <a asp-page="/OrchidPage/Orchids/Details" asp-route-id="@item.OrchidId" class="btn btn-outline-primary">
+                                                <i class="bi bi-eye me-2"></i> View Details
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         }
-                        
-                        <li class="page-item @(Model.Orchids.PageNumber == Model.Orchids.TotalPages ? "disabled" : "")">
-                            <a class="page-link" asp-page="./Index"
-                               asp-route-pageIndex="@(Model.Orchids.PageNumber + 1)"
-                               asp-route-nameSearch="@Model.NameSearch"
-                               asp-route-categoryIdSearch="@Model.CategoryIdSearch"
-                               asp-route-isNatural="@Model.IsNatural">
-                                <i class="bi bi-chevron-right"></i>
-                            </a>
-                        </li>
-                        <li class="page-item @(Model.Orchids.PageNumber == Model.Orchids.TotalPages ? "disabled" : "")">
-                            <a class="page-link" asp-page="./Index"
-                               asp-route-pageIndex="@Model.Orchids.TotalPages"
-                               asp-route-nameSearch="@Model.NameSearch"
-                               asp-route-categoryIdSearch="@Model.CategoryIdSearch"
-                               asp-route-isNatural="@Model.IsNatural">
-                                <i class="bi bi-chevron-double-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            }
-        }
-    </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    @if (Model.Orchids.TotalPages > 1)
+                    {
+                        <nav aria-label="Page navigation" class="mt-5">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item @(Model.Orchids.PageNumber == 1 ? "disabled" : "")">
+                                    <a class="page-link" asp-page="./Index"
+                                    asp-route-pageIndex="1"
+                                    asp-route-nameSearch="@Model.NameSearch"
+                                    asp-route-categoryIdSearch="@Model.CategoryIdSearch"
+                                    asp-route-isNatural="@Model.IsNatural">
+                                        <i class="bi bi-chevron-double-left"></i>
+                                    </a>
+                                </li>
+                                <li class="page-item @(Model.Orchids.PageNumber == 1 ? "disabled" : "")">
+                                    <a class="page-link" asp-page="./Index"
+                                    asp-route-pageIndex="@(Model.Orchids.PageNumber - 1)"
+                                    asp-route-nameSearch="@Model.NameSearch"
+                                    asp-route-categoryIdSearch="@Model.CategoryIdSearch"
+                                    asp-route-isNatural="@Model.IsNatural">
+                                        <i class="bi bi-chevron-left"></i>
+                                    </a>
+                                </li>
+                                
+                                @{
+                                    int startPage = Math.Max(1, Model.Orchids.PageNumber - 2);
+                                    int endPage = Math.Min(Model.Orchids.TotalPages, startPage + 4);
+                                    startPage = Math.Max(1, endPage - 4);
+                                }
+                                
+                                @for (var i = startPage; i <= endPage; i++)
+                                {
+                                    <li class="page-item @(i == Model.Orchids.PageNumber ? "active" : "")">
+                                        <a class="page-link" asp-page="./Index"
+                                        asp-route-pageIndex="@i"
+                                        asp-route-nameSearch="@Model.NameSearch"
+                                        asp-route-categoryIdSearch="@Model.CategoryIdSearch"
+                                        asp-route-isNatural="@Model.IsNatural">@i</a>
+                                    </li>
+                                }
+                                
+                                <li class="page-item @(Model.Orchids.PageNumber == Model.Orchids.TotalPages ? "disabled" : "")">
+                                    <a class="page-link" asp-page="./Index"
+                                    asp-route-pageIndex="@(Model.Orchids.PageNumber + 1)"
+                                    asp-route-nameSearch="@Model.NameSearch"
+                                    asp-route-categoryIdSearch="@Model.CategoryIdSearch"
+                                    asp-route-isNatural="@Model.IsNatural">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                </li>
+                                <li class="page-item @(Model.Orchids.PageNumber == Model.Orchids.TotalPages ? "disabled" : "")">
+                                    <a class="page-link" asp-page="./Index"
+                                    asp-route-pageIndex="@Model.Orchids.TotalPages"
+                                    asp-route-nameSearch="@Model.NameSearch"
+                                    asp-route-categoryIdSearch="@Model.CategoryIdSearch"
+                                    asp-route-isNatural="@Model.IsNatural">
+                                        <i class="bi bi-chevron-double-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    }
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="mb-5 py-5">
+        <h2 class="text-center mb-5 section-title">Customer Reviews</h2>
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="testimonial-card text-center p-4">
+                    <div class="testimonial-stars mb-3">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="mb-3">"The orchids I received were even more beautiful than in the pictures. Healthy plants and excellent packaging. Will definitely order again!"</p>
+                    <div class="testimonial-author">
+                        <h5 class="h6 mb-1">Sarah Johnson</h5>
+                        <p class="small text-muted mb-0">Orchid Enthusiast</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="testimonial-card text-center p-4">
+                    <div class="testimonial-stars mb-3">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-half"></i>
+                    </div>
+                    <p class="mb-3">"Great selection of rare orchids that I couldn't find anywhere else. The care instructions were very helpful for a beginner like me."</p>
+                    <div class="testimonial-author">
+                        <h5 class="h6 mb-1">Michael Davis</h5>
+                        <p class="small text-muted mb-0">New Collector</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="testimonial-card text-center p-4">
+                    <div class="testimonial-stars mb-3">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="mb-3">"I've been collecting orchids for over 10 years, and the specimens from Orchid Heaven are some of the healthiest I've ever received."</p>
+                    <div class="testimonial-author">
+                        <h5 class="h6 mb-1">Emma Rodriguez</h5>
+                        <p class="small text-muted mb-0">Experienced Collector</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Care Tips -->
+    <section class="mb-5 py-3">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <img src="https://images.unsplash.com/photo-1515513616051-5d3ae2773086?q=80&w=1000&auto=format&fit=crop" alt="Orchid Care" class="img-fluid rounded-4 shadow">
+            </div>
+            <div class="col-lg-6">
+                <h2 class="section-title mb-4">Orchid Care Tips</h2>
+                <div class="mb-4">
+                    <h5><i class="bi bi-droplet me-2 text-primary"></i> Watering</h5>
+                    <p>Most orchids prefer to dry out between waterings. Water thoroughly, then allow the media to dry before watering again.</p>
+                </div>
+                <div class="mb-4">
+                    <h5><i class="bi bi-brightness-high me-2 text-primary"></i> Light</h5>
+                    <p>Most orchids enjoy bright, indirect light. Avoid direct sunlight which can burn the leaves.</p>
+                </div>
+                <div>
+                    <h5><i class="bi bi-thermometer-half me-2 text-primary"></i> Temperature</h5>
+                    <p>Most orchids thrive in temperatures between 65-75°F during the day and about 10°F cooler at night.</p>
+                </div>
+                <a href="#" class="btn btn-outline-primary mt-3">Read More Care Tips</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="mb-5">
+        <div class="newsletter-section text-center p-5 rounded-4">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h2 class="section-title mb-3">Join Our Newsletter</h2>
+                    <p class="mb-4">Subscribe to receive updates on new arrivals, special offers, and care tips</p>
+                    <form class="row g-3 justify-content-center">
+                        <div class="col-md-8">
+                            <input type="email" class="form-control form-control-lg" placeholder="Your Email Address">
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary btn-lg w-100">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 
 @section Styles {
     <style>
-        .card {
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            border: none;
-            border-radius: 10px;
+        /* General styling */
+        body {
+            color: #4a4a4a;
+        }
+        
+        .section-title {
+            position: relative;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .section-title::after {
+            content: "";
+            display: block;
+            width: 70px;
+            height: 3px;
+            background-color: #5d9c59;
+            margin: 10px auto 0;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            background: url('https://images.unsplash.com/photo-1621466550398-ac8062907657?q=80&w=1200&auto=format&fit=crop') center/cover no-repeat;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            border-radius: 0 0 20px 20px;
             overflow: hidden;
         }
         
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 0;
         }
         
+        .z-1 {
+            z-index: 1;
+        }
+        
+        /* Product cards */
+        .product-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+        }
+        
+        /* Category cards */
+        .category-card {
+            background-color: #f8f9fa;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+        }
+        
+        .category-icon {
+            color: #5d9c59;
+        }
+        
+        /* Testimonials */
+        .testimonial-card {
+            background-color: #f8f9fa;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            height: 100%;
+        }
+        
+        .testimonial-stars {
+            color: #ffc107;
+        }
+        
+        /* Newsletter */
+        .newsletter-section {
+            background-color: #ebf3ee;
+        }
+        
+        /* Badge styling */
         .badge {
             font-weight: 500;
             padding: 0.5em 0.75em;
         }
         
+        /* Pagination */
         .page-link {
             width: 40px;
             height: 40px;
@@ -224,15 +463,55 @@
             justify-content: center;
             border-radius: 50% !important;
             margin: 0 3px;
+            color: #5d9c59;
         }
         
+        .page-item.active .page-link {
+            background-color: #5d9c59;
+            border-color: #5d9c59;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background-color: #5d9c59;
+            border-color: #5d9c59;
+        }
+        
+        .btn-primary:hover, 
+        .btn-primary:focus {
+            background-color: #4e8a4a;
+            border-color: #4e8a4a;
+        }
+        
+        .btn-outline-primary {
+            color: #5d9c59;
+            border-color: #5d9c59;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: #5d9c59;
+            border-color: #5d9c59;
+        }
+        
+        .text-primary {
+            color: #5d9c59 !important;
+        }
+        
+        /* Form elements */
         .form-floating > .form-control,
         .form-floating > .form-select {
             height: calc(3.5rem + 2px);
         }
         
-        .bg-light {
-            background-color: #f8f9fa !important;
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #5d9c59;
+            box-shadow: 0 0 0 0.25rem rgba(93, 156, 89, 0.25);
+        }
+        
+        /* Rounded corners */
+        .rounded-4 {
+            border-radius: 1rem;
         }
     </style>
 }

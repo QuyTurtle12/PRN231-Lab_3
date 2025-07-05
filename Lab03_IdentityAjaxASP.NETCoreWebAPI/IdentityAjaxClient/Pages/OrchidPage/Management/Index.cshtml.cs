@@ -1,6 +1,7 @@
 ﻿using BusinessObjects;
 using DataAccess.Paginated;
 using IdentityAjaxClient.Model;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -22,7 +23,7 @@ namespace IdentityAjaxClient.Pages.OrchidPage.Management
         public string? CategoryIdSearch { get; set; }
         public bool? IsNatural { get; set; }
 
-        public async Task OnGetAsync(
+        public async Task<IActionResult> OnGetAsync(
             int pageIndex = 1,
             int pageSize = 10,
             string? nameSearch = null,
@@ -90,6 +91,8 @@ namespace IdentityAjaxClient.Pages.OrchidPage.Management
                 Orchid = new PaginatedList<Orchid>(new List<Orchid>(), 0, 1, 10);
                 ModelState.AddModelError(string.Empty, "Error loading orchids: " + ex.Message);
             }
+
+            return Page();
         }
     }
 }

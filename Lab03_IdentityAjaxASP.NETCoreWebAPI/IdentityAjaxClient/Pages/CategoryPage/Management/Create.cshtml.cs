@@ -1,44 +1,72 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DataAccess.DTO.Category;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using BusinessObjects;
-using DataAccess;
 
 namespace IdentityAjaxClient.Pages.CategoryPage.Management
 {
     public class CreateModel : PageModel
     {
-        private readonly DataAccess.ProductManagementDbContext _context;
+        private readonly HttpClient _httpClient;
+        private readonly ILogger<CreateModel> _logger;
 
-        public CreateModel(DataAccess.ProductManagementDbContext context)
+        public CreateModel(IHttpClientFactory httpClientFactory, ILogger<CreateModel> logger)
         {
-            _context = context;
-        }
-
-        public IActionResult OnGet()
-        {
-            return Page();
+            _httpClient = httpClientFactory.CreateClient("API");
+            _logger = logger;
         }
 
         [BindProperty]
-        public Category Category { get; set; } = default!;
+        public CreateCategoryDTO Category { get; set; } = default!;
 
-        // For more information, see https://aka.ms/RazorPagesCRUD.
+        public IActionResult OnGet()
+        {
+            // Check if user is authorized
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (string.IsNullOrEmpty(userRole) || !userRole.Equals("Staff", StringComparison.OrdinalIgnoreCase))
+            {
+                TempData["ErrorMessage"] = "You are not authorized to create categories.";
+                return RedirectToPage("/Index");
+            }
+
+            return Page();
+        }
+
         public async Task<IActionResult> OnPostAsync()
         {
+            // Check if user is authorized
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (string.IsNullOrEmpty(userRole) || !userRole.Equals("Staff"))
+            {
+                return RedirectToPage("/Index");
+            }
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Categories.Add(Category);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("categories", Category);
 
-            return RedirectToPage("./Index");
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["SuccessMessage"] = "Category created successfully.";
+                    return RedirectToPage("./Index");
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, $"Failed to create Category: {error}");
+                    return Page();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating category");
+                ModelState.AddModelError(string.Empty, "An error occurred while creating the category. Please try again.");
+                return Page();
+            }
         }
     }
 }

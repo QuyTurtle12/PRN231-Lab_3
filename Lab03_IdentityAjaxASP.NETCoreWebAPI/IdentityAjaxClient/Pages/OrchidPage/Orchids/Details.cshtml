@@ -1,0 +1,301 @@
+﻿@page
+@model IdentityAjaxClient.Pages.OrchidPage.Orchids.DetailsModel
+@{
+    ViewData["Title"] = "Orchid Details";
+}
+
+<div class="container py-5">
+    @if (!string.IsNullOrEmpty(TempData["SuccessMessage"]?.ToString()))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(TempData["ErrorMessage"]?.ToString()))
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-page="/Index" class="text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Orchid Details</li>
+        </ol>
+    </nav>
+
+    @if (Model.Orchid != null)
+    {
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="row g-0">
+                <!-- Product Image -->
+                <div class="col-md-6 position-relative">
+                    @if (!string.IsNullOrEmpty(Model.Orchid.OrchidUrl))
+                    {
+                        <img src="@Model.Orchid.OrchidUrl" class="img-fluid h-100 w-100 object-fit-cover" style="max-height: 500px" alt="@Model.Orchid.OrchidName">
+                    }
+                    else
+                    {
+                        <div class="bg-light d-flex align-items-center justify-content-center h-100" style="min-height: 400px;">
+                            <i class="bi bi-flower1 display-1 text-muted"></i>
+                        </div>
+                    }
+                    <span class="position-absolute top-0 start-0 m-3 badge bg-success">In Stock</span>
+                </div>
+                
+                <!-- Product Details -->
+                <div class="col-md-6">
+                    <div class="card-body p-4 p-lg-5">
+                        <h1 class="card-title fw-bold mb-2">@Model.Orchid.OrchidName</h1>
+                        
+                        <div class="mb-3">
+                            <span class="badge bg-light text-dark me-2">
+                                <i class="bi bi-tag me-1"></i> @Model.Orchid.Category?.CategoryName
+                            </span>
+                            @if (Model.Orchid.IsNatural.HasValue)
+                            {
+                                <span class="badge @(Model.Orchid.IsNatural.Value ? "bg-success" : "bg-info")">
+                                    @(Model.Orchid.IsNatural.Value ? "Natural" : "Hybrid")
+                                </span>
+                            }
+                        </div>
+                        
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="rating me-2">
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-half text-warning"></i>
+                            </div>
+                            <small class="text-muted">(4.5/5)</small>
+                        </div>
+                        
+                        <h3 class="fw-bold text-primary mb-4">
+                            @Model.Orchid.Price?.ToString("C", new System.Globalization.CultureInfo("en-US"))
+                        </h3>
+                        
+                        <p class="card-text mb-4">@Model.Orchid.OrchidDescription</p>
+                        
+                        <div class="mb-4">
+                            <h5 class="fw-bold mb-3">Specifications</h5>
+                            <div class="row">
+                                <div class="col-6 mb-2">
+                                    <small class="text-muted d-block">Category</small>
+                                    <span>@Model.Orchid.Category?.CategoryName</span>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <small class="text-muted d-block">Type</small>
+                                    <span>@(Model.Orchid.IsNatural.HasValue ? (Model.Orchid.IsNatural.Value ? "Natural" : "Hybrid") : "Unknown")</span>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <small class="text-muted d-block">Care Level</small>
+                                    <span>Intermediate</span>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <small class="text-muted d-block">Light Requirement</small>
+                                    <span>Medium to Bright</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <form method="post" asp-page-handler="AddToCart">
+                            <input type="hidden" asp-for="Id" />
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <label class="form-label mb-2">Quantity</label>
+                                    <div class="quantity-control d-flex">
+                                        <button type="button" class="btn quantity-btn" onclick="decreaseQuantity()">
+                                            <i class="bi bi-dash"></i>
+                                        </button>
+                                        <div class="quantity-input-wrapper">
+                                            <input type="number" id="quantity" name="quantity" class="form-control quantity-input" value="1" min="1" max="10">
+                                        </div>
+                                        <button type="button" class="btn quantity-btn" onclick="increaseQuantity()">
+                                            <i class="bi bi-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-8 d-grid">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="bi bi-cart-plus me-2"></i> Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <div class="mb-4">
+                <i class="bi bi-emoji-frown display-1 text-muted"></i>
+            </div>
+            <h2>Orchid Not Found</h2>
+            <p class="text-muted mb-4">The orchid you're looking for is no longer available or may have been moved.</p>
+            <a asp-page="/Index" class="btn btn-primary px-4 py-2">
+                <i class="bi bi-arrow-left me-2"></i> Browse Our Collection
+            </a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function increaseQuantity() {
+            var input = document.getElementById('quantity');
+            var value = parseInt(input.value, 10);
+            if (value < parseInt(input.max)) {
+                input.value = value + 1;
+            }
+        }
+        
+        function decreaseQuantity() {
+            var input = document.getElementById('quantity');
+            var value = parseInt(input.value, 10);
+            if (value > parseInt(input.min)) {
+                input.value = value - 1;
+            }
+        }
+    </script>
+}
+
+@section Styles {
+    <style>
+        /* Product styles */
+        .btn-primary {
+            background-color: #5d9c59;
+            border-color: #5d9c59;
+        }
+        
+        .btn-primary:hover, 
+        .btn-primary:focus {
+            background-color: #4e8a4a;
+            border-color: #4e8a4a;
+        }
+        
+        .btn-outline-primary {
+            color: #5d9c59;
+            border-color: #5d9c59;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: #5d9c59;
+            border-color: #5d9c59;
+        }
+        
+        .text-primary {
+            color: #5d9c59 !important;
+        }
+        
+        .nav-tabs .nav-link {
+            color: #4a4a4a;
+            border: none;
+            border-bottom: 2px solid transparent;
+            padding: 0.75rem 1rem;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: #5d9c59;
+            border-color: #5d9c59;
+            background: transparent;
+        }
+        
+        .rounded-4 {
+            border-radius: 1rem;
+        }
+        
+        .object-fit-cover {
+            object-fit: cover;
+        }
+
+        .quantity-control {
+    position: relative;
+    width: 100%;
+    height: 38px;
+    border-radius: 4px;
+    align-items: center;
+}
+
+    .quantity-btn {
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        border: 1px solid #dee2e6;
+        background-color: #f8f9fa;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #212529;
+        border-radius: 4px;
+    }
+
+    .quantity-input-wrapper {
+        position: relative;
+        flex-grow: 1;
+        height: 38px;
+        margin: 0 5px;
+    }
+
+    .quantity-input {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        border: 1px solid #007bff;
+        border-radius: 4px;
+        padding-right: 20px;
+    }
+
+    .quantity-input:focus {
+        outline: none;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .quantity-arrows {
+        position: absolute;
+        right: 5px;
+        top: 1px;
+        height: calc(100% - 2px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .quantity-arrow-up,
+    .quantity-arrow-down {
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        font-size: 8px;
+        line-height: 1;
+        cursor: pointer;
+        color: #6c757d;
+        height: 50%;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Remove spinner from number input */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+    </style>
+}

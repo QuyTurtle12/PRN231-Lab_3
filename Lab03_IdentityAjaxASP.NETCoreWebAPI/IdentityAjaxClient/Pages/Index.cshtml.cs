@@ -1,8 +1,9 @@
+using BusinessObjects;
+using DataAccess.DTO.Order;
+using IdentityAjaxClient.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using BusinessObjects;
-using IdentityAjaxClient.Model;
 
 namespace IdentityAjaxClient.Pages
 {
@@ -82,6 +83,53 @@ namespace IdentityAjaxClient.Pages
                     TotalCount = 0,
                     TotalPages = 0
                 };
+            }
+        }
+
+        public async Task<IActionResult> OnPostAddToCartAsync(int orchidId)
+        {
+            if (orchidId <= 0)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                // Get user ID from session
+                var userId = HttpContext.Session.GetString("UserId");
+
+                if (string.IsNullOrEmpty(userId))
+                {
+                    // Redirect to login if user is not authenticated
+                    return RedirectToPage("/Account/Login");
+                }
+
+                // Create cart item
+                var cartItem = new CartItem
+                {
+                    OrchidId = orchidId,
+                    UserId = int.Parse(userId),
+                    Quantity = 1
+                };
+
+                // Send to API
+                var response = await _httpClient.PostAsJsonAsync("cart", cartItem);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["SuccessMessage"] = "Item added to cart successfully!";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Failed to add item to cart.";
+                }
+
+                return RedirectToPage();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"Error adding to cart: {ex.Message}");
+                return RedirectToPage();
             }
         }
     }

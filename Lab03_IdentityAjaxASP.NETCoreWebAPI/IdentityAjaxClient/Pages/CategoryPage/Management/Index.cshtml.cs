@@ -25,10 +25,9 @@ namespace IdentityAjaxClient.Pages.CategoryPage.Management
         {
             try
             {
-                // Check if the user is authorized (admin or staff)
+                // Check if the user is authorized
                 var userRole = HttpContext.Session.GetString("UserRole");
-                if (string.IsNullOrEmpty(userRole) ||
-                    (userRole != "Admin" && userRole != "Staff"))
+                if (string.IsNullOrEmpty(userRole) || (userRole != "Staff"))
                 {
                     return RedirectToPage("/Index");
                 }
