@@ -3,6 +3,7 @@
     public class CreateOrderDTO : BaseOrderDTO
     {
         public List<CartItem> OrderItems { get; set; } = new List<CartItem>();
+        public string customerEmail { get; set; } = string.Empty;
     }
 
     public class CartItem : CreateOrderDTO

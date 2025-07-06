@@ -17,7 +17,7 @@ namespace Repositories.Repository
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<int> InsertAsync(CreateOrderDTO orderDto)
+        public async Task InsertAsync(CreateOrderDTO orderDto)
         {
             try
             {
@@ -40,10 +40,19 @@ namespace Repositories.Repository
                     totalAmount += orchid.Price * item.Quantity;
                 }
 
+                Account? account = _unitOfWork.GetDAO<Account>().Entities
+                    .FirstOrDefault(a => a.Email == orderDto.customerEmail);
+
+                // Validate account
+                if (account == null)
+                {
+                    throw new Exception($"Account with email {orderDto.customerEmail} not found.");
+                }
+
                 // Create new order
                 var order = new Order
                 {
-                    AccountId = orderDto.AccountId,
+                    AccountId = account.AccountId,
                     OrderDate = DateOnly.FromDateTime(DateTime.Now),
                     OrderStatus = OrderStatusEnum.Pending.ToString(),
                     TotalAmount = totalAmount
@@ -70,13 +79,9 @@ namespace Repositories.Repository
                     orderDetails.ForEach(detail => detail.OrderId = order.Id);
                     await _unitOfWork.GetDAO<OrderDetail>().InsertRangeAsync(orderDetails);
                     await _unitOfWork.SaveAsync();
-
-                    _unitOfWork.CommitTransaction();
-                    return order.Id;
                 }
                 catch
                 {
-                    _unitOfWork.RollBack();
                     throw;
                 }
             }
@@ -86,7 +91,7 @@ namespace Repositories.Repository
             }
         }
 
-        public async Task<PaginatedList<Order>> GetAllAsync(int pageIndex, int pageNumber, string? idSearch, DateOnly? fromDate, DateOnly? toDate, OrderStatusEnum? status)
+        public async Task<PaginatedList<Order>> GetAllAsync(int pageIndex, int pageNumber, string? idSearch, string? customerSearch, DateOnly? fromDate, DateOnly? toDate, OrderStatusEnum? status)
         {
             // Validate inputs
             if (pageIndex < 1) pageIndex = 1;
@@ -122,6 +127,11 @@ namespace Repositories.Repository
                 query = query.Where(o => o.Id.ToString() == idSearch);
             }
 
+            if (!string.IsNullOrWhiteSpace(customerSearch))
+            {
+                query = query.Where(o => o.Account!.AccountName == customerSearch);
+            }
+
             if (fromDate.HasValue)
             {
                 query = query.Where(o => o.OrderDate >= fromDate.Value);
@@ -146,7 +156,7 @@ namespace Repositories.Repository
             return result;
         }
 
-        public async Task<bool> UpdateAsync(int orderId, UpdateOrderDTO orderDto)
+        public async Task UpdateAsync(int orderId, UpdateOrderDTO orderDto)
         {
             try
             {
@@ -157,7 +167,7 @@ namespace Repositories.Repository
                     .FirstOrDefaultAsync(o => o.Id == orderId);
 
                 if (order == null)
-                    return false;
+                    throw new Exception($"Order with ID {orderId} not found.");
 
                 try
                 {
@@ -228,8 +238,6 @@ namespace Repositories.Repository
                     // Update order
                     await _unitOfWork.GetDAO<Order>().UpdateAsync(order);
                     await _unitOfWork.SaveAsync();
-
-                    return true;
                 }
                 catch
                 {

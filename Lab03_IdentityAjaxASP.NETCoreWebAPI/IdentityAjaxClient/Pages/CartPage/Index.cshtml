@@ -1,0 +1,587 @@
+﻿@page
+@model IdentityAjaxClient.Pages.CartPage.IndexModel
+@{
+    ViewData["Title"] = "Your Shopping Cart";
+}
+
+<div class="container py-5">
+    <!-- Botanical Header -->
+    <div class="text-center mb-5 position-relative">
+        <div class="leaf-decoration left-leaf"></div>
+        <h1 class="display-5 fw-bold mb-2">Your Shopping Cart</h1>
+        <p class="text-muted">Continue your botanical journey</p>
+        <div class="leaf-decoration right-leaf"></div>
+
+        <div class="d-flex align-items-center justify-content-center mt-3">
+            <div class="divider-leaf"></div>
+            <i class="bi bi-flower3 text-primary mx-3"></i>
+            <div class="divider-leaf"></div>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4 botanical-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-page="/Index" class="text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+        </ol>
+    </nav>
+
+    @if (!Model.CartItems.Any())
+    {
+        <!-- Empty Cart with Botanical Design -->
+        <div class="card border-0 shadow-sm rounded-4 text-center p-5 mb-4 empty-cart-card">
+            <div class="empty-cart-illustration">
+                <div class="empty-pot">
+                    <i class="bi bi-cart text-muted"></i>
+                </div>
+                <div class="empty-leaves"></div>
+            </div>
+            <h3 class="mb-3 mt-4">Your cart is empty</h3>
+            <p class="text-muted mb-4">Looks like your garden is waiting for some beautiful orchids.</p>
+            <a asp-page="/Index" class="btn btn-primary btn-lg px-5">
+                <i class="bi bi-flower2 me-2"></i> Explore Our Collection
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            <!-- Cart Items Card -->
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm rounded-botanical mb-4">
+                    <div class="card-header bg-white py-3 border-0">
+                        <div class="d-flex align-items-center">
+                            <div class="cart-icon-wrapper me-3">
+                                <i class="bi bi-cart3"></i>
+                            </div>
+                            <h4 class="mb-0">Your Selected Orchids (@Model.CartItems.Count)</h4>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-0">
+                        @foreach (var item in Model.CartItems)
+                        {
+                            <div class="cart-item p-4 border-botanical @(Model.CartItems.Last() == item ? "" : "border-bottom")">
+                                <div class="row align-items-center">
+                                    <!-- Product Image -->
+                                    <div class="col-md-3 mb-3 mb-md-0">
+                                        <div class="orchid-image-container">
+                                            @if (!string.IsNullOrEmpty(item.Product?.OrchidUrl))
+                                            {
+                                                <img src="@item.Product.OrchidUrl" class="img-fluid rounded-botanical" alt="@item.Product.OrchidName">
+                                            }
+                                            else
+                                            {
+                                                <div class="placeholder-image">
+                                                    <i class="bi bi-flower1"></i>
+                                                </div>
+                                            }
+
+                                            @if (item.Product.IsNatural.HasValue)
+                                            {
+                                                <div class="type-badge @(item.Product.IsNatural.Value ? "natural" : "hybrid")">
+                                                    @(item.Product.IsNatural.Value ? "Natural" : "Hybrid")
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <!-- Product Info -->
+                                    <div class="col-md-4 mb-3 mb-md-0">
+                                        <h5 class="orchid-name mb-2">@item.Product.OrchidName</h5>
+                                        <div class="mb-2 orchid-category">
+                                            <i class="bi bi-tag me-1"></i>
+                                            @(item.Product.Category?.CategoryName ?? "Uncategorized")
+                                        </div>
+                                        <div class="orchid-price">
+                                            <span>$@((item.Product.Price ?? 0).ToString("F2"))</span> per plant
+                                        </div>
+                                    </div>
+
+                                    <!-- Quantity Control -->
+                                    <div class="col-md-2 mb-3 mb-md-0">
+                                        <form asp-page-handler="UpdateQuantity" method="post">
+                                            <input type="hidden" name="productId" value="@item.OrchidId" />
+                                            <div class="quantity-control d-flex">
+                                                <button type="button" class="btn quantity-btn" onclick="decreaseQty(this)">
+                                                    <i class="bi bi-dash"></i>
+                                                </button>
+                                                <div class="quantity-input-wrapper">
+                                                    <input type="number" name="quantity" value="@item.Quantity" min="1" max="99"
+                                                           class="form-control quantity-input" onchange="this.form.submit()">
+                                                </div>
+                                                <button type="button" class="btn quantity-btn" onclick="increaseQty(this)">
+                                                    <i class="bi bi-plus"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <!-- Subtotal -->
+                                    <div class="col-md-3 text-end">
+                                        <div class="subtotal-price">$@(((item.Product.Price ?? 0) * item.Quantity).ToString("F2"))</div>
+                                        <form asp-page-handler="RemoveItem" method="post" class="mt-2">
+                                            <input type="hidden" name="productId" value="@item.OrchidId" />
+                                            <button type="submit" class="btn btn-sm btn-outline-danger remove-btn">
+                                                <i class="bi bi-trash me-1"></i> Remove
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Cart Actions -->
+                <div class="d-flex justify-content-between">
+                    <a asp-page="/Index" class="btn btn-outline-primary btn-botanical">
+                        <i class="bi bi-arrow-left me-2"></i> Continue Shopping
+                    </a>
+                    <form asp-page-handler="ClearCart" method="post">
+                        <button type="submit" class="btn btn-outline-danger btn-botanical">
+                            <i class="bi bi-trash me-2"></i> Clear Cart
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Order Summary Card -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-botanical sticky-lg-top" style="top: 2rem;">
+                    <div class="card-header bg-white py-3 border-0">
+                        <div class="d-flex align-items-center">
+                            <div class="summary-icon-wrapper me-3">
+                                <i class="bi bi-receipt"></i>
+                            </div>
+                            <h4 class="mb-0">Order Summary</h4>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Subtotal</span>
+                            <span class="fw-bold">$@Model.TotalPrice.ToString("F2")</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Shipping</span>
+                            <span class="text-success">Free</span>
+                        </div>
+
+                        <div class="care-note mb-4">
+                            <div class="care-icon">
+                                <i class="bi bi-info-circle"></i>
+                            </div>
+                            <p>All orchids are carefully packaged to ensure they arrive in perfect condition</p>
+                        </div>
+
+                        <hr class="botanical-divider">
+
+                        <div class="d-flex justify-content-between mb-4">
+                            <span class="fw-bold">Total</span>
+                            <span class="total-price">$@Model.TotalPrice.ToString("F2")</span>
+                        </div>
+
+                        <a asp-page="/CheckoutPage/Index" class="btn btn-primary btn-lg w-100 checkout-btn">
+                            <i class="bi bi-credit-card me-2"></i> Proceed to Checkout
+                        </a>
+
+                        <div class="text-center mt-3">
+                            <div class="secure-checkout">
+                                <i class="bi bi-shield-check me-1"></i> Secure Checkout
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function increaseQty(btn) {
+            const input = btn.parentNode.querySelector('input[type="number"]');
+            if (input.value < parseInt(input.max)) {
+                input.value = parseInt(input.value) + 1;
+                input.form.submit();
+            }
+        }
+
+        function decreaseQty(btn) {
+            const input = btn.parentNode.querySelector('input[type="number"]');
+            if (input.value > parseInt(input.min)) {
+                input.value = parseInt(input.value) - 1;
+                input.form.submit();
+            }
+        }
+    </script>
+}
+
+@section Styles {
+    <style>
+        /* Botanical Theme Colors */
+        :root {
+            --primary-green: #5d9c59;
+            --dark-green: #4e8a4a;
+            --light-green: #ebf5ea;
+            --accent-pink: #f8b8c4;
+            --accent-yellow: #fff8e6;
+            --text-color: #3c4043;
+        }
+
+        body {
+            color: var(--text-color);
+        }
+
+        /* Header with Decorative Elements */
+        .leaf-decoration {
+            position: absolute;
+            width: 150px;
+            height: 80px;
+            top: 0;
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 0.1;
+        }
+
+        .left-leaf {
+            left: 10%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M10,50 Q30,20 50,50 T90,50" stroke="%235d9c59" stroke-width="8" fill="none" /></svg>');
+            transform: rotate(-30deg);
+        }
+
+        .right-leaf {
+            right: 10%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M10,50 Q30,20 50,50 T90,50" stroke="%235d9c59" stroke-width="8" fill="none" /></svg>');
+            transform: rotate(30deg) scaleX(-1);
+        }
+
+        .divider-leaf {
+            height: 1px;
+            width: 100px;
+            background-color: var(--primary-green);
+            opacity: 0.3;
+        }
+
+        /* Botanical Breadcrumb */
+        .botanical-breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+            content: "•";
+            color: var(--primary-green);
+        }
+
+        /* Rounded Cards and Elements */
+        .rounded-botanical {
+            border-radius: 16px !important;
+            overflow: hidden;
+        }
+
+        /* Cart Items Styling */
+        .cart-item {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+            .cart-item:hover {
+                background-color: var(--light-green);
+            }
+
+        .border-botanical {
+            border-color: rgba(93, 156, 89, 0.1) !important;
+        }
+
+        /* Orchid Images */
+        .orchid-image-container {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            aspect-ratio: 1/1;
+        }
+
+            .orchid-image-container img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .placeholder-image {
+            background-color: var(--light-green);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary-green);
+        }
+
+        .type-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+            .type-badge.natural {
+                background-color: var(--primary-green);
+                color: white;
+            }
+
+            .type-badge.hybrid {
+                background-color: #61a8e8;
+                color: white;
+            }
+
+        /* Orchid Information Styling */
+        .orchid-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+
+        .orchid-category {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .orchid-price {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+            .orchid-price span {
+                font-weight: 600;
+                color: var(--primary-green);
+                font-size: 1.1rem;
+            }
+
+        /* Quantity Controls */
+        .quantity-control {
+            position: relative;
+            width: 100%;
+            max-width: 130px;
+            height: 38px;
+            border-radius: 50px;
+            align-items: center;
+            background-color: #f8f9fa;
+            border: 1px solid rgba(93, 156, 89, 0.2);
+            padding: 0 2px;
+        }
+
+        .quantity-btn {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            border: none;
+            background-color: transparent;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--primary-green);
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+            .quantity-btn:hover {
+                background-color: var(--primary-green);
+                color: white;
+            }
+
+        .quantity-input-wrapper {
+            position: relative;
+            flex-grow: 1;
+            height: 32px;
+            margin: 0 2px;
+        }
+
+        .quantity-input {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            border: none;
+            background: transparent;
+            font-weight: 600;
+        }
+
+            .quantity-input:focus {
+                outline: none;
+                box-shadow: none;
+            }
+
+        /* Subtotal and Remove Button */
+        .subtotal-price {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-green);
+        }
+
+        .remove-btn {
+            font-size: 0.8rem;
+            border-radius: 50px;
+            padding: 0.25rem 0.75rem;
+        }
+
+        /* Card Headers with Icons */
+        .cart-icon-wrapper,
+        .summary-icon-wrapper {
+            width: 40px;
+            height: 40px;
+            background-color: var(--light-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-green);
+            font-size: 1.2rem;
+        }
+
+        /* Care Note */
+        .care-note {
+            background-color: var(--light-green);
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 0.85rem;
+            position: relative;
+            padding-left: 50px;
+        }
+
+        .care-icon {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            color: var(--primary-green);
+            font-size: 1.1rem;
+        }
+
+        /* Botanical Divider */
+        .botanical-divider {
+            position: relative;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(93, 156, 89, 0.3), transparent);
+        }
+
+        /* Total Price */
+        .total-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-green);
+        }
+
+        /* Checkout Button */
+        .checkout-btn {
+            border-radius: 50px;
+            padding: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+        }
+
+            .checkout-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 15px rgba(93, 156, 89, 0.2);
+            }
+
+        /* Secure Checkout */
+        .secure-checkout {
+            color: #6c757d;
+            font-size: 0.85rem;
+        }
+
+        /* Buttons */
+        .btn-botanical {
+            border-radius: 50px;
+            padding: 0.5rem 1.5rem;
+            transition: all 0.3s;
+        }
+
+            .btn-botanical:hover {
+                transform: translateY(-2px);
+            }
+
+        .btn-primary {
+            background-color: var(--primary-green);
+            border-color: var(--primary-green);
+        }
+
+            .btn-primary:hover,
+            .btn-primary:focus {
+                background-color: var(--dark-green);
+                border-color: var(--dark-green);
+                box-shadow: 0 4px 12px rgba(93, 156, 89, 0.2);
+            }
+
+        .btn-outline-primary {
+            color: var(--primary-green);
+            border-color: var(--primary-green);
+        }
+
+            .btn-outline-primary:hover {
+                background-color: var(--primary-green);
+                border-color: var(--primary-green);
+                color: white;
+            }
+
+        /* Empty Cart Styling */
+        .empty-cart-card {
+            background: linear-gradient(to bottom, white, var(--light-green));
+            padding: 3rem !important;
+        }
+
+        .empty-cart-illustration {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+        }
+
+        .empty-pot {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
+            background-color: #f8f9fa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: #adb5bd;
+        }
+
+        .empty-leaves {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50"><path d="M50,0 C60,25 70,35 90,40 M50,0 C40,25 30,35 10,40" stroke="%235d9c59" stroke-width="2" fill="none" opacity="0.2" /></svg>');
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+            opacity: 0.2;
+        }
+
+        /* Remove spinner from number input */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+    </style>
+}

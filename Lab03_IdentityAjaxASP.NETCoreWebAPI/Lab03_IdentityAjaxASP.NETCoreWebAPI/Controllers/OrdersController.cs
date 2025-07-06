@@ -1,7 +1,6 @@
 ﻿using DataAccess.Constant.Enum;
 using DataAccess.DTO.Order;
-using DataAccess.Paginated;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Interface;
 
@@ -12,17 +11,19 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrderRepository _orderRepository;
+        private const string STAFF_ROLE = "3";
+
         public OrdersController(IOrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllOrders(int pageIndex = 1, int pageNumber = 10, string? idSearch = null, DateOnly? fromDate = null, DateOnly? toDate = null, OrderStatusEnum? status = null)
+        public async Task<IActionResult> GetAllOrders(int pageIndex = 1, int pageNumber = 10, string? idSearch = null, string? customerSearch = null, DateOnly? fromDate = null, DateOnly? toDate = null, OrderStatusEnum? status = null)
         {
             try
             {
-                var orders = await _orderRepository.GetAllAsync(pageIndex, pageNumber, idSearch, fromDate, toDate, status);
+                var orders = await _orderRepository.GetAllAsync(pageIndex, pageNumber, idSearch, customerSearch, fromDate, toDate, status);
                 
                 return Ok(orders);
             }
@@ -32,6 +33,7 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI.Controllers
             }
         }
 
+        [Authorize(Roles = STAFF_ROLE)]
         [HttpPost]
         public async Task<IActionResult> CreateOrder(CreateOrderDTO orderDto)
         {
@@ -41,8 +43,8 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI.Controllers
                 {
                     return BadRequest("Order data is required.");
                 }
-                var orderId = await _orderRepository.InsertAsync(orderDto);
-                return CreatedAtAction(nameof(GetAllOrders), new { id = orderId }, orderId);
+                await _orderRepository.InsertAsync(orderDto);
+                return CreatedAtAction(nameof(GetAllOrders), new { id = 0 });
             }
             catch (Exception ex)
             {
@@ -50,6 +52,7 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI.Controllers
             }
         }
 
+        [Authorize(Roles = STAFF_ROLE)]
         [HttpPut("{orderId}")]
         public async Task<IActionResult> UpdateOrder(int orderId, UpdateOrderDTO orderDto)
         {
@@ -59,11 +62,8 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI.Controllers
                 {
                     return BadRequest("Order data is required.");
                 }
-                var result = await _orderRepository.UpdateAsync(orderId, orderDto);
-                if (!result)
-                {
-                    return NotFound($"Order with ID {orderId} not found.");
-                }
+                await _orderRepository.UpdateAsync(orderId, orderDto);
+
                 return NoContent();
             }
             catch (Exception ex)

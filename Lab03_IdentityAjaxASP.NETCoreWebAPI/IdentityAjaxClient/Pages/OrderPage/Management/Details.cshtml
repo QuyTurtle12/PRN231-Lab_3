@@ -1,0 +1,179 @@
+﻿@page "{id:int}"
+@model IdentityAjaxClient.Pages.OrderPage.Management.DetailsModel
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="container-fluid px-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="display-6 mb-1">Order Details</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a asp-page="/Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-page="./Index">Orders</a></li>
+                    <li class="breadcrumb-item active">Order #@Model.Order?.Id</li>
+                </ol>
+            </nav>
+        </div>
+        <div>
+            <a asp-page="./Index" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Orders
+            </a>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i> @Model.ErrorMessage
+        </div>
+    }
+
+    <div class="row">
+        <!-- Order Summary Card -->
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i> Order Summary
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Order Date</span>
+                        <span>@(Model.Order?.OrderDate?.ToString("MMMM d, yyyy") ?? "N/A")</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Customer</span>
+                        <span>@(Model.Order?.Account?.AccountName ?? "N/A")</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Email</span>
+                        <span>@(Model.Order?.Account?.Email ?? "N/A")</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Status</span>
+                        @{
+                            var statusClass = Model.Order?.OrderStatus?.ToLower() switch
+                            {
+                                "completed" => "bg-success",
+                                "processing" => "bg-warning text-dark",
+                                "shipping" => "bg-info text-dark",
+                                "cancelled" => "bg-danger",
+                                _ => "bg-secondary"
+                            };
+                        }
+                        <span class="badge @statusClass">@(Model.Order?.OrderStatus ?? "N/A")</span>
+                    </div>
+                    <hr />
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold fs-5">Total</span>
+                        <span class="fw-bold fs-5 text-primary">@(Model.Order?.TotalAmount?.ToString("C", new System.Globalization.CultureInfo("en-US")) ?? "$0.00")</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Items Card -->
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-list-ul me-2"></i> Order Items
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.Order?.OrderDetails == null || !Model.Order.OrderDetails.Any())
+                    {
+                        <div class="p-4 text-center">
+                            <p class="text-muted mb-0">No items found in this order.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th class="text-center">Quantity</th>
+                                        <th class="text-end">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Order.OrderDetails)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    @if (item.Orchid != null && !string.IsNullOrEmpty(item.Orchid.OrchidUrl))
+                                                    {
+                                                        <img src="@item.Orchid.OrchidUrl"
+                                                             class="me-3 rounded"
+                                                             alt="@item.Orchid.OrchidName"
+                                                             style="width: 50px; height: 50px; object-fit: cover;" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="bg-light me-3 rounded d-flex align-items-center justify-content-center"
+                                                             style="width: 50px; height: 50px;">
+                                                            <i class="bi bi-image text-muted"></i>
+                                                        </div>
+                                                    }
+                                                    <div>
+                                                        <h6 class="mb-0">@(item.Orchid?.OrchidName ?? "Unknown Product")</h6>
+                                                        <small class="text-muted">@(item.Orchid?.Category?.CategoryName ?? "")</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>@(item.Price?.ToString("C", new System.Globalization.CultureInfo("en-US")) ?? "$0.00")</td>
+                                            <td class="text-center">@(item.Quantity ?? 0)</td>
+                                            <td class="text-end fw-bold">
+                                                @((item.Price * item.Quantity)?.ToString("C", new System.Globalization.CultureInfo("en-US")) ?? "$0.00")
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot class="table-light">
+                                    <tr>
+                                        <th colspan="3" class="text-end">Total:</th>
+                                        <th class="text-end text-primary">
+                                            @(Model.Order.TotalAmount?.ToString("C", new System.Globalization.CultureInfo("en-US")) ?? "$0.00")
+                                        </th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .card {
+            border: none;
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+
+        .badge {
+            font-weight: 500;
+            padding: 0.5em 0.75em;
+        }
+
+        .table td, .table th {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(var(--bs-primary-rgb), 0.05);
+        }
+    </style>
+}

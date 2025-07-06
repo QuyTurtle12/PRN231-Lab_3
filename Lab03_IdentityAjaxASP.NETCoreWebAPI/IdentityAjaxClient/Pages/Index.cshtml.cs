@@ -29,6 +29,7 @@ namespace IdentityAjaxClient.Pages
 
         [BindProperty(SupportsGet = true)]
         public bool? IsNatural { get; set; }
+        private const string CartSessionKey = "Cart";
 
         public async Task OnGetAsync(
             int pageIndex = 1,
@@ -101,34 +102,64 @@ namespace IdentityAjaxClient.Pages
                 if (string.IsNullOrEmpty(userId))
                 {
                     // Redirect to login if user is not authenticated
-                    return RedirectToPage("/Account/Login");
+                    return RedirectToPage("/AuthPage/Login");
                 }
 
-                // Create cart item
-                var cartItem = new CartItem
+                // Fetch the orchid from API to get its details
+                var orchidResponse = await _httpClient.GetAsync($"orchids?idSearch={orchidId}");
+                if (!orchidResponse.IsSuccessStatusCode)
                 {
-                    OrchidId = orchidId,
-                    UserId = int.Parse(userId),
-                    Quantity = 1
-                };
+                    return NotFound();
+                }
 
-                // Send to API
-                var response = await _httpClient.PostAsJsonAsync("cart", cartItem);
+                var orchidPaginatedList = await orchidResponse.Content.ReadFromJsonAsync<PaginationDTO<Orchid>>();
 
-                if (response.IsSuccessStatusCode)
+                Orchid? orchid = orchidPaginatedList?.Items.FirstOrDefault();
+
+                if (orchid == null)
                 {
-                    TempData["SuccessMessage"] = "Item added to cart successfully!";
+                    TempData["ErrorMessage"] = "Could not find the specified orchid.";
+                    return RedirectToPage();
+                }
+
+                // Get existing cart from session
+                var cartItems = new List<CartItem>();
+                var cartJson = HttpContext.Session.GetString(CartSessionKey);
+
+                if (!string.IsNullOrEmpty(cartJson))
+                {
+                    cartItems = System.Text.Json.JsonSerializer.Deserialize<List<CartItem>>(cartJson) ?? new List<CartItem>();
+                }
+
+                // Check if the item already exists in cart
+                var existingItem = cartItems.FirstOrDefault(i => i.OrchidId == orchidId);
+                if (existingItem != null)
+                {
+                    // Increase quantity of existing item
+                    existingItem.Quantity++;
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "Failed to add item to cart.";
+                    // Add new item to cart
+                    cartItems.Add(new CartItem
+                    {
+                        OrchidId = orchidId,
+                        UserId = int.Parse(userId),
+                        Quantity = 1
+                    });
                 }
 
+                // Save updated cart back to session
+                HttpContext.Session.SetString(CartSessionKey,
+                    System.Text.Json.JsonSerializer.Serialize(cartItems));
+
+                TempData["SuccessMessage"] = "Item added to cart successfully!";
                 return RedirectToPage();
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, $"Error adding to cart: {ex.Message}");
+                _logger.LogError(ex, "Error adding item to cart");
+                TempData["ErrorMessage"] = $"Error adding item to cart: {ex.Message}";
                 return RedirectToPage();
             }
         }
