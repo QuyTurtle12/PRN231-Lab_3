@@ -4,33 +4,66 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h2 class="text-center">Login</h2>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-8">
+            <!-- Botanical Header -->
+            <div class="text-center mb-4 position-relative">
+                <div class="leaf-decoration left-leaf"></div>
+                <h1 class="display-5 fw-bold mb-2">Welcome Back</h1>
+                <p class="text-muted">Sign in to your Orchid Heaven account</p>
+                <div class="leaf-decoration right-leaf"></div>
+
+                <div class="d-flex align-items-center justify-content-center mt-3">
+                    <div class="divider-leaf"></div>
+                    <i class="bi bi-flower3 text-primary mx-3"></i>
+                    <div class="divider-leaf"></div>
+                </div>
             </div>
-            <div class="card-body">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <form method="post">
-                    <div class="mb-3">
-                        <label asp-for="LoginDTO.Email" class="form-label"></label>
-                        <input asp-for="LoginDTO.Email" class="form-control" />
-                        <span asp-validation-for="LoginDTO.Email" class="text-danger"></span>
+            
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="card-header bg-white border-0 py-4">
+                    <div class="login-icon-wrapper mx-auto mb-3">
+                        <i class="bi bi-person-circle"></i>
                     </div>
-                    <div class="mb-3">
-                        <label asp-for="LoginDTO.Password" class="form-label"></label>
-                        <input asp-for="LoginDTO.Password" class="form-control" type="password" />
-                        <span asp-validation-for="LoginDTO.Password" class="text-danger"></span>
-                    </div>
-                    <div class="mb-3 form-check">
-                        <input asp-for="LoginDTO.RememberMe" class="form-check-input" type="checkbox" />
-                        <label asp-for="LoginDTO.RememberMe" class="form-check-label">Remember Me</label>
-                    </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Login</button>
-                    </div>
-                </form>
+                </div>
+                <div class="card-body p-4">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <form method="post">
+                        <div class="mb-4">
+                            <div class="form-floating">
+                                <input asp-for="LoginDTO.Email" class="form-control form-control-lg login-input" placeholder="Email" />
+                                <label asp-for="LoginDTO.Email" class="form-label"><i class="bi bi-envelope me-2"></i>Email</label>
+                            </div>
+                            <span asp-validation-for="LoginDTO.Email" class="text-danger"></span>
+                        </div>
+                        <div class="mb-4">
+                            <div class="form-floating">
+                                <input asp-for="LoginDTO.Password" class="form-control form-control-lg login-input" type="password" placeholder="Password" />
+                                <label asp-for="LoginDTO.Password" class="form-label"><i class="bi bi-lock me-2"></i>Password</label>
+                            </div>
+                            <span asp-validation-for="LoginDTO.Password" class="text-danger"></span>
+                        </div>
+                        <div class="mb-4 form-check">
+                            <input asp-for="LoginDTO.RememberMe" class="form-check-input" type="checkbox" />
+                            <label asp-for="LoginDTO.RememberMe" class="form-check-label">Remember Me</label>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg login-btn">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                            </button>
+                        </div>
+                        <div class="text-center mt-4">
+                            <p class="mb-0">Don't have an account? <a asp-page="/AuthPage/Register" class="text-decoration-none">Register</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <div class="secure-login">
+                    <i class="bi bi-shield-check me-1"></i> Secure Login
+                </div>
             </div>
         </div>
     </div>
@@ -38,4 +71,84 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+}
+
+@section Styles {
+    <style>
+        /* Login page specific styles */
+        .login-icon-wrapper {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+        
+        .login-input {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .login-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.25);
+        }
+        
+        .login-btn {
+            border-radius: 10px;
+            font-weight: 600;
+            background: var(--gradient-primary);
+            border: none;
+            padding: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(231, 76, 60, 0.3);
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .secure-login {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .leaf-decoration {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            opacity: 0.2;
+        }
+        
+        .left-leaf {
+            left: 0;
+            top: 10px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%235d9c59'%3E%3Cpath d='M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z'/%3E%3C/svg%3E") no-repeat center center;
+            transform: rotate(-30deg);
+        }
+        
+        .right-leaf {
+            right: 0;
+            top: 10px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%235d9c59'%3E%3Cpath d='M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z'/%3E%3C/svg%3E") no-repeat center center;
+            transform: rotate(30deg);
+        }
+        
+        .divider-leaf {
+            height: 2px;
+            background-color: #e9ecef;
+            flex-grow: 1;
+            max-width: 80px;
+        }
+    </style>
 }

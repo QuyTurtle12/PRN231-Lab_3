@@ -3,6 +3,159 @@
 @{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container py-5">
+    <!-- Botanical Header -->
+    <div class="text-center mb-5 position-relative">
+        <div class="leaf-decoration left-leaf"></div>
+        <h1 class="display-4 fw-bold mb-2">Privacy Policy</h1>
+        <p class="text-muted">How we protect your information at Orchid Heaven</p>
+        <div class="leaf-decoration right-leaf"></div>
+
+        <div class="d-flex align-items-center justify-content-center mt-3">
+            <div class="divider-leaf"></div>
+            <i class="bi bi-flower3 text-primary mx-3"></i>
+            <div class="divider-leaf"></div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+                <div class="card-body p-4 p-md-5">
+                    <div class="privacy-section mb-5">
+                        <h3 class="privacy-heading"><i class="bi bi-shield-lock me-2"></i>Information We Collect</h3>
+                        <p>At Orchid Heaven, we collect certain personal information when you create an account, place an order, or interact with our website. This information may include:</p>
+                        <ul class="privacy-list">
+                            <li>Your name and contact details</li>
+                            <li>Delivery address information</li>
+                            <li>Payment information (securely processed)</li>
+                            <li>Order history and preferences</li>
+                            <li>Communication preferences</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="privacy-section mb-5">
+                        <h3 class="privacy-heading"><i class="bi bi-lock me-2"></i>How We Use Your Information</h3>
+                        <p>We use the information we collect for the following purposes:</p>
+                        <ul class="privacy-list">
+                            <li>Processing and fulfilling your orders</li>
+                            <li>Managing your account and providing customer support</li>
+                            <li>Sending order confirmations and delivery updates</li>
+                            <li>Improving our products and services</li>
+                            <li>Personalizing your shopping experience</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="privacy-section mb-5">
+                        <h3 class="privacy-heading"><i class="bi bi-shield-check me-2"></i>Data Security</h3>
+                        <p>We take the security of your personal information seriously and implement appropriate technical and organizational measures to protect it. Our security practices include:</p>
+                        <ul class="privacy-list">
+                            <li>Encryption of sensitive data</li>
+                            <li>Regular security assessments</li>
+                            <li>Secure payment processing</li>
+                            <li>Limited staff access to personal information</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="privacy-section mb-5">
+                        <h3 class="privacy-heading"><i class="bi bi-envelope-check me-2"></i>Marketing Communications</h3>
+                        <p>With your consent, we may send you marketing communications about our products, promotions, and events. You can opt out of receiving these communications at any time by:</p>
+                        <ul class="privacy-list">
+                            <li>Clicking the unsubscribe link in our emails</li>
+                            <li>Updating your preferences in your account settings</li>
+                            <li>Contacting our customer service team</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="privacy-section">
+                        <h3 class="privacy-heading"><i class="bi bi-question-circle me-2"></i>Contact Us</h3>
+                        <p>If you have any questions about our privacy policy or how we handle your personal information, please contact us at:</p>
+                        <div class="contact-info">
+                            <p><i class="bi bi-envelope me-2"></i>privacy@orchidheaven.com</p>
+                            <p><i class="bi bi-telephone me-2"></i>(555) 123-4567</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <p class="text-muted small">Last updated: @DateTime.Now.ToString("MMMM yyyy")</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        /* Privacy page specific styles */
+        .privacy-heading {
+            color: var(--primary-color);
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .privacy-list {
+            padding-left: 1.5rem;
+        }
+        
+        .privacy-list li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        
+        .privacy-list li::before {
+            content: "🌿";
+            position: absolute;
+            left: -1.5rem;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+        }
+        
+        .privacy-section {
+            position: relative;
+            padding-left: 1rem;
+            border-left: 3px solid rgba(231, 76, 60, 0.1);
+        }
+        
+        .contact-info {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+        
+        .contact-info p {
+            margin-bottom: 0.5rem;
+        }
+        
+        .leaf-decoration {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            opacity: 0.2;
+        }
+        
+        .left-leaf {
+            left: 0;
+            top: 10px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%235d9c59'%3E%3Cpath d='M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z'/%3E%3C/svg%3E") no-repeat center center;
+            transform: rotate(-30deg);
+        }
+        
+        .right-leaf {
+            right: 0;
+            top: 10px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%235d9c59'%3E%3Cpath d='M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z'/%3E%3C/svg%3E") no-repeat center center;
+            transform: rotate(30deg);
+        }
+        
+        .divider-leaf {
+            height: 2px;
+            background-color: #e9ecef;
+            flex-grow: 1;
+            max-width: 80px;
+        }
+    </style>
+}

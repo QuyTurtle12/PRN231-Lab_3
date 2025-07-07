@@ -211,7 +211,7 @@
                                                 : item.OrchidDescription)
                                         </p>
                                         <div class="d-grid gap-2 mt-3">
-                                            @if (Model.IsCustomer)
+                                          @if (Model.IsCustomer)
                                             {
                                              <button type="button" class="btn btn-primary w-100 add-to-cart-btn" data-orchid-id="@item.OrchidId">
                                                 <i class="bi bi-cart-plus me-2"></i> Add to Cart
@@ -371,13 +371,7 @@
     <section class="mb-5 py-3">
         <div class="care-tips-section">
             <div class="row align-items-center">
-                <div class="col-lg-6 mb-4 mb-lg-0">
-                    <div class="care-image-wrapper">
-                        <img src="https://images.unsplash.com/photo-1515513616051-5d3ae2773086?q=80&w=1000&auto=format&fit=crop" alt="Orchid Care" class="img-fluid rounded-4 shadow-lg care-image">
-                        <div class="care-image-overlay"></div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
                     <div class="care-content">
                         <h2 class="section-title mb-4">Orchid Care Tips</h2>
                         <div class="care-tip mb-4">
@@ -407,9 +401,6 @@
                                 <p>Most orchids thrive in temperatures between 65-75°F during the day and about 10°F cooler at night.</p>
                             </div>
                         </div>
-                        <a href="#" class="btn btn-outline-primary mt-4 care-btn">
-                            <i class="bi bi-book me-2"></i>Read More Care Tips
-                        </a>
                     </div>
                 </div>
             </div>
@@ -462,14 +453,11 @@
                     const originalText = this.innerHTML;
                     this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...';
                     
-                    // Get the anti-forgery token - Fix this part
-                    const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
-                    
                     fetch('?handler=AddToCart', {
                         method: 'POST',
                         body: form,
                         headers: {
-                            'RequestVerificationToken': token
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
                         }
                     })
                     .then(response => response.json())
