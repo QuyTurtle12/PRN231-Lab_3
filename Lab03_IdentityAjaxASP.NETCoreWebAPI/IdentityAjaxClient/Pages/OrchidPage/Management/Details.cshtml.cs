@@ -20,16 +20,31 @@ namespace IdentityAjaxClient.Pages.OrchidPage.Management
         {
             if (id == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "No orchid ID provided.";
+                return RedirectToPage("./Index");
             }
 
             try
             {
+                // Get current user role from session
+                var userRole = HttpContext.Session.GetString("UserRole");
+
+                bool isStaff = !string.IsNullOrEmpty(userRole) &&
+                    userRole.Equals("Staff", StringComparison.OrdinalIgnoreCase);
+
+                // Check authorization
+                if (!isStaff)
+                {
+                    TempData["ErrorMessage"] = "You don't have permission to view this page.";
+                    return RedirectToPage("/Index");
+                }
+
                 // Fetch orchid details
                 var orchidResponse = await _httpClient.GetAsync($"orchids?idSearch={id}");
                 if (!orchidResponse.IsSuccessStatusCode)
                 {
-                    return NotFound();
+                    TempData["ErrorMessage"] = "Failed to retrieve orchid details.";
+                    return RedirectToPage("./Index");
                 }
 
                 var orchidPaginatedList = await orchidResponse.Content.ReadFromJsonAsync<PaginationDTO<Orchid>>();
@@ -38,7 +53,8 @@ namespace IdentityAjaxClient.Pages.OrchidPage.Management
 
                 if (orchid == null)
                 {
-                    return NotFound();
+                    TempData["ErrorMessage"] = "Orchid not found.";
+                    return RedirectToPage("./Index");
                 }
 
                 Orchid = orchid;
@@ -47,8 +63,8 @@ namespace IdentityAjaxClient.Pages.OrchidPage.Management
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Error loading orchid: " + ex.Message);
-                return Page();
+                TempData["ErrorMessage"] = $"Error loading orchid: {ex.Message}";
+                return RedirectToPage("./Index");
             }
         }
     }

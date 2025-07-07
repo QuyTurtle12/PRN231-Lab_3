@@ -31,7 +31,8 @@ namespace IdentityAjaxClient.Pages.OrchidPage.Orchids
         {
             if (id <= 0)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Invalid orchid ID.";
+                return RedirectToPage("/Index");
             }
 
             try
@@ -40,7 +41,8 @@ namespace IdentityAjaxClient.Pages.OrchidPage.Orchids
                 var orchidResponse = await _httpClient.GetAsync($"orchids?idSearch={id}");
                 if (!orchidResponse.IsSuccessStatusCode)
                 {
-                    return NotFound();
+                    TempData["ErrorMessage"] = "Failed to retrieve orchid details.";
+                    return RedirectToPage("/Index");
                 }
 
                 var orchidPaginatedList = await orchidResponse.Content.ReadFromJsonAsync<PaginationDTO<Orchid>>();
@@ -49,7 +51,8 @@ namespace IdentityAjaxClient.Pages.OrchidPage.Orchids
 
                 if (orchid == null)
                 {
-                    return NotFound();
+                    TempData["ErrorMessage"] = "Orchid not found.";
+                    return RedirectToPage("/Index");
                 }
 
                 Orchid = orchid;
@@ -58,8 +61,9 @@ namespace IdentityAjaxClient.Pages.OrchidPage.Orchids
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, $"Error retrieving orchid: {ex.Message}");
-                return Page();
+                _logger.LogError(ex, "Error retrieving orchid details");
+                TempData["ErrorMessage"] = $"Error retrieving orchid: {ex.Message}";
+                return RedirectToPage("/Index");
             }
         }
 
@@ -67,7 +71,11 @@ namespace IdentityAjaxClient.Pages.OrchidPage.Orchids
         {
             if (orchidId <= 0)
             {
-                return BadRequest();
+                return new JsonResult(new
+                {
+                    success = false,
+                    message = "Invalid orchid ID."
+                });
             }
 
             // Ensure quantity is at least 1
@@ -80,15 +88,24 @@ namespace IdentityAjaxClient.Pages.OrchidPage.Orchids
 
                 if (string.IsNullOrEmpty(userId))
                 {
-                    // Redirect to login if user is not authenticated
-                    return RedirectToPage("/AuthPage/Login");
+                    // Return JSON response for AJAX handling
+                    return new JsonResult(new
+                    {
+                        success = false,
+                        message = "Please log in to add items to your cart.",
+                        requireLogin = true
+                    });
                 }
 
                 // Fetch the orchid from API to get its details
                 var orchidResponse = await _httpClient.GetAsync($"orchids?idSearch={orchidId}");
                 if (!orchidResponse.IsSuccessStatusCode)
                 {
-                    return NotFound();
+                    return new JsonResult(new
+                    {
+                        success = false,
+                        message = "Could not find the specified orchid."
+                    });
                 }
 
                 var orchidPaginatedList = await orchidResponse.Content.ReadFromJsonAsync<PaginationDTO<Orchid>>();
@@ -97,8 +114,11 @@ namespace IdentityAjaxClient.Pages.OrchidPage.Orchids
 
                 if (orchid == null)
                 {
-                    TempData["ErrorMessage"] = "Could not find the specified orchid.";
-                    return RedirectToPage();
+                    return new JsonResult(new
+                    {
+                        success = false,
+                        message = "Could not find the specified orchid."
+                    });
                 }
 
                 // Get current cart
@@ -124,15 +144,20 @@ namespace IdentityAjaxClient.Pages.OrchidPage.Orchids
                 return new JsonResult(new
                 {
                     success = true,
-                    message = existingItem != null ? $"Item quantity increased by {quantity} in cart!" : $"Item added to cart with quantity {quantity}!",
+                    message = existingItem != null 
+                        ? $"{orchid.OrchidName} quantity increased by {quantity} in your cart!" 
+                        : $"{orchid.OrchidName} added to your cart with quantity {quantity}!",
                     cartCount = cart?.Count ?? 0
                 });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error adding item to cart");
-                TempData["ErrorMessage"] = $"Error adding item to cart: {ex.Message}";
-                return RedirectToPage();
+                return new JsonResult(new
+                {
+                    success = false,
+                    message = $"Error adding item to cart: {ex.Message}"
+                });
             }
         }
     }
