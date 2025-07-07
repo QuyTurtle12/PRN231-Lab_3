@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace IdentityAjaxClient.Pages.AuthPage
 {
-    public class RegisterModel : PageModel
+    public class RegisterModel : BasePageModel
     {
         private readonly HttpClient _httpClient;
 

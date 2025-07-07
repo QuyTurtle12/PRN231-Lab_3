@@ -1,0 +1,296 @@
+﻿@page
+@model IdentityAjaxClient.Pages.CheckoutPage.IndexModel
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4 botanical-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-page="/Index" class="text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item"><a asp-page="/CartPage/Index" class="text-decoration-none">Shopping Cart</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+        </ol>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="text-center mb-5 position-relative">
+        <div class="leaf-decoration left-leaf"></div>
+        <h1 class="display-5 fw-bold mb-2">Complete Your Order</h1>
+        <p class="text-muted">Review and confirm your purchase</p>
+        <div class="leaf-decoration right-leaf"></div>
+
+        <div class="d-flex align-items-center justify-content-center mt-3">
+            <div class="divider-leaf"></div>
+            <i class="bi bi-flower3 text-primary mx-3"></i>
+            <div class="divider-leaf"></div>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger mb-4">
+            <i class="bi bi-exclamation-circle me-2"></i> @Model.ErrorMessage
+        </div>
+    }
+
+    <form method="post">
+        <div class="row g-4">
+            <!-- Order Summary -->
+            <div class="col-lg-5 order-lg-2">
+                <div class="card border-0 shadow-sm rounded-botanical sticky-lg-top" style="top: 2rem;">
+                    <div class="card-header bg-white py-3 border-0">
+                        <div class="d-flex align-items-center">
+                            <div class="summary-icon-wrapper me-3">
+                                <i class="bi bi-receipt"></i>
+                            </div>
+                            <h4 class="mb-0">Order Summary</h4>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="p-4">
+                            @foreach (var item in Model.CartItems)
+                            {
+                                <div class="d-flex mb-3">
+                                    <div class="flex-shrink-0 me-3">
+                                        @if (!string.IsNullOrEmpty(item.Product?.OrchidUrl))
+                                        {
+                                            <img src="@item.Product.OrchidUrl" alt="@item.Product.OrchidName"
+                                                 class="rounded-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                        }
+                                        else
+                                        {
+                                            <div class="bg-light rounded-3 d-flex align-items-center justify-content-center"
+                                                 style="width: 50px; height: 50px;">
+                                                <i class="bi bi-flower1 text-muted"></i>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-0">@item.Product.OrchidName</h6>
+                                        <small class="text-muted">Qty: @item.Quantity</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="fw-semibold">$@(((item.Product.Price ?? 0) * item.Quantity).ToString("F2"))</span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <hr class="botanical-divider m-0">
+
+                        <div class="p-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Subtotal</span>
+                                <span class="fw-semibold">$@Model.TotalPrice.ToString("F2")</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span>Shipping</span>
+                                <span class="text-success">Free</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-0">
+                                <span class="h5">Total</span>
+                                <span class="h5 text-primary">$@Model.TotalPrice.ToString("F2")</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Checkout Details -->
+            <div class="col-lg-7 order-lg-1">
+                <div class="card border-0 shadow-sm rounded-botanical mb-4">
+                    <div class="card-header bg-white py-3 border-0">
+                        <div class="d-flex align-items-center">
+                            <div class="cart-icon-wrapper me-3">
+                                <i class="bi bi-person"></i>
+                            </div>
+                            <h4 class="mb-0">Customer Information</h4>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="customer-info p-3 bg-light rounded-3 mb-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-1"><strong>Name:</strong> @Model.UserAccount?.AccountName</p>
+                                    <p class="mb-1"><strong>Email:</strong> @Model.UserAccount?.Email</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-botanical">
+                    <div class="card-header bg-white py-3 border-0">
+                        <div class="d-flex align-items-center">
+                            <div class="cart-icon-wrapper me-3">
+                                <i class="bi bi-credit-card"></i>
+                            </div>
+                            <h4 class="mb-0">Payment</h4>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label class="form-label">Payment Method</label>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="cashOnDelivery" checked>
+                                <label class="form-check-label" for="cashOnDelivery">
+                                    <i class="bi bi-cash me-2"></i> Cash on Delivery
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="care-note mb-4">
+                            <div class="care-icon">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+                            <p>All orders are carefully processed and packaged. Your orchids will be delivered in perfect condition.</p>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100 checkout-btn">
+                            <i class="bi bi-lock me-2"></i> Place Order
+                        </button>
+
+                        <div class="text-center mt-3">
+                            <a asp-page="/CartPage/Index" class="btn btn-link">
+                                <i class="bi bi-arrow-left me-1"></i> Return to Cart
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Styles {
+    <style>
+        /* Botanical Theme Colors */
+        :root {
+            --primary-green: #5d9c59;
+            --dark-green: #4e8a4a;
+            --light-green: #ebf5ea;
+            --accent-pink: #f8b8c4;
+            --accent-yellow: #fff8e6;
+            --text-color: #3c4043;
+        }
+
+        body {
+            color: var(--text-color);
+        }
+
+        /* Header with Decorative Elements */
+        .leaf-decoration {
+            position: absolute;
+            width: 150px;
+            height: 80px;
+            top: 0;
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 0.1;
+        }
+
+        .left-leaf {
+            left: 10%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M10,50 Q30,20 50,50 T90,50" stroke="%235d9c59" stroke-width="8" fill="none" /></svg>');
+            transform: rotate(-30deg);
+        }
+
+        .right-leaf {
+            right: 10%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M10,50 Q30,20 50,50 T90,50" stroke="%235d9c59" stroke-width="8" fill="none" /></svg>');
+            transform: rotate(30deg) scaleX(-1);
+        }
+
+        .divider-leaf {
+            height: 1px;
+            width: 100px;
+            background-color: var(--primary-green);
+            opacity: 0.3;
+        }
+
+        /* Botanical Breadcrumb */
+        .botanical-breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+            content: "•";
+            color: var(--primary-green);
+        }
+
+        /* Rounded Cards */
+        .rounded-botanical {
+            border-radius: 16px !important;
+            overflow: hidden;
+        }
+
+        /* Card Headers with Icons */
+        .cart-icon-wrapper,
+        .summary-icon-wrapper {
+            width: 40px;
+            height: 40px;
+            background-color: var(--light-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-green);
+            font-size: 1.2rem;
+        }
+
+        /* Botanical Divider */
+        .botanical-divider {
+            position: relative;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(93, 156, 89, 0.3), transparent);
+        }
+
+        /* Care Note */
+        .care-note {
+            background-color: var(--light-green);
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 0.85rem;
+            position: relative;
+            padding-left: 50px;
+        }
+
+        .care-icon {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            color: var(--primary-green);
+            font-size: 1.1rem;
+        }
+
+        /* Checkout Button */
+        .checkout-btn {
+            border-radius: 50px;
+            padding: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+        }
+
+            .checkout-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 15px rgba(93, 156, 89, 0.2);
+            }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--primary-green);
+            border-color: var(--primary-green);
+        }
+
+            .btn-primary:hover,
+            .btn-primary:focus {
+                background-color: var(--dark-green);
+                border-color: var(--dark-green);
+                box-shadow: 0 4px 12px rgba(93, 156, 89, 0.2);
+            }
+
+        /* Text Colors */
+        .text-primary {
+            color: var(--primary-green) !important;
+        }
+    </style>
+}

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace IdentityAjaxClient.Pages.AuthPage
 {
-    public class LogoutModel : PageModel
+    public class LogoutModel : BasePageModel
     {
         public IActionResult OnGet()
         {

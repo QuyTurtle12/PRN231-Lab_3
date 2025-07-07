@@ -6,6 +6,6 @@ namespace IdentityAjaxClient.Model
     {
         public int OrchidId { get; set; }
         public int Quantity { get; set; }
-        public Orchid Product { get; set; }
+        public Orchid Product { get; set; } = null!;
     }
 }

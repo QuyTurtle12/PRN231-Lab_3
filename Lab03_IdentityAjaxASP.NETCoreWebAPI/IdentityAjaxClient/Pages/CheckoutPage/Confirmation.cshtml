@@ -1,0 +1,167 @@
+﻿@page "{id:int}"
+@model IdentityAjaxClient.Pages.CheckoutPage.ConfirmationModel
+@using System.Globalization
+@{
+    ViewData["Title"] = "Order Confirmation";
+    var usCulture = new CultureInfo("en-US");
+}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <div class="success-animation mb-4">
+            <div class="checkmark-circle">
+                <div class="checkmark-circle-bg"></div>
+                <div class="checkmark draw"></div>
+            </div>
+        </div>
+
+        <h1 class="display-5 fw-bold mb-2">Thank You For Your Order!</h1>
+        <p class="lead text-muted mb-4">Your order has been placed successfully.</p>
+
+        <div class="d-flex justify-content-center">
+            <div class="card border-0 shadow-sm rounded-4 mb-4" style="max-width: 600px;">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="mb-0">Order #@Model.Order?.Id</h5>
+                        <span class="badge bg-success">@Model.Order?.OrderStatus</span>
+                    </div>
+
+                    <div class="row text-start mb-4">
+                        <div class="col-sm-6 mb-3 mb-sm-0">
+                            <p class="text-muted mb-1">Order Date</p>
+                            <p class="fw-semibold mb-0">@Model.Order?.OrderDate?.ToString("MMMM d, yyyy")</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="text-muted mb-1">Customer</p>
+                            <p class="fw-semibold mb-0">@Model.Order?.Account?.AccountName</p>
+                        </div>
+                    </div>
+
+                    <div class="border-top border-bottom py-3 mb-4">
+                        @foreach (var item in Model.OrderItems)
+                        {
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <span class="fw-medium">@item.Quantity x @item.Orchid.OrchidName</span>
+                                </div>
+                                <span>$@(item.Price?.ToString("F2", usCulture))</span>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-0">
+                        <span class="h5 mb-0">Total</span>
+                        <span class="h5 text-primary mb-0">$@(Model.Order?.TotalAmount?.ToString("F2", usCulture))</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="botanical-message mb-4">
+            <i class="bi bi-flower3 text-primary me-2"></i>
+            Your beautiful orchids are being prepared for shipping
+            <i class="bi bi-flower3 text-primary ms-2"></i>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3">
+            <a asp-page="/Index" class="btn btn-primary px-4 py-2">
+                <i class="bi bi-house me-2"></i> Back to Home
+            </a>
+            <a asp-page="/OrderPage/Management/Details" asp-route-id="@Model.Order?.Id" class="btn btn-outline-primary px-4 py-2">
+                <i class="bi bi-bag me-2"></i> View Order Details
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        /* Botanical Theme Colors */
+        :root {
+            --primary-green: #5d9c59;
+            --dark-green: #4e8a4a;
+            --light-green: #ebf5ea;
+        }
+
+        /* Success Animation */
+        .success-animation {
+            margin: 0 auto;
+            width: 100px;
+            height: 100px;
+            position: relative;
+        }
+
+        .checkmark-circle {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            display: block;
+            border-radius: 50%;
+            box-sizing: content-box;
+            padding: 10px;
+        }
+
+        .checkmark-circle-bg {
+            border-radius: 50%;
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            width: 100px;
+            height: 100px;
+            background-color: var(--light-green);
+        }
+
+        .checkmark {
+            transform: rotate(45deg);
+            height: 56px;
+            width: 28px;
+            border-right: 5px solid var(--primary-green);
+            border-bottom: 5px solid var(--primary-green);
+            position: absolute;
+            left: 45px;
+            top: 34px;
+            display: block;
+            animation: checkmark 0.5s ease-in-out forwards;
+            opacity: 0;
+        }
+
+        .rounded-4 {
+            border-radius: 1rem;
+        }
+
+        .botanical-message {
+            font-style: italic;
+            color: #6c757d;
+        }
+
+        .text-primary {
+            color: var(--primary-green) !important;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-green);
+            border-color: var(--primary-green);
+        }
+
+            .btn-primary:hover,
+            .btn-primary:focus {
+                background-color: var(--dark-green);
+                border-color: var(--dark-green);
+            }
+
+        .btn-outline-primary {
+            color: var(--primary-green);
+            border-color: var(--primary-green);
+        }
+
+            .btn-outline-primary:hover {
+                background-color: var(--primary-green);
+                border-color: var(--primary-green);
+                color: white;
+            }
+
+        .bg-success {
+            background-color: var(--primary-green) !important;
+        }
+    </style>
+}

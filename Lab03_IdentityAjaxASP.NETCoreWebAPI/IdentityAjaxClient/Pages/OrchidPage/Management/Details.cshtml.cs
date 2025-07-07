@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace IdentityAjaxClient.Pages.OrchidPage.Management
 {
-    public class DetailsModel : PageModel
+    public class DetailsModel : BasePageModel
     {
         private readonly HttpClient _httpClient;
 

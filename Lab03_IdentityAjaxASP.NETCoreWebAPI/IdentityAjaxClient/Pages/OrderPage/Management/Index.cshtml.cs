@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using BusinessObjects;
+﻿using BusinessObjects;
 using DataAccess.Constant.Enum;
 using IdentityAjaxClient.Model;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace IdentityAjaxClient.Pages.OrderPage.Management
 {
-    public class IndexModel : PageModel
+    public class IndexModel : BasePageModel
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<IndexModel> _logger;

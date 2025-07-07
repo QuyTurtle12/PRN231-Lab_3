@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IdentityAjaxClient.Pages.OrchidPage.Management
 {
-    public class EditModel : PageModel
+    public class EditModel : BasePageModel
     {
         private readonly HttpClient _httpClient;
         private readonly IWebHostEnvironment _environment;

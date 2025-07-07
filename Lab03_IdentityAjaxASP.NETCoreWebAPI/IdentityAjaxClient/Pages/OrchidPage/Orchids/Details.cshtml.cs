@@ -80,7 +80,6 @@ namespace IdentityAjaxClient.Pages.OrchidPage.Orchids
                 var cartItem = new CartItem
                 {
                     OrchidId = Id,
-                    UserId = int.Parse(userId),
                     Quantity = 1
                 };
 

@@ -17,50 +17,32 @@ namespace Repositories.Repository
             _unitOfWork = unitOfWork;
         }
 
-        public async Task InsertAsync(CreateOrderDTO orderDto)
+        public async Task<int> InsertAsync(CreateOrderDTO orderDto)
         {
             try
             {
-                decimal? totalAmount = 0;
-
-                // Calculate total amount and validate order items
-                foreach (CartItem item in orderDto.OrderItems)
-                {
-                    Orchid? orchid = _unitOfWork.GetDAO<Orchid>().Entities.FirstOrDefault(o => o.OrchidId == item.OrchidId);
-                    if (orchid == null)
-                    {
-                        throw new Exception($"Orchid with ID {item.OrchidId} not found.");
-                    }
-
-                    if (item.Quantity <= 0)
-                    {
-                        throw new Exception($"Quantity for Orchid ID {item.OrchidId} must be greater than zero.");
-                    }
-
-                    totalAmount += orchid.Price * item.Quantity;
-                }
-
-                Account? account = _unitOfWork.GetDAO<Account>().Entities
-                    .FirstOrDefault(a => a.Email == orderDto.customerEmail);
-
-                // Validate account
-                if (account == null)
-                {
-                    throw new Exception($"Account with email {orderDto.customerEmail} not found.");
-                }
-
                 // Create new order
                 var order = new Order
                 {
-                    AccountId = account.AccountId,
+                    AccountId = orderDto.AccountId,
                     OrderDate = DateOnly.FromDateTime(DateTime.Now),
                     OrderStatus = OrderStatusEnum.Pending.ToString(),
-                    TotalAmount = totalAmount
+                    TotalAmount = orderDto.TotalAmount
                 };
 
+                order.Id = _unitOfWork.GetDAO<Order>()
+                    .Entities
+                    .Select(o => o.Id)
+                    .Max() + 1;
+
+                int lastOrderDetailId = _unitOfWork.GetDAO<OrderDetail>()
+                    .Entities
+                    .Max(od => od.Id);
+
                 // Create order details
-                var orderDetails = orderDto.OrderItems.Select(item => new OrderDetail
+                var orderDetails = orderDto.OrderItems.Select((item, index) => new OrderDetail
                 {
+                    Id = lastOrderDetailId + index + 1,
                     OrchidId = item.OrchidId,
                     Quantity = item.Quantity,
                     Price = _unitOfWork.GetDAO<Orchid>().Entities
@@ -79,6 +61,8 @@ namespace Repositories.Repository
                     orderDetails.ForEach(detail => detail.OrderId = order.Id);
                     await _unitOfWork.GetDAO<OrderDetail>().InsertRangeAsync(orderDetails);
                     await _unitOfWork.SaveAsync();
+
+                    return order.Id;
                 }
                 catch
                 {

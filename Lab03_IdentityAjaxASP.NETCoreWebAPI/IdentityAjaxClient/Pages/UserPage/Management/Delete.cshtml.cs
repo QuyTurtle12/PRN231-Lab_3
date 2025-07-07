@@ -10,7 +10,7 @@ using DataAccess;
 
 namespace IdentityAjaxClient.Pages.UserPage.Management
 {
-    public class DeleteModel : PageModel
+    public class DeleteModel : BasePageModel
     {
         private readonly DataAccess.ProductManagementDbContext _context;
 

@@ -173,9 +173,8 @@
                                             </small>
                                         </p>
                                         <div class="d-grid gap-2 mt-3">
-                                            <form method="post" asp-page-handler="AddToCart">
-                                                <input type="hidden" name="orchidId" value="@item.OrchidId" />
-                                                <button type="submit" class="btn btn-primary w-100">
+                                            <form method="post" asp-page-handler="AddToCart" asp-route-orchidId="@item.OrchidId" asp-fragment="product-@item.OrchidId">
+                                                <button type="button" class="btn btn-primary w-100 add-to-cart-btn" data-orchid-id="@item.OrchidId">
                                                     <i class="bi bi-cart-plus me-2"></i> Add to Cart
                                                 </button>
                                             </form>
@@ -356,6 +355,56 @@
         </div>
     </section>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+            
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const orchidId = this.dataset.orchidId;
+                    const form = new FormData();
+                    form.append('orchidId', orchidId);
+                    
+                    // Show loading state
+                    this.disabled = true;
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...';
+                    
+                    fetch('?handler=AddToCart', {
+                        method: 'POST',
+                        body: form,
+                        headers: {
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Reset button
+                        this.disabled = false;
+                        this.innerHTML = originalText;
+                        
+                        // Show toast notification
+                        if (data.success) {
+                            ToastManager.success(data.message || 'Item added to cart successfully!');
+                        } else {
+                            ToastManager.error(data.message || 'Failed to add item to cart.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        this.disabled = false;
+                        this.innerHTML = originalText;
+                        ToastManager.error('An error occurred while adding to cart.');
+                    });
+                });
+            });
+        });
+    </script>
+}
 
 @section Styles {
     <style>

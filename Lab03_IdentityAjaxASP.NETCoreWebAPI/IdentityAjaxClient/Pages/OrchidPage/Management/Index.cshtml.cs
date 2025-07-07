@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace IdentityAjaxClient.Pages.OrchidPage.Management
 {
-    public class IndexModel : PageModel
+    public class IndexModel : BasePageModel
     {
         private readonly HttpClient _httpClient;
 
@@ -16,7 +16,7 @@ namespace IdentityAjaxClient.Pages.OrchidPage.Management
             _httpClient = httpClientFactory.CreateClient("API");
         }
 
-        public PaginatedList<Orchid> Orchid { get; set; } = default!;
+        public PaginationDTO<Orchid> Orchid { get; set; } = default!;
         public SelectList? CategoryList { get; set; }
         public string? NameSort { get; set; }
         public string? NameSearch { get; set; }
@@ -79,16 +79,18 @@ namespace IdentityAjaxClient.Pages.OrchidPage.Management
                 var response = await _httpClient.GetFromJsonAsync<PaginationDTO<Orchid>>(query)
                     ?? throw new Exception("Failed to fetch orchids");
 
-                Orchid = new PaginatedList<Orchid>(
-                        response.Items,
-                        response.TotalCount,
-                        response.PageNumber,
-                        response.PageSize
-                    );
+                Orchid = response;
             }
             catch (Exception ex)
             {
-                Orchid = new PaginatedList<Orchid>(new List<Orchid>(), 0, 1, 10);
+                Orchid = new PaginationDTO<Orchid>
+                {
+                    Items = new List<Orchid>(),
+                    PageNumber = 1,
+                    PageSize = 10,
+                    TotalCount = 0,
+                    TotalPages = 0
+                };
                 ModelState.AddModelError(string.Empty, "Error loading orchids: " + ex.Message);
             }
 

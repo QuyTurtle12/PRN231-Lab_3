@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace IdentityAjaxClient.Pages.CategoryPage.Management
 {
-    public class CreateModel : PageModel
+    public class CreateModel : BasePageModel
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<CreateModel> _logger;

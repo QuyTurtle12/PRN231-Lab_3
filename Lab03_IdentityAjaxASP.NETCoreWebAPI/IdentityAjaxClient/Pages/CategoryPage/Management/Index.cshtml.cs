@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IdentityAjaxClient.Pages.CategoryPage.Management
 {
-    public class IndexModel : PageModel
+    public class IndexModel : BasePageModel
     {
         private readonly HttpClient _httpClient;
 

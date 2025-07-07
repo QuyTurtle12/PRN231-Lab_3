@@ -8,7 +8,7 @@ using IdentityAjaxClient.Model;
 
 namespace IdentityAjaxClient.Pages.CategoryPage.Management
 {
-    public class DeleteModel : PageModel
+    public class DeleteModel : BasePageModel
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<DeleteModel> _logger;

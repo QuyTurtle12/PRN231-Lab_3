@@ -12,6 +12,7 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI.Controllers
     {
         private readonly IOrderRepository _orderRepository;
         private const string STAFF_ROLE = "3";
+        private const string CUSTOMER_ROLE = "2";
 
         public OrdersController(IOrderRepository orderRepository)
         {
@@ -33,7 +34,7 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI.Controllers
             }
         }
 
-        [Authorize(Roles = STAFF_ROLE)]
+        [Authorize(Roles = CUSTOMER_ROLE)]
         [HttpPost]
         public async Task<IActionResult> CreateOrder(CreateOrderDTO orderDto)
         {
@@ -43,8 +44,8 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI.Controllers
                 {
                     return BadRequest("Order data is required.");
                 }
-                await _orderRepository.InsertAsync(orderDto);
-                return CreatedAtAction(nameof(GetAllOrders), new { id = 0 });
+                int newOrderId = await _orderRepository.InsertAsync(orderDto);
+                return CreatedAtAction(nameof(GetAllOrders), new { id = newOrderId });
             }
             catch (Exception ex)
             {

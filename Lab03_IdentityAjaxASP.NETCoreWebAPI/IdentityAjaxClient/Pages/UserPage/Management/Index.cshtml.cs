@@ -7,7 +7,7 @@ using DataAccess.Constant.Enum;
 
 namespace IdentityAjaxClient.Pages.UserPage.Management
 {
-    public class IndexModel : PageModel
+    public class IndexModel : BasePageModel
     {
         private readonly HttpClient _httpClient;
 

@@ -5,7 +5,7 @@ using System.Net.Http.Json;
 
 namespace IdentityAjaxClient.Pages.AuthPage
 {
-    public class LoginModel : PageModel
+    public class LoginModel : BasePageModel
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;

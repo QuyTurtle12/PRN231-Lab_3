@@ -78,6 +78,8 @@
         </main>
     </div>
 
+    <partial name="_ToastPartial" />
+
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2025 - IdentityAjaxClient - <a asp-area="" asp-page="/Privacy">Privacy</a>
@@ -86,6 +88,17 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site-toasts.js" asp-append-version="true"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize all toasts from the partial
+            var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+            var toastList = toastElList.map(function (toastEl) {
+                return new bootstrap.Toast(toastEl, { delay: 5000 }).show();
+            });
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
     <!-- Bootstrap JS Bundle -->

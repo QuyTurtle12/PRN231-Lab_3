@@ -1,3 +1,4 @@
+using System.Text.Json;
 using BusinessObjects;
 using DataAccess.DTO.Order;
 using IdentityAjaxClient.Model;
@@ -122,39 +123,32 @@ namespace IdentityAjaxClient.Pages
                     return RedirectToPage();
                 }
 
-                // Get existing cart from session
-                var cartItems = new List<CartItem>();
-                var cartJson = HttpContext.Session.GetString(CartSessionKey);
+                // Get current cart
+                var cartJson = HttpContext.Session.GetString("Cart");
+                var cart = string.IsNullOrEmpty(cartJson)
+                    ? new List<CartItem>()
+                    : JsonSerializer.Deserialize<List<CartItem>>(cartJson);
 
-                if (!string.IsNullOrEmpty(cartJson))
-                {
-                    cartItems = System.Text.Json.JsonSerializer.Deserialize<List<CartItem>>(cartJson) ?? new List<CartItem>();
-                }
-
-                // Check if the item already exists in cart
-                var existingItem = cartItems.FirstOrDefault(i => i.OrchidId == orchidId);
+                // Add item to cart
+                var existingItem = cart?.FirstOrDefault(x => x.OrchidId == orchidId);
                 if (existingItem != null)
                 {
-                    // Increase quantity of existing item
-                    existingItem.Quantity++;
+                    existingItem.Quantity += 1;
                 }
                 else
                 {
-                    // Add new item to cart
-                    cartItems.Add(new CartItem
-                    {
-                        OrchidId = orchidId,
-                        UserId = int.Parse(userId),
-                        Quantity = 1
-                    });
+                    cart?.Add(new CartItem { OrchidId = orchidId, Quantity = 1 });
                 }
 
-                // Save updated cart back to session
-                HttpContext.Session.SetString(CartSessionKey,
-                    System.Text.Json.JsonSerializer.Serialize(cartItems));
+                // Save cart
+                HttpContext.Session.SetString("Cart", JsonSerializer.Serialize(cart));
 
-                TempData["SuccessMessage"] = "Item added to cart successfully!";
-                return RedirectToPage();
+                return new JsonResult(new
+                {
+                    success = true,
+                    message = existingItem != null ? "Item quantity increased in cart!" : "Item added to cart successfully!",
+                    cartCount = cart?.Count ?? 0
+                });
             }
             catch (Exception ex)
             {

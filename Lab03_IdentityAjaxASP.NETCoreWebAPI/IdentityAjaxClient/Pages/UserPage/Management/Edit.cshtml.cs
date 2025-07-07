@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace IdentityAjaxClient.Pages.UserPage.Management
 {
-    public class EditModel : PageModel
+    public class EditModel : BasePageModel
     {
         private readonly HttpClient _httpClient;
 

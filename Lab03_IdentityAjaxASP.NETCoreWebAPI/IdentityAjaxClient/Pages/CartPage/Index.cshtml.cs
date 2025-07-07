@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace IdentityAjaxClient.Pages.CartPage
 {
-    public class IndexModel : PageModel
+    public class IndexModel : BasePageModel
     {
         private const string CartSessionKey = "Cart";
 

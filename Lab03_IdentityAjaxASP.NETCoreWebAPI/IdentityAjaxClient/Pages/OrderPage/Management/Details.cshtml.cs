@@ -5,7 +5,7 @@ using IdentityAjaxClient.Model;
 
 namespace IdentityAjaxClient.Pages.OrderPage.Management
 {
-    public class DetailsModel : PageModel
+    public class DetailsModel : BasePageModel
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<IndexModel> _logger;
