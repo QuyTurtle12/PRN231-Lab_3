@@ -66,6 +66,9 @@ app.Use(async (context, next) =>
 
         if (context.Request.Cookies.ContainsKey("UserName"))
             context.Session.SetString("UserName", context.Request.Cookies["UserName"]);
+
+        if (context.Request.Cookies.ContainsKey("UserEmail"))
+            context.Session.SetString("UserEmail", context.Request.Cookies["UserEmail"]);
     }
 
     await next();

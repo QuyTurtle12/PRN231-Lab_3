@@ -25,7 +25,7 @@ namespace IdentityAjaxClient.Pages.OrchidPage.Management
 
         public async Task<IActionResult> OnGetAsync(
             int pageIndex = 1,
-            int pageSize = 10,
+            int pageSize = 9,
             string? nameSearch = null,
             string? categoryIdSearch = null,
             bool? isNatural = null)

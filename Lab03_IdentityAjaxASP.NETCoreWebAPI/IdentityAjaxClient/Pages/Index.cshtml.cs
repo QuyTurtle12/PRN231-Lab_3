@@ -19,6 +19,7 @@ namespace IdentityAjaxClient.Pages
             _httpClient = httpClientFactory.CreateClient("API");
         }
 
+        public bool IsCustomer { get; private set; }
         public PaginationDTO<Orchid> Orchids { get; set; } = default!;
         public SelectList? CategoryList { get; set; }
 
@@ -38,6 +39,11 @@ namespace IdentityAjaxClient.Pages
         {
             try
             {
+                // Get current user role from session
+                var userRole = HttpContext.Session.GetString("UserRole");
+
+                IsCustomer = !string.IsNullOrEmpty(userRole) && userRole.Equals("Customer", StringComparison.OrdinalIgnoreCase);
+
                 // Fetch categories for dropdown
                 var categoriesResponse = await _httpClient.GetFromJsonAsync<PaginationDTO<Category>>("categories");
                 if (categoriesResponse != null)

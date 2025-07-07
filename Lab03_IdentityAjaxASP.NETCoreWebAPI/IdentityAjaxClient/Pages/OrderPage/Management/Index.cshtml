@@ -2,11 +2,11 @@
 @model IdentityAjaxClient.Pages.OrderPage.Management.IndexModel
 
 @{
-    ViewData["Title"] = "Order Management";
+    ViewData["Title"] = Model.IsStaff ? "Order Management" : "Orders";
 }
 
 <div class="container-fluid">
-    <h1 class="mb-4">Order Management</h1>
+    <h1 class="mb-4">@(Model.IsStaff ? "Order Management" : "Orders")</h1>
 
     @if (!string.IsNullOrEmpty(TempData["SuccessMessage"]?.ToString()))
     {
@@ -32,12 +32,15 @@
         </div>
         <div class="card-body">
             <form method="get" class="row g-3">
-                <div class="col-md-3">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="customerSearch" name="customerSearch" value="@Model.CustomerSearch" placeholder="Customer name or email">
-                        <label for="customerSearch">Customer</label>
+                @if (Model.IsStaff)
+                {
+                    <div class="col-md-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="customerSearch" name="customerSearch" value="@Model.CustomerSearch" placeholder="Customer name or email">
+                            <label for="customerSearch">Customer Email</label>
+                        </div>
                     </div>
-                </div>
+                }
                 <div class="col-md-3">
                     <div class="form-floating">
                         <select class="form-select" id="orderStatusSearch" name="orderStatusSearch" asp-for="OrderStatusSearch" asp-items="Model.OrderStatusList">
@@ -45,18 +48,18 @@
                         <label for="orderStatusSearch">Order Status</label>
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2"> 
                     <div class="form-floating">
                         <input type="date" class="form-control" id="startDateSearch" name="startDateSearch" value="@(Model.StartDateSearch?.ToString("yyyy-MM-dd"))" placeholder="From date">
-                        <label for="startDateSearch">From Date</label>
+                        <label for="startDateSearch">From Date</label> 
+                    </div> 
+                </div> 
+                    <div class="col-md-2">
+                            <div class="form-floating">
+                                <input type="date" class="form-control" id="endDateSearch" name="endDateSearch" value="@(Model.EndDateSearch?.ToString("yyyy-MM-dd"))" placeholder="To date"> 
+                                <label for="endDateSearch">To Date</label>
+                            </div>
                     </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-floating">
-                        <input type="date" class="form-control" id="endDateSearch" name="endDateSearch" value="@(Model.EndDateSearch?.ToString("yyyy-MM-dd"))" placeholder="To date">
-                        <label for="endDateSearch">To Date</label>
-                    </div>
-                </div>
                 <div class="col-md-2 d-flex align-items-end">
                     <div class="d-flex gap-2 w-100">
                         <button type="submit" class="btn btn-primary flex-grow-1">
@@ -132,9 +135,12 @@
                                             <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-outline-primary">
                                                 <i class="bi bi-eye"></i> Details
                                             </a>
-                                            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-outline-secondary">
-                                                <i class="bi bi-pencil"></i> Edit
-                                            </a>
+                                            @if (Model.IsStaff)
+                                            {
+                                                <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-outline-secondary">
+                                                    <i class="bi bi-pencil"></i> Edit
+                                                </a>
+                                            }
                                         </div>
                                     </td>
                                 </tr>

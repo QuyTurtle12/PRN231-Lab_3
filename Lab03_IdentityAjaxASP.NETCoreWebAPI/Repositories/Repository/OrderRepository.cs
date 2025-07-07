@@ -113,8 +113,8 @@ namespace Repositories.Repository
 
             if (!string.IsNullOrWhiteSpace(customerSearch))
             {
-                query = query.Where(o => o.Account!.AccountName == customerSearch);
-            }
+                query = query.Where(o => o.Account!.Email == customerSearch);
+            } 
 
             if (fromDate.HasValue)
             {
@@ -132,7 +132,7 @@ namespace Repositories.Repository
             }
 
             // Order by OrderDate descending
-            query = query.OrderByDescending(o => o.OrderDate);
+            query = query.OrderByDescending(o => o.Id);
 
             // Convert query to paginated list
             PaginatedList<Order> result = await _unitOfWork.GetDAO<Order>().GetPagging(query, pageIndex, pageNumber);

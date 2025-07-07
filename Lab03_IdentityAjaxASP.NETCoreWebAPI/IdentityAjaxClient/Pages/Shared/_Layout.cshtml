@@ -15,6 +15,14 @@
 </head>
 <body>
     <header>
+        @{
+            var isAuthenticated = Context.Session.GetString("JWTToken") != null;
+            var userRole = Context.Session.GetString("UserRole")?.ToLower();
+            var isCustomer = userRole == "customer";
+            var isStaff = userRole == "staff";
+            var isAdmin = userRole == "admin";
+        }
+
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-page="/Index">IdentityAjaxClient</a>
@@ -24,47 +32,79 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+                        <!-- Pages accessible to all users -->
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/OrchidPage/Management/Index">Orchid Management</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/UserPage/Management/Index">User Management</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/CategoryPage/Management/Index">Category Management</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/OrderPage/Management/Index">Order Management</a>
-                        </li>
-                        @if (Context.Session.GetString("JWTToken") != null)
+
+                        @if (isAuthenticated)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/CartPage/Index">Cart</a>
-                            </li>
-                            <li class="nav-item dropdown">
+                            <!-- Pages for Customers, Staff -->
+                            @if (isCustomer || isStaff)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/OrderPage/Management/Index">Orders</a>
+                                </li>
+                            }
+
+                            <!-- Pages for Customers only -->
+                            @if (isCustomer)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/CartPage/Index">Cart</a>
+                                </li>
+                            }
+
+                            <!-- Pages for Staff only -->
+                            @if (isStaff)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/CategoryPage/Management/Index">Category Management</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/OrchidPage/Management/Index">Orchid Management</a>
+                                </li>
+                            }
+
+                            <!-- Pages for Admin only -->
+                            @if (isAdmin)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/UserPage/Management/Index">User Management</a>
+                                </li>
+                            }
+
+                            <!-- Account dropdown for authenticated users -->
+                            <li class="nav-item dropdown ms-auto">
                                 <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Account
+                                    <i class="bi bi-person-circle me-1"></i> Account
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" asp-page="/UserPage/Management/Details" asp-route-id="@Context.Session.GetString("UserId")">Profile</a>
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" asp-page="/UserPage/Management/Details" asp-route-id="@Context.Session.GetString("UserId")">
+                                        <i class="bi bi-person me-2"></i> Profile
+                                    </a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" asp-page="/AuthPage/Logout">Logout</a>
+                                    <a class="dropdown-item" asp-page="/AuthPage/Logout">
+                                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                    </a>
                                 </div>
-							</li>
+                            </li>
                         }
                         else
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-page="/AuthPage/Login">Login</a>
+                            <!-- Authentication links for unauthenticated users -->
+                            <li class="nav-item ms-auto">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/AuthPage/Login">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i> Login
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-page="/AuthPage/Register">Register</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/AuthPage/Register">
+                                    <i class="bi bi-person-plus me-1"></i> Register
+                                </a>
                             </li>
                         }
                     </ul>

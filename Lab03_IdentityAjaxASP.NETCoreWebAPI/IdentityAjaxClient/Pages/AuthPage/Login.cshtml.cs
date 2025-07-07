@@ -50,7 +50,8 @@ namespace IdentityAjaxClient.Pages.AuthPage
                             Response.Cookies.Append("JWTToken", result.Token, cookieOptions);
                             Response.Cookies.Append("UserId", result.AccountId.ToString(), cookieOptions);
                             Response.Cookies.Append("UserRole", result.RoleName, cookieOptions);
-                            Response.Cookies.Append("UserName", result.RoleName, cookieOptions);
+                            Response.Cookies.Append("UserName", result.AccountName, cookieOptions);
+                            Response.Cookies.Append("UserEmail", result.AccountEmail, cookieOptions);
                         }
 
                         // Store token and user info in session (for current session)
@@ -58,6 +59,7 @@ namespace IdentityAjaxClient.Pages.AuthPage
                         HttpContext.Session.SetString("UserId", result.AccountId.ToString());
                         HttpContext.Session.SetString("UserRole", result.RoleName);
                         HttpContext.Session.SetString("UserName", result.AccountName);
+                        HttpContext.Session.SetString("UserEmail", result.AccountEmail);
                         return RedirectToPage("/Index");
                     }
                 }

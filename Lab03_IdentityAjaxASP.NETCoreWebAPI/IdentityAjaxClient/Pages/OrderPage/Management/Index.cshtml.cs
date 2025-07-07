@@ -17,6 +17,8 @@ namespace IdentityAjaxClient.Pages.OrderPage.Management
             _logger = logger;
         }
 
+        public bool IsStaff { get; private set; }
+
         public PaginationDTO<Order> Orders { get; set; } = default!;
         public SelectList? OrderStatusList { get; set; }
 
@@ -41,73 +43,139 @@ namespace IdentityAjaxClient.Pages.OrderPage.Management
             {
                 // Get current user role from session
                 var userRole = HttpContext.Session.GetString("UserRole");
+                var userId = HttpContext.Session.GetString("UserId");
 
-                bool isStaff = !string.IsNullOrEmpty(userRole) &&
+                IsStaff = !string.IsNullOrEmpty(userRole) &&
                     (userRole.Equals("Staff", StringComparison.OrdinalIgnoreCase));
 
+                bool isCustomer = !string.IsNullOrEmpty(userRole) &&
+                    (userRole.Equals("Customer", StringComparison.OrdinalIgnoreCase));
+
                 // Check authorization
-                if (!isStaff)
+                if (!IsStaff && !isCustomer)
                 {
                     TempData["ErrorMessage"] = "You are not authorized to access order management.";
                     return RedirectToPage("/Index");
                 }
 
-                // Create order status dropdown from enum
-                var statusValues = Enum.GetValues<OrderStatusEnum>().ToList();
-                var selectListItems = new List<SelectListItem>
+                // If user is a customer, restrict orders to their own
+                if (isCustomer)
+                {
+                    var userEmail = HttpContext.Session.GetString("UserEmail");
+
+                    // Create order status dropdown from enum
+                    var statusValues = Enum.GetValues<OrderStatusEnum>().ToList();
+                    var selectListItems = new List<SelectListItem>
+                    {
+                        new SelectListItem("All", "")
+                    };
+
+                    selectListItems.AddRange(statusValues.Select(s =>
+                        new SelectListItem(s.ToString(), ((int)s).ToString())));
+
+                    OrderStatusList = new SelectList(selectListItems, "Value", "Text",
+                                        OrderStatusSearch.HasValue ? ((int)OrderStatusSearch.Value).ToString() : "");
+
+
+                    // Build query string for orders
+                    var query = $"orders?pageIndex={pageIndex}&pageSize={pageSize}&customerSearch={Uri.EscapeDataString(userEmail)}";
+
+
+                    if (OrderStatusSearch.HasValue)
+                    {
+                        query += $"&status={(int)OrderStatusSearch.Value}";
+                    }
+
+                    if (StartDateSearch.HasValue)
+                    {
+                        query += $"&fromDate={StartDateSearch.Value:yyyy-MM-dd}";
+                    }
+
+                    if (EndDateSearch.HasValue)
+                    {
+                        query += $"&toDate={EndDateSearch.Value:yyyy-MM-dd}";
+                    }
+
+                    // Fetch orders with pagination and filtering
+                    var response = await _httpClient.GetFromJsonAsync<PaginationDTO<Order>>(query);
+
+                    if (response != null)
+                    {
+                        Orders = response;
+                    }
+                    else
+                    {
+                        Orders = new PaginationDTO<Order>
+                        {
+                            Items = new List<Order>(),
+                            PageNumber = 1,
+                            PageSize = 10,
+                            TotalCount = 0,
+                            TotalPages = 0
+                        };
+                        ModelState.AddModelError(string.Empty, "No orders found.");
+                    }
+                }
+                // If user is staff, fetch all orders
+                else
+                {
+                    // Create order status dropdown from enum
+                    var statusValues = Enum.GetValues<OrderStatusEnum>().ToList();
+                    var selectListItems = new List<SelectListItem>
                 {
                     new SelectListItem("All", "")
                 };
 
-                selectListItems.AddRange(statusValues.Select(s =>
-                    new SelectListItem(s.ToString(), ((int)s).ToString())));
+                    selectListItems.AddRange(statusValues.Select(s =>
+                        new SelectListItem(s.ToString(), ((int)s).ToString())));
 
-                OrderStatusList = new SelectList(selectListItems, "Value", "Text",
-                                    OrderStatusSearch.HasValue ? ((int)OrderStatusSearch.Value).ToString() : "");
-
-
-                // Build query string for orders
-                var query = $"orders?pageIndex={pageIndex}&pageSize={pageSize}";
+                    OrderStatusList = new SelectList(selectListItems, "Value", "Text",
+                                        OrderStatusSearch.HasValue ? ((int)OrderStatusSearch.Value).ToString() : "");
 
 
-                if (OrderStatusSearch.HasValue)
-                {
-                    query += $"&status={(int)OrderStatusSearch.Value}";
-                }
+                    // Build query string for orders
+                    var query = $"orders?pageIndex={pageIndex}&pageSize={pageSize}";
 
-                if (!string.IsNullOrWhiteSpace(CustomerSearch))
-                {
-                    query += $"&customerSearch={Uri.EscapeDataString(CustomerSearch)}";
-                }
 
-                if (StartDateSearch.HasValue)
-                {
-                    query += $"&fromDate={StartDateSearch.Value:yyyy-MM-dd}";
-                }
-
-                if (EndDateSearch.HasValue)
-                {
-                    query += $"&toDate={EndDateSearch.Value:yyyy-MM-dd}";
-                }
-
-                // Fetch orders with pagination and filtering
-                var response = await _httpClient.GetFromJsonAsync<PaginationDTO<Order>>(query);
-
-                if (response != null)
-                {
-                    Orders = response;
-                }
-                else
-                {
-                    Orders = new PaginationDTO<Order>
+                    if (OrderStatusSearch.HasValue)
                     {
-                        Items = new List<Order>(),
-                        PageNumber = 1,
-                        PageSize = 10,
-                        TotalCount = 0,
-                        TotalPages = 0
-                    };
-                    ModelState.AddModelError(string.Empty, "No orders found.");
+                        query += $"&status={(int)OrderStatusSearch.Value}";
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(CustomerSearch))
+                    {
+                        query += $"&customerSearch={Uri.EscapeDataString(CustomerSearch)}";
+                    }
+
+                    if (StartDateSearch.HasValue)
+                    {
+                        query += $"&fromDate={StartDateSearch.Value:yyyy-MM-dd}";
+                    }
+
+                    if (EndDateSearch.HasValue)
+                    {
+                        query += $"&toDate={EndDateSearch.Value:yyyy-MM-dd}";
+                    }
+
+                    // Fetch orders with pagination and filtering
+                    var response = await _httpClient.GetFromJsonAsync<PaginationDTO<Order>>(query);
+
+                    if (response != null)
+                    {
+                        Orders = response;
+                    }
+                    else
+                    {
+                        Orders = new PaginationDTO<Order>
+                        {
+                            Items = new List<Order>(),
+                            PageNumber = 1,
+                            PageSize = 10,
+                            TotalCount = 0,
+                            TotalPages = 0
+                        };
+                        ModelState.AddModelError(string.Empty, "No orders found.");
+                    }
                 }
 
                 return Page();

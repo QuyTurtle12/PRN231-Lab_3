@@ -46,12 +46,12 @@
                     }
                     <span class="position-absolute top-0 start-0 m-3 badge bg-success">In Stock</span>
                 </div>
-                
+
                 <!-- Product Details -->
                 <div class="col-md-6">
                     <div class="card-body p-4 p-lg-5">
                         <h1 class="card-title fw-bold mb-2">@Model.Orchid.OrchidName</h1>
-                        
+
                         <div class="mb-3">
                             <span class="badge bg-light text-dark me-2">
                                 <i class="bi bi-tag me-1"></i> @Model.Orchid.Category?.CategoryName
@@ -63,7 +63,7 @@
                                 </span>
                             }
                         </div>
-                        
+
                         <div class="d-flex align-items-center mb-4">
                             <div class="rating me-2">
                                 <i class="bi bi-star-fill text-warning"></i>
@@ -74,13 +74,13 @@
                             </div>
                             <small class="text-muted">(4.5/5)</small>
                         </div>
-                        
+
                         <h3 class="fw-bold text-primary mb-4">
                             @Model.Orchid.Price?.ToString("C", new System.Globalization.CultureInfo("en-US"))
                         </h3>
-                        
+
                         <p class="card-text mb-4">@Model.Orchid.OrchidDescription</p>
-                        
+
                         <div class="mb-4">
                             <h5 class="fw-bold mb-3">Specifications</h5>
                             <div class="row">
@@ -102,9 +102,9 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <form method="post" asp-page-handler="AddToCart">
-                            <input type="hidden" asp-for="Id" />
+
+                        <form id="addToCartForm" method="post" asp-page-handler="AddToCart">
+                            <input type="hidden" name="orchidId" value="@Model.Orchid.OrchidId" />
                             <div class="row g-3 mb-4">
                                 <div class="col-md-4">
                                     <label class="form-label mb-2">Quantity</label>
@@ -121,19 +121,16 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 d-grid">
-                                    <button type="submit" class="btn btn-primary btn-lg">
+                                    <button type="submit" id="addToCartBtn" class="btn btn-primary btn-lg">
                                         <i class="bi bi-cart-plus me-2"></i> Add to Cart
                                     </button>
                                 </div>
                             </div>
                         </form>
-                        
                     </div>
                 </div>
             </div>
         </div>
-        
-        
     }
     else
     {
@@ -150,6 +147,10 @@
     }
 </div>
 
+<form id="antiforgery" method="post">
+    @Html.AntiForgeryToken()
+</form>
+
 @section Scripts {
     <script>
         function increaseQuantity() {
@@ -159,7 +160,7 @@
                 input.value = value + 1;
             }
         }
-        
+
         function decreaseQuantity() {
             var input = document.getElementById('quantity');
             var value = parseInt(input.value, 10);
@@ -167,6 +168,65 @@
                 input.value = value - 1;
             }
         }
+
+        // Add to cart AJAX functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const addToCartForm = document.getElementById('addToCartForm');
+
+            if (addToCartForm) {
+                addToCartForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const orchidId = this.querySelector('input[name="orchidId"]').value;
+                    const quantity = document.getElementById('quantity').value;
+
+                    const form = new FormData();
+                    form.append('orchidId', orchidId);
+                    form.append('quantity', quantity);
+
+                    // Show loading state
+                    const submitBtn = document.getElementById('addToCartBtn');
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...';
+
+                    // Get the anti-forgery token
+                    const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+                    fetch('?handler=AddToCart', {
+                        method: 'POST',
+                        body: form,
+                        headers: {
+                            'RequestVerificationToken': token
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Reset button
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalText;
+
+                        // Show toast notification
+                        if (data.success) {
+                            ToastManager.success(data.message || 'Item added to cart successfully!');
+                        } else {
+                            ToastManager.error(data.message || 'Failed to add item to cart.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalText;
+                        ToastManager.error('An error occurred while adding to cart.');
+                    });
+                });
+            }
+        });
     </script>
 }
 
@@ -177,125 +237,126 @@
             background-color: #5d9c59;
             border-color: #5d9c59;
         }
-        
-        .btn-primary:hover, 
-        .btn-primary:focus {
-            background-color: #4e8a4a;
-            border-color: #4e8a4a;
-        }
-        
+
+            .btn-primary:hover,
+            .btn-primary:focus {
+                background-color: #4e8a4a;
+                border-color: #4e8a4a;
+            }
+
         .btn-outline-primary {
             color: #5d9c59;
             border-color: #5d9c59;
         }
-        
-        .btn-outline-primary:hover {
-            background-color: #5d9c59;
-            border-color: #5d9c59;
-        }
-        
+
+            .btn-outline-primary:hover {
+                background-color: #5d9c59;
+                border-color: #5d9c59;
+            }
+
         .text-primary {
             color: #5d9c59 !important;
         }
-        
+
         .nav-tabs .nav-link {
             color: #4a4a4a;
             border: none;
             border-bottom: 2px solid transparent;
             padding: 0.75rem 1rem;
         }
-        
-        .nav-tabs .nav-link.active {
-            color: #5d9c59;
-            border-color: #5d9c59;
-            background: transparent;
-        }
-        
+
+            .nav-tabs .nav-link.active {
+                color: #5d9c59;
+                border-color: #5d9c59;
+                background: transparent;
+            }
+
         .rounded-4 {
             border-radius: 1rem;
         }
-        
+
         .object-fit-cover {
             object-fit: cover;
         }
 
         .quantity-control {
-    position: relative;
-    width: 100%;
-    height: 38px;
-    border-radius: 4px;
-    align-items: center;
-}
+            position: relative;
+            width: 100%;
+            height: 38px;
+            border-radius: 4px;
+            align-items: center;
+        }
 
-    .quantity-btn {
-        width: 38px;
-        height: 38px;
-        padding: 0;
-        border: 1px solid #dee2e6;
-        background-color: #f8f9fa;
-        font-size: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        color: #212529;
-        border-radius: 4px;
-    }
+        .quantity-btn {
+            width: 38px;
+            height: 38px;
+            padding: 0;
+            border: 1px solid #dee2e6;
+            background-color: #f8f9fa;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #212529;
+            border-radius: 4px;
+        }
 
-    .quantity-input-wrapper {
-        position: relative;
-        flex-grow: 1;
-        height: 38px;
-        margin: 0 5px;
-    }
+        .quantity-input-wrapper {
+            position: relative;
+            flex-grow: 1;
+            height: 38px;
+            margin: 0 5px;
+        }
 
-    .quantity-input {
-        width: 100%;
-        height: 100%;
-        text-align: center;
-        border: 1px solid #007bff;
-        border-radius: 4px;
-        padding-right: 20px;
-    }
+        .quantity-input {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            padding-right: 20px;
+        }
 
-    .quantity-input:focus {
-        outline: none;
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-    }
+            .quantity-input:focus {
+                outline: none;
+                box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            }
 
-    .quantity-arrows {
-        position: absolute;
-        right: 5px;
-        top: 1px;
-        height: calc(100% - 2px);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
+        .quantity-arrows {
+            position: absolute;
+            right: 5px;
+            top: 1px;
+            height: calc(100% - 2px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
 
-    .quantity-arrow-up,
-    .quantity-arrow-down {
-        background: none;
-        border: none;
-        padding: 0;
-        margin: 0;
-        font-size: 8px;
-        line-height: 1;
-        cursor: pointer;
-        color: #6c757d;
-        height: 50%;
-        display: flex;
-        align-items: center;
-    }
+        .quantity-arrow-up,
+        .quantity-arrow-down {
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            font-size: 8px;
+            line-height: 1;
+            cursor: pointer;
+            color: #6c757d;
+            height: 50%;
+            display: flex;
+            align-items: center;
+        }
 
-    /* Remove spinner from number input */
-    input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-    input[type=number] {
-        -moz-appearance: textfield;
-    }
+        /* Remove spinner from number input */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
     </style>
 }

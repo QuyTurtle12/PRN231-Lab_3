@@ -7,14 +7,29 @@
 <!-- Hero Section -->
 <div class="hero-section position-relative mb-5">
     <div class="hero-overlay"></div>
+    <div class="floating-flowers">
+        <div class="flower flower-1">🌸</div>
+        <div class="flower flower-2">🌺</div>
+        <div class="flower flower-3">🌼</div>
+        <div class="flower flower-4">🌻</div>
+        <div class="flower flower-5">🌷</div>
+    </div>
     <div class="container-fluid position-relative py-5 z-1">
         <div class="row py-5">
             <div class="col-lg-7 col-md-9 mx-auto text-center py-5">
-                <h1 class="display-4 fw-bold text-white mb-3">Orchid Heaven</h1>
-                <p class="lead text-white mb-4">Discover rare and exotic orchids from around the world</p>
-                <div class="d-flex justify-content-center gap-3">
-                    <a href="#orchid-collection" class="btn btn-primary btn-lg px-4">Explore Collection</a>
-                    <a href="#about-us" class="btn btn-outline-light btn-lg px-4">Learn More</a>
+                <div class="hero-content">
+                    <h1 class="display-3 fw-bold text-white mb-4 hero-title">
+                        <span class="gradient-text">Orchid</span> Heaven
+                    </h1>
+                    <p class="lead text-white mb-4 hero-subtitle">Where beauty blooms and dreams take root</p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="#orchid-collection" class="btn btn-primary btn-lg px-5 py-3 hero-btn">
+                            <i class="bi bi-flower1 me-2"></i>Explore Collection
+                        </a>
+                        <a href="#about-us" class="btn btn-outline-light btn-lg px-5 py-3 hero-btn">
+                            <i class="bi bi-heart me-2"></i>Learn More
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -24,36 +39,51 @@
 <div class="container">
     <!-- Featured Categories -->
     <section class="mb-5" id="about-us">
-        <h2 class="text-center mb-4 section-title">Welcome to Our Orchid Collection</h2>
+        <div class="section-header text-center mb-5">
+            <h2 class="section-title">Welcome to Our Orchid Collection</h2>
+            <p class="section-subtitle">Discover the magic of nature's most elegant flowers</p>
+        </div>
         <div class="row g-4">
             <div class="col-lg-4 col-md-6">
                 <div class="category-card text-center p-4 h-100">
                     <div class="category-icon mb-3">
-                        <i class="bi bi-flower1 display-3"></i>
+                        <div class="icon-wrapper">
+                            <i class="bi bi-flower1"></i>
+                        </div>
                     </div>
                     <h3 class="h4 mb-3">Natural Orchids</h3>
                     <p class="mb-3">Discover our collection of natural orchids cultivated with care and passion.</p>
-                    <a asp-page="./Index" asp-route-isNatural="true" class="btn btn-sm btn-outline-primary">View Collection</a>
+                    <a asp-page="./Index" asp-route-isNatural="true" class="btn btn-sm btn-outline-primary category-btn">
+                        <i class="bi bi-arrow-right me-1"></i>View Collection
+                    </a>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6">
                 <div class="category-card text-center p-4 h-100">
                     <div class="category-icon mb-3">
-                        <i class="bi bi-flower2 display-3"></i>
+                        <div class="icon-wrapper">
+                            <i class="bi bi-flower2"></i>
+                        </div>
                     </div>
                     <h3 class="h4 mb-3">Hybrid Varieties</h3>
                     <p class="mb-3">Explore our unique hybrid varieties created by expert horticulturists.</p>
-                    <a asp-page="./Index" asp-route-isNatural="false" class="btn btn-sm btn-outline-primary">View Collection</a>
+                    <a asp-page="./Index" asp-route-isNatural="false" class="btn btn-sm btn-outline-primary category-btn">
+                        <i class="bi bi-arrow-right me-1"></i>View Collection
+                    </a>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6">
                 <div class="category-card text-center p-4 h-100">
                     <div class="category-icon mb-3">
-                        <i class="bi bi-flower3 display-3"></i>
+                        <div class="icon-wrapper">
+                            <i class="bi bi-flower3"></i>
+                        </div>
                     </div>
                     <h3 class="h4 mb-3">Rare Specimens</h3>
                     <p class="mb-3">Discover our rare and exotic species from remote locations around the world.</p>
-                    <a asp-page="./Index" class="btn btn-sm btn-outline-primary">View All</a>
+                    <a asp-page="./Index" class="btn btn-sm btn-outline-primary category-btn">
+                        <i class="bi bi-arrow-right me-1"></i>View All
+                    </a>
                 </div>
             </div>
         </div>
@@ -63,23 +93,23 @@
     <section class="mb-5" id="orchid-collection">
         <div class="row">
             <div class="col-12">
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-header bg-white py-3 border-0">
-                        <h2 class="section-title h4 mb-0">
+                <div class="search-card border-0 shadow-lg mb-4">
+                    <div class="search-header bg-gradient-primary py-4 border-0">
+                        <h2 class="section-title h4 mb-0 text-white">
                             <i class="bi bi-search me-2"></i> Find Your Perfect Orchid
                         </h2>
                     </div>
-                    <div class="card-body">
+                    <div class="search-body p-4">
                         <form method="get" class="row g-3">
                             <div class="col-md-4">
                                 <div class="form-floating">
-                                    <input type="text" class="form-control" id="nameSearch" name="nameSearch" value="@Model.NameSearch" placeholder="Search by name">
+                                    <input type="text" class="form-control search-input" id="nameSearch" name="nameSearch" value="@Model.NameSearch" placeholder="Search by name">
                                     <label for="nameSearch">Orchid Name</label>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <select class="form-select" id="categoryIdSearch" name="categoryIdSearch" asp-for="CategoryIdSearch" asp-items="Model.CategoryList">
+                                    <select class="form-select search-input" id="categoryIdSearch" name="categoryIdSearch" asp-for="CategoryIdSearch" asp-items="Model.CategoryList">
                                         <option value="">All Categories</option>
                                     </select>
                                     <label for="categoryIdSearch">Category</label>
@@ -87,7 +117,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="form-floating">
-                                    <select class="form-select" id="isNatural" name="isNatural" asp-for="IsNatural">
+                                    <select class="form-select search-input" id="isNatural" name="isNatural" asp-for="IsNatural">
                                         <option value="">All Types</option>
                                         <option value="true">Natural</option>
                                         <option value="false">Hybrid</option>
@@ -97,10 +127,10 @@
                             </div>
                             <div class="col-md-3 d-flex align-items-end">
                                 <div class="d-flex gap-2 w-100">
-                                    <button type="submit" class="btn btn-primary flex-grow-1">
+                                    <button type="submit" class="btn btn-primary flex-grow-1 search-btn">
                                         <i class="bi bi-search me-1"></i> Search
                                     </button>
-                                    <a asp-page="./Index" class="btn btn-outline-secondary flex-grow-1">
+                                    <a asp-page="./Index" class="btn btn-outline-secondary flex-grow-1 clear-btn">
                                         <i class="bi bi-x-circle me-1"></i> Clear
                                     </a>
                                 </div>
@@ -116,8 +146,10 @@
             <div class="col-12">
                 @if (!Model.Orchids?.Items.Any() ?? true)
                 {
-                    <div class="alert alert-info text-center p-5">
-                        <i class="bi bi-search display-1 d-block mb-3 text-muted"></i>
+                    <div class="no-results text-center p-5">
+                        <div class="no-results-icon mb-4">
+                            <i class="bi bi-search"></i>
+                        </div>
                         <h3>No orchids found</h3>
                         <p class="mb-0">Try adjusting your search criteria or browse our collection without filters.</p>
                     </div>
@@ -125,60 +157,67 @@
                 else
                 {
                     <!-- Counter info -->
-                    <p class="text-muted mb-4">
-                        Found @Model.Orchids.TotalCount orchid@(Model.Orchids.TotalCount != 1 ? "s" : "") matching your criteria
-                    </p>
+                    <div class="results-counter mb-4">
+                        <p class="text-muted mb-0">
+                            <i class="bi bi-flower1 me-2"></i>
+                            Found @Model.Orchids.TotalCount orchid@(Model.Orchids.TotalCount != 1 ? "s" : "") matching your criteria
+                        </p>
+                    </div>
 
                     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                         @foreach (var item in Model.Orchids.Items)
                         {
                             <div class="col">
                                 <div class="product-card card h-100 border-0 rounded-4 overflow-hidden">
-                                    <div class="position-relative">
+                                    <div class="product-image-wrapper position-relative">
                                         @if (!string.IsNullOrEmpty(item.OrchidUrl))
                                         {
                                             <img src="@item.OrchidUrl" 
-                                                class="card-img-top" 
-                                                alt="@item.OrchidName"
-                                                style="height: 240px; object-fit: cover;" />
+                                                class="card-img-top product-image" 
+                                                alt="@item.OrchidName" />
                                         }
                                         else
                                         {
-                                            <div class="bg-light d-flex align-items-center justify-content-center" 
-                                                style="height: 240px;">
-                                                <i class="bi bi-flower1 text-muted" style="font-size: 3rem;"></i>
+                                            <div class="product-placeholder d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-flower1"></i>
                                             </div>
                                         }
-                                        <div class="position-absolute top-0 end-0 m-2">
-                                            <span class="badge @(item.IsNatural.GetValueOrDefault() ? "bg-success" : "bg-info")">
+                                        <div class="product-badge position-absolute top-0 end-0 m-3">
+                                            <span class="badge @(item.IsNatural.GetValueOrDefault() ? "badge-natural" : "badge-hybrid")">
                                                 @(item.IsNatural.GetValueOrDefault() ? "Natural" : "Hybrid")
                                             </span>
                                         </div>
+                                        <div class="product-overlay">
+                                            <div class="overlay-content">
+                                                <a asp-page="/OrchidPage/Orchids/Details" asp-route-id="@item.OrchidId" class="btn btn-light btn-sm">
+                                                    <i class="bi bi-eye me-1"></i> Quick View
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="card-body d-flex flex-column">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <h5 class="card-title mb-0">@item.OrchidName</h5>
-                                            <span class="fs-5 fw-bold text-primary">
+                                    <div class="card-body d-flex flex-column p-4">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h5 class="card-title mb-0 product-title">@item.OrchidName</h5>
+                                            <span class="product-price">
                                                 @item.Price?.ToString("C", new System.Globalization.CultureInfo("en-US"))
                                             </span>
                                         </div>
-                                        <p class="card-text text-muted small mb-2">
+                                        <p class="card-text text-muted small mb-2 product-category">
                                             <i class="bi bi-tag me-1"></i> @(item.Category?.CategoryName ?? "No Category")
                                         </p>
-                                        <p class="card-text flex-grow-1" style="max-height: 3em; overflow: hidden;">
-                                            <small>
-                                                @(item.OrchidDescription?.Length > 100 
-                                                    ? item.OrchidDescription[..100] + "..." 
-                                                    : item.OrchidDescription)
-                                            </small>
+                                        <p class="card-text flex-grow-1 product-description">
+                                            @(item.OrchidDescription?.Length > 100 
+                                                ? item.OrchidDescription[..100] + "..." 
+                                                : item.OrchidDescription)
                                         </p>
                                         <div class="d-grid gap-2 mt-3">
-                                            <form method="post" asp-page-handler="AddToCart" asp-route-orchidId="@item.OrchidId" asp-fragment="product-@item.OrchidId">
-                                                <button type="button" class="btn btn-primary w-100 add-to-cart-btn" data-orchid-id="@item.OrchidId">
-                                                    <i class="bi bi-cart-plus me-2"></i> Add to Cart
-                                                </button>
-                                            </form>
-                                            <a asp-page="/OrchidPage/Orchids/Details" asp-route-id="@item.OrchidId" class="btn btn-outline-primary">
+                                            @if (Model.IsCustomer)
+                                            {
+                                             <button type="button" class="btn btn-primary w-100 add-to-cart-btn" data-orchid-id="@item.OrchidId">
+                                                <i class="bi bi-cart-plus me-2"></i> Add to Cart
+                                             </button>
+                                            }
+                                            <a asp-page="/OrchidPage/Orchids/Details" asp-route-id="@item.OrchidId" class="btn btn-outline-primary details-btn">
                                                 <i class="bi bi-eye me-2"></i> View Details
                                             </a>
                                         </div>
@@ -257,10 +296,18 @@
 
     <!-- Testimonials -->
     <section class="mb-5 py-5">
-        <h2 class="text-center mb-5 section-title">Customer Reviews</h2>
+        <div class="section-header text-center mb-5">
+            <h2 class="section-title">Customer Reviews</h2>
+            <p class="section-subtitle">What our customers say about their orchid experience</p>
+        </div>
         <div class="row g-4">
             <div class="col-lg-4">
                 <div class="testimonial-card text-center p-4">
+                    <div class="testimonial-avatar mb-3">
+                        <div class="avatar-circle">
+                            <i class="bi bi-person"></i>
+                        </div>
+                    </div>
                     <div class="testimonial-stars mb-3">
                         <i class="bi bi-star-fill"></i>
                         <i class="bi bi-star-fill"></i>
@@ -277,6 +324,11 @@
             </div>
             <div class="col-lg-4">
                 <div class="testimonial-card text-center p-4">
+                    <div class="testimonial-avatar mb-3">
+                        <div class="avatar-circle">
+                            <i class="bi bi-person"></i>
+                        </div>
+                    </div>
                     <div class="testimonial-stars mb-3">
                         <i class="bi bi-star-fill"></i>
                         <i class="bi bi-star-fill"></i>
@@ -293,6 +345,11 @@
             </div>
             <div class="col-lg-4">
                 <div class="testimonial-card text-center p-4">
+                    <div class="testimonial-avatar mb-3">
+                        <div class="avatar-circle">
+                            <i class="bi bi-person"></i>
+                        </div>
+                    </div>
                     <div class="testimonial-stars mb-3">
                         <i class="bi bi-star-fill"></i>
                         <i class="bi bi-star-fill"></i>
@@ -312,25 +369,49 @@
 
     <!-- Care Tips -->
     <section class="mb-5 py-3">
-        <div class="row align-items-center">
-            <div class="col-lg-6 mb-4 mb-lg-0">
-                <img src="https://images.unsplash.com/photo-1515513616051-5d3ae2773086?q=80&w=1000&auto=format&fit=crop" alt="Orchid Care" class="img-fluid rounded-4 shadow">
-            </div>
-            <div class="col-lg-6">
-                <h2 class="section-title mb-4">Orchid Care Tips</h2>
-                <div class="mb-4">
-                    <h5><i class="bi bi-droplet me-2 text-primary"></i> Watering</h5>
-                    <p>Most orchids prefer to dry out between waterings. Water thoroughly, then allow the media to dry before watering again.</p>
+        <div class="care-tips-section">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="care-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1515513616051-5d3ae2773086?q=80&w=1000&auto=format&fit=crop" alt="Orchid Care" class="img-fluid rounded-4 shadow-lg care-image">
+                        <div class="care-image-overlay"></div>
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <h5><i class="bi bi-brightness-high me-2 text-primary"></i> Light</h5>
-                    <p>Most orchids enjoy bright, indirect light. Avoid direct sunlight which can burn the leaves.</p>
+                <div class="col-lg-6">
+                    <div class="care-content">
+                        <h2 class="section-title mb-4">Orchid Care Tips</h2>
+                        <div class="care-tip mb-4">
+                            <div class="tip-icon">
+                                <i class="bi bi-droplet"></i>
+                            </div>
+                            <div class="tip-content">
+                                <h5>Watering</h5>
+                                <p>Most orchids prefer to dry out between waterings. Water thoroughly, then allow the media to dry before watering again.</p>
+                            </div>
+                        </div>
+                        <div class="care-tip mb-4">
+                            <div class="tip-icon">
+                                <i class="bi bi-brightness-high"></i>
+                            </div>
+                            <div class="tip-content">
+                                <h5>Light</h5>
+                                <p>Most orchids enjoy bright, indirect light. Avoid direct sunlight which can burn the leaves.</p>
+                            </div>
+                        </div>
+                        <div class="care-tip">
+                            <div class="tip-icon">
+                                <i class="bi bi-thermometer-half"></i>
+                            </div>
+                            <div class="tip-content">
+                                <h5>Temperature</h5>
+                                <p>Most orchids thrive in temperatures between 65-75°F during the day and about 10°F cooler at night.</p>
+                            </div>
+                        </div>
+                        <a href="#" class="btn btn-outline-primary mt-4 care-btn">
+                            <i class="bi bi-book me-2"></i>Read More Care Tips
+                        </a>
+                    </div>
                 </div>
-                <div>
-                    <h5><i class="bi bi-thermometer-half me-2 text-primary"></i> Temperature</h5>
-                    <p>Most orchids thrive in temperatures between 65-75°F during the day and about 10°F cooler at night.</p>
-                </div>
-                <a href="#" class="btn btn-outline-primary mt-3">Read More Care Tips</a>
             </div>
         </div>
     </section>
@@ -338,23 +419,30 @@
     <!-- Newsletter -->
     <section class="mb-5">
         <div class="newsletter-section text-center p-5 rounded-4">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <h2 class="section-title mb-3">Join Our Newsletter</h2>
-                    <p class="mb-4">Subscribe to receive updates on new arrivals, special offers, and care tips</p>
-                    <form class="row g-3 justify-content-center">
-                        <div class="col-md-8">
-                            <input type="email" class="form-control form-control-lg" placeholder="Your Email Address">
-                        </div>
-                        <div class="col-md-4">
-                            <button type="submit" class="btn btn-primary btn-lg w-100">Subscribe</button>
-                        </div>
-                    </form>
+            <div class="newsletter-content">
+                <div class="newsletter-icon mb-3">
+                    <i class="bi bi-envelope-heart"></i>
                 </div>
+                <h2 class="section-title mb-3">Join Our Newsletter</h2>
+                <p class="mb-4">Subscribe to receive updates on new arrivals, special offers, and care tips</p>
+                <form class="row g-3 justify-content-center">
+                    <div class="col-md-8">
+                        <input type="email" class="form-control form-control-lg newsletter-input" placeholder="Your Email Address">
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary btn-lg w-100 newsletter-btn">
+                            <i class="bi bi-send me-2"></i>Subscribe
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
 </div>
+
+<form id="antiforgery" method="post">
+    @Html.AntiForgeryToken()
+</form>
 
 @section Scripts {
     <script>
@@ -374,11 +462,14 @@
                     const originalText = this.innerHTML;
                     this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...';
                     
+                    // Get the anti-forgery token - Fix this part
+                    const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+                    
                     fetch('?handler=AddToCart', {
                         method: 'POST',
                         body: form,
                         headers: {
-                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                            'RequestVerificationToken': token
                         }
                     })
                     .then(response => response.json())
@@ -402,40 +493,77 @@
                     });
                 });
             });
+
+            // Add scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements for animation
+            document.querySelectorAll('.category-card, .product-card, .testimonial-card').forEach(el => {
+                observer.observe(el);
+            });
         });
     </script>
 }
 
 @section Styles {
+    <link rel="stylesheet" href="~/css/animations.css" asp-append-version="true" />
     <style>
         /* General styling */
         body {
             color: #4a4a4a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* Section headers */
+        .section-header {
+            margin-bottom: 3rem;
         }
         
         .section-title {
             position: relative;
             color: #2c3e50;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            font-weight: 400;
         }
         
         .section-title::after {
             content: "";
             display: block;
-            width: 70px;
-            height: 3px;
-            background-color: #5d9c59;
-            margin: 10px auto 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #e74c3c, #f39c12, #f1c40f, #27ae60, #3498db);
+            margin: 15px auto 0;
+            border-radius: 2px;
         }
         
         /* Hero Section */
         .hero-section {
-            background: url('https://images.unsplash.com/photo-1621466550398-ac8062907657?q=80&w=1200&auto=format&fit=crop') center/cover no-repeat;
-            min-height: 500px;
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.8), rgba(155, 89, 182, 0.8)), 
+                        url('https://images.unsplash.com/photo-1621466550398-ac8062907657?q=80&w=1200&auto=format&fit=crop') center/cover no-repeat;
+            min-height: 600px;
             display: flex;
             align-items: center;
-            border-radius: 0 0 20px 20px;
+            border-radius: 0 0 30px 30px;
             overflow: hidden;
+            position: relative;
         }
         
         .hero-overlay {
@@ -444,7 +572,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.3);
             z-index: 0;
         }
         
@@ -452,98 +580,511 @@
             z-index: 1;
         }
         
+        .hero-content {
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .hero-title {
+            font-size: 4rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 1.5rem;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, #e74c3c, #f39c12, #f1c40f, #27ae60);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.3rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            margin-bottom: 2rem;
+        }
+        
+        .hero-btn {
+            border-radius: 50px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .hero-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        /* Floating flowers animation uses the global animation definition */
+        .floating-flowers {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .flower {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.7;
+        }
+        
+        .flower-1 { top: 10%; left: 10%; animation-delay: 0s; }
+        .flower-2 { top: 20%; right: 15%; animation-delay: 1s; }
+        .flower-3 { bottom: 30%; left: 20%; animation-delay: 2s; }
+        .flower-4 { bottom: 20%; right: 10%; animation-delay: 3s; }
+        .flower-5 { top: 50%; left: 50%; animation-delay: 4s; }
+        
         /* Product cards */
         .product-card {
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.4s ease-in-out;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .product-card.animate-in {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .product-image-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-image {
+            height: 280px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        
+        .product-placeholder {
+            height: 280px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            color: #adb5bd;
+            font-size: 4rem;
+        }
+        
+        .product-card:hover .product-image {
+            transform: scale(1.1);
+        }
+        
+        .product-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .product-card:hover .product-overlay {
+            opacity: 1;
+        }
+        
+        .product-badge {
+            z-index: 2;
+        }
+        
+        .badge-natural {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+            font-weight: 600;
+            padding: 0.5em 1em;
+            border-radius: 20px;
+        }
+        
+        .badge-hybrid {
+            background: linear-gradient(45deg, #3498db, #5dade2);
+            color: white;
+            font-weight: 600;
+            padding: 0.5em 1em;
+            border-radius: 20px;
+        }
+        
+        .product-title {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+        
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #e74c3c;
+        }
+        
+        .product-category {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .product-description {
+            color: #5a6c7d;
+            font-size: 0.9rem;
+            line-height: 1.5;
         }
         
         /* Category cards */
         .category-card {
-            background-color: #f8f9fa;
-            border-radius: 16px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .category-card.animate-in {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         .category-card:hover {
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            transform: translateY(-10px);
+            background: linear-gradient(135deg, #ffffff, #e8f5e8);
         }
         
-        .category-icon {
-            color: #5d9c59;
+        .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            color: white;
+            font-size: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover .icon-wrapper {
+            transform: scale(1.1) rotate(10deg);
+            background: linear-gradient(135deg, #f39c12, #f1c40f);
+        }
+        
+        .category-btn {
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .category-btn:hover {
+            transform: translateX(5px);
+        }
+        
+        /* Search section */
+        .search-card {
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        
+        .search-header {
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+        }
+        
+        .search-input {
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.25);
+        }
+        
+        .search-btn {
+            border-radius: 15px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .search-btn:hover {
+            background: linear-gradient(135deg, #c0392b, #d68910);
+            transform: translateY(-2px);
+        }
+        
+        .clear-btn {
+            border-radius: 15px;
+            font-weight: 600;
+        }
+        
+        /* Results counter */
+        .results-counter {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        /* No results */
+        .no-results {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 20px;
+            border: 2px dashed #dee2e6;
+        }
+        
+        .no-results-icon {
+            font-size: 4rem;
+            color: #adb5bd;
         }
         
         /* Testimonials */
         .testimonial-card {
-            background-color: #f8f9fa;
-            border-radius: 16px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
             height: 100%;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .testimonial-card.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .testimonial-avatar {
+            margin-bottom: 1.5rem;
+        }
+        
+        .avatar-circle {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            color: white;
+            font-size: 2rem;
         }
         
         .testimonial-stars {
-            color: #ffc107;
+            color: #f1c40f;
+            font-size: 1.2rem;
+        }
+        
+        /* Care tips section */
+        .care-tips-section {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 20px;
+            padding: 3rem;
+        }
+        
+        .care-image-wrapper {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        
+        .care-image {
+            transition: transform 0.4s ease;
+        }
+        
+        .care-image-wrapper:hover .care-image {
+            transform: scale(1.05);
+        }
+        
+        .care-image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.2), rgba(155, 89, 182, 0.2));
+            pointer-events: none;
+        }
+        
+        .care-tip {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .tip-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .tip-content h5 {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tip-content p {
+            color: #5a6c7d;
+            margin-bottom: 0;
+        }
+        
+        .care-btn {
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .care-btn:hover {
+            transform: translateX(5px);
         }
         
         /* Newsletter */
         .newsletter-section {
-            background-color: #ebf3ee;
+            background: linear-gradient(135deg, #e74c3c, #f39c12, #f1c40f);
+            position: relative;
+            overflow: hidden;
         }
         
-        /* Badge styling */
-        .badge {
-            font-weight: 500;
-            padding: 0.5em 0.75em;
+        .newsletter-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
         }
         
-        /* Pagination */
-        .page-link {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50% !important;
-            margin: 0 3px;
-            color: #5d9c59;
+        .newsletter-content {
+            position: relative;
+            z-index: 1;
         }
         
-        .page-item.active .page-link {
-            background-color: #5d9c59;
-            border-color: #5d9c59;
+        .newsletter-icon {
+            font-size: 3rem;
+            color: white;
+            opacity: 0.9;
+        }
+        
+        .newsletter-section .section-title {
+            color: white;
+        }
+        
+        .newsletter-section .section-title::after {
+            background: white;
+        }
+        
+        .newsletter-input {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .newsletter-btn {
+            border-radius: 15px;
+            background: white;
+            color: #e74c3c;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .newsletter-btn:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
         
         /* Buttons */
         .btn-primary {
-            background-color: #5d9c59;
-            border-color: #5d9c59;
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            border: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
         
         .btn-primary:hover, 
         .btn-primary:focus {
-            background-color: #4e8a4a;
-            border-color: #4e8a4a;
+            background: linear-gradient(135deg, #c0392b, #d68910);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
         
         .btn-outline-primary {
-            color: #5d9c59;
-            border-color: #5d9c59;
+            color: #e74c3c;
+            border-color: #e74c3c;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
         
         .btn-outline-primary:hover {
-            background-color: #5d9c59;
-            border-color: #5d9c59;
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            border-color: #e74c3c;
+            transform: translateY(-2px);
         }
         
         .text-primary {
-            color: #5d9c59 !important;
+            color: #e74c3c !important;
+        }
+        
+        /* Pagination */
+        .page-link {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50% !important;
+            margin: 0 5px;
+            color: #e74c3c;
+            border: 2px solid #e9ecef;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .page-link:hover {
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            border-color: #e74c3c;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .page-item.active .page-link {
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            border-color: #e74c3c;
+            color: white;
         }
         
         /* Form elements */
@@ -554,13 +1095,14 @@
         
         .form-control:focus,
         .form-select:focus {
-            border-color: #5d9c59;
-            box-shadow: 0 0 0 0.25rem rgba(93, 156, 89, 0.25);
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.25);
         }
-        
+
         /* Rounded corners */
         .rounded-4 {
             border-radius: 1rem;
         }
+       
     </style>
 }

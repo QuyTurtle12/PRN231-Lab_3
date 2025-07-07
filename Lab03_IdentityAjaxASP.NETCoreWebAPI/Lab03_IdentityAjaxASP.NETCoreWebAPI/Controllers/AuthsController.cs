@@ -35,7 +35,9 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI.Controllers
             {
                 token,
                 accountId = user.AccountId,
-                roleName = user.Role?.RoleName ?? "Unknown"
+                roleName = user.Role?.RoleName ?? "Unknown",
+                accountName = user.AccountName,
+                accountEmail = user.Email
             });
         }
 
