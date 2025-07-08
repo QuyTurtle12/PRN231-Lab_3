@@ -4,85 +4,128 @@
     ViewData["Title"] = "Update Order Status";
 }
 
-<div class="container-fluid px-4">
-    <!-- Header Section -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="display-6 mb-1">Update Order Status</h1>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a asp-page="/Index">Home</a></li>
-                    <li class="breadcrumb-item"><a asp-page="./Index">Orders</a></li>
-                    <li class="breadcrumb-item"><a asp-page="./Details" asp-route-id="@Model.Order?.Id">Order #@Model.Order?.Id</a></li>
-                    <li class="breadcrumb-item active">Update Status</li>
-                </ol>
-            </nav>
-        </div>
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4 botanical-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-page="/Index" class="text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item"><a asp-page="./Index" class="text-decoration-none">Orders</a></li>
+            <li class="breadcrumb-item"><a asp-page="./Details" asp-route-id="@Model.Order?.Id" class="text-decoration-none">Order #@Model.Order?.Id</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Update Status</li>
+        </ol>
+    </nav>
+
+    <!-- Botanical Header -->
+    <div class="botanical-header text-center mb-5 position-relative">
+        <div class="leaf-decoration left-leaf animate-float"></div>
+        <h1 class="display-5 fw-bold section-title">Update Order Status</h1>
+        <p class="section-subtitle">Change the status for order #@Model.Order?.Id</p>
+        <div class="leaf-decoration right-leaf animate-float"></div>
     </div>
 
     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
     {
-        <div class="alert alert-danger" role="alert">
-            <i class="bi bi-exclamation-triangle me-2"></i> @Model.ErrorMessage
+        <div class="alert-botanical alert-danger-botanical mb-4" role="alert">
+            <div class="d-flex">
+                <div class="me-3">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
+                <div>@Model.ErrorMessage</div>
+            </div>
         </div>
     }
 
-    <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white py-3">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-pencil-square me-2"></i> Update Order #@Model.Order?.Id
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <!-- Order Info Summary -->
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <p class="mb-1"><strong>Customer:</strong> @Model.Order?.Account?.AccountName</p>
-                            <p class="mb-1"><strong>Email:</strong> @Model.Order?.Account?.Email</p>
-                            <p class="mb-1"><strong>Order Date:</strong> @Model.Order?.OrderDate?.ToString("MMMM d, yyyy")</p>
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card-botanical shadow-botanical animate-fade-in-up">
+                <div class="card-header-botanical">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-wrapper-botanical me-3" style="width: 40px; height: 40px;">
+                            <i class="bi bi-pencil-square"></i>
                         </div>
-                        <div class="col-md-6 text-md-end">
-                            <p class="mb-1"><strong>Total Amount:</strong> @Model.Order?.TotalAmount?.ToString("C", new System.Globalization.CultureInfo("en-US"))</p>
-                            <p class="mb-1"><strong>Items:</strong> @Model.Order?.OrderDetails?.Count</p>
+                        <h4 class="mb-0 orchid-title">Update Order #@Model.Order?.Id</h4>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Order Info Summary -->
+                    <div class="order-summary p-4 rounded-3 mb-4" style="background-color: var(--light-green);">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-2">
+                                    <span class="text-muted">Customer:</span>
+                                    <span class="fw-medium ms-2">@Model.Order?.Account?.AccountName</span>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="text-muted">Email:</span>
+                                    <span class="fw-medium ms-2">@Model.Order?.Account?.Email</span>
+                                </div>
+                                <div>
+                                    <span class="text-muted">Order Date:</span>
+                                    <span class="fw-medium ms-2">@Model.Order?.OrderDate?.ToString("MMMM d, yyyy", new System.Globalization.CultureInfo("en-US"))</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <div class="mb-2">
+                                    <span class="text-muted">Total Amount:</span>
+                                    <span class="fw-bold text-primary ms-2">@Model.Order?.TotalAmount?.ToString("C", new System.Globalization.CultureInfo("en-US"))</span>
+                                </div>
+                                <div>
+                                    <span class="text-muted">Items:</span>
+                                    <span class="fw-medium ms-2">@Model.Order?.OrderDetails?.Count</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <hr>
+                    <div class="divider-botanical"></div>
 
                     <!-- Status Update Form -->
-                    <form method="post">
+                    <form method="post" class="orchid-form">
                         <input type="hidden" asp-for="Order.Id" />
 
                         <div class="mb-4">
-                            <label for="OrderStatus" class="form-label">Order Status</label>
-                            <select asp-for="OrderStatus" class="form-select form-select-lg" required>
+                            <label for="OrderStatus" class="form-label orchid-form-label">Order Status</label>
+                            <select asp-for="OrderStatus" class="form-select form-control-botanical form-select-lg" required>
                                 <option value="Processing">Processing</option>
                                 <option value="Shipping">Shipping</option>
                                 <option value="Completed">Completed</option>
                                 <option value="Cancelled">Cancelled</option>
                             </select>
-                            <div class="form-text text-muted">
-                                Current status: <span class="fw-bold">@Model.Order?.OrderStatus</span>
+                            <div class="form-text text-muted mt-2">
+                                Current status: 
+                                @{
+                                    var statusClass = Model.Order?.OrderStatus?.ToLower() switch
+                                    {
+                                        "completed" => "badge-botanical badge-success",
+                                        "processing" => "badge-botanical badge-warning",
+                                        "shipping" => "badge-botanical badge-info",
+                                        "cancelled" => "badge-botanical badge-danger",
+                                        _ => "badge-botanical badge-secondary"
+                                    };
+                                }
+                                <span class="@statusClass ms-2">@Model.Order?.OrderStatus</span>
                             </div>
                             <span asp-validation-for="OrderStatus" class="text-danger"></span>
                         </div>
 
-                        <div class="d-flex gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary">
+                        <div class="d-flex gap-3 mt-5">
+                            <button type="submit" class="btn-botanical btn-primary-botanical">
                                 <i class="bi bi-check-circle me-2"></i> Update Status
                             </button>
-                            <a asp-page="./Details" asp-route-id="@Model.Order?.Id" class="btn btn-outline-secondary">
+                            <a asp-page="./Details" asp-route-id="@Model.Order?.Id" class="btn-botanical btn-outline-botanical">
                                 <i class="bi bi-x-circle me-2"></i> Cancel
                             </a>
                         </div>
                     </form>
                 </div>
-                <div class="card-footer bg-light">
-                    <div class="small text-muted">
-                        <i class="bi bi-info-circle me-1"></i>
-                        Only order status can be modified. For other changes, please contact the system administrator.
+                <div class="card-footer-botanical p-4">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="bi bi-info-circle"></i>
+                        </div>
+                        <div class="text-muted small">
+                            Only order status can be modified. For other changes, please contact the system administrator.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -92,14 +135,114 @@
 
 @section Styles {
     <style>
-        .card {
-            border: none;
-            border-radius: 0.75rem;
-            overflow: hidden;
+        /* Form control botanical styling */
+        .form-control-botanical {
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
         }
-
+        
+        .form-control-botanical:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 0.25rem rgba(93, 156, 89, 0.25);
+        }
+        
         .form-select-lg {
-            height: 50px;
+            height: 60px;
+        }
+        
+        .orchid-form-label {
+            font-weight: 500;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Badge styling */
+        .badge-botanical {
+            padding: 0.5em 1em;
+            font-weight: 500;
+            border-radius: 50px;
+            font-size: 0.75rem;
+        }
+        
+        .badge-warning {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: #e6a100;
+        }
+        
+        .badge-info {
+            background-color: rgba(23, 162, 184, 0.2);
+            color: #138496;
+        }
+        
+        .badge-success {
+            background-color: rgba(var(--primary-green-rgb), 0.2);
+            color: var(--primary-green);
+        }
+        
+        .badge-danger {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #c82333;
+        }
+        
+        .badge-secondary {
+            background-color: rgba(108, 117, 125, 0.2);
+            color: #5a6268;
+        }
+        
+        /* Alert styling */
+        .alert-botanical {
+            border: none;
+            border-radius: 15px;
+            padding: 1rem 1.5rem;
+        }
+        
+        .alert-danger-botanical {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #c82333;
+        }
+        
+        /* Divider */
+        .divider-botanical {
+            border-top: 1px solid rgba(0,0,0,0.05);
+            margin: 1.5rem 0;
+        }
+        
+        /* Card footer */
+        .card-footer-botanical {
+            background-color: rgba(var(--light-green-rgb), 0.5);
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        /* Font weight */
+        .fw-medium {
+            font-weight: 500;
+        }
+        
+        /* Animations */
+        @@keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .animate-float {
+            animation: float 6s infinite ease-in-out;
+        }
+        
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
         }
     </style>
 }

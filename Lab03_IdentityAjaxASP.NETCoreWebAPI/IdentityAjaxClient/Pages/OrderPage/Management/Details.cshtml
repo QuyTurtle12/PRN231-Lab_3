@@ -4,70 +4,90 @@
     ViewData["Title"] = "Order Details";
 }
 
-<div class="container-fluid px-4">
-    <!-- Header Section -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="display-6 mb-1">Order Details</h1>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a asp-page="/Index">Home</a></li>
-                    <li class="breadcrumb-item"><a asp-page="./Index">Orders</a></li>
-                    <li class="breadcrumb-item active">Order #@Model.Order?.Id</li>
-                </ol>
-            </nav>
-        </div>
-        <div>
-            <a asp-page="./Index" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left"></i> Back to Orders
-            </a>
-        </div>
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4 botanical-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-page="/Index" class="text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item"><a asp-page="./Index" class="text-decoration-none">Orders</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Order #@Model.Order?.Id</li>
+        </ol>
+    </nav>
+
+    <!-- Botanical Header -->
+    <div class="botanical-header text-center mb-5 position-relative">
+        <div class="leaf-decoration left-leaf animate-float"></div>
+        <h1 class="display-5 fw-bold section-title">Order Details</h1>
+        <p class="section-subtitle">Order #@Model.Order?.Id placed on @(Model.Order?.OrderDate?.ToString("MMMM d, yyyy", new System.Globalization.CultureInfo("en-US")) ?? "N/A")</p>
+        <div class="leaf-decoration right-leaf animate-float"></div>
+    </div>
+
+    <div class="d-flex justify-content-end mb-4">
+        <a asp-page="./Index" class="btn-botanical btn-outline-botanical">
+            <i class="bi bi-arrow-left me-2"></i> Back to Orders
+        </a>
     </div>
 
     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
     {
-        <div class="alert alert-danger" role="alert">
-            <i class="bi bi-exclamation-triangle me-2"></i> @Model.ErrorMessage
+        <div class="alert-botanical alert-danger-botanical mb-4" role="alert">
+            <div class="d-flex">
+                <div class="me-3">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
+                <div>@Model.ErrorMessage</div>
+            </div>
         </div>
     }
 
-    <div class="row">
+    <div class="row g-4">
         <!-- Order Summary Card -->
         <div class="col-md-4">
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-white py-3">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-info-circle me-2"></i> Order Summary
-                    </h5>
+            <div class="card-botanical shadow-botanical mb-4 animate-fade-in-up">
+                <div class="card-header-botanical">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-wrapper-botanical me-3" style="width: 40px; height: 40px;">
+                            <i class="bi bi-info-circle"></i>
+                        </div>
+                        <h4 class="mb-0 orchid-title">Order Summary</h4>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="text-muted">Order Date</span>
-                        <span>@(Model.Order?.OrderDate?.ToString("yyyy-MM-dd") ?? "N/A")</span>
+                <div class="card-body p-4">
+                    <div class="order-info-item mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">Order Date</span>
+                            <span class="fw-medium">@(Model.Order?.OrderDate?.ToString("MMMM d, yyyy", new System.Globalization.CultureInfo("en-US")) ?? "N/A")</span>
+                        </div>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="text-muted">Customer</span>
-                        <span>@(Model.Order?.Account?.AccountName ?? "N/A")</span>
+                    <div class="order-info-item mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">Customer</span>
+                            <span class="fw-medium">@(Model.Order?.Account?.AccountName ?? "N/A")</span>
+                        </div>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="text-muted">Email</span>
-                        <span>@(Model.Order?.Account?.Email ?? "N/A")</span>
+                    <div class="order-info-item mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">Email</span>
+                            <span class="fw-medium">@(Model.Order?.Account?.Email ?? "N/A")</span>
+                        </div>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="text-muted">Status</span>
-                        @{
-                            var statusClass = Model.Order?.OrderStatus?.ToLower() switch
-                            {
-                                "completed" => "bg-success",
-                                "processing" => "bg-warning text-dark",
-                                "shipping" => "bg-info text-dark",
-                                "cancelled" => "bg-danger",
-                                _ => "bg-secondary"
-                            };
-                        }
-                        <span class="badge @statusClass">@(Model.Order?.OrderStatus ?? "N/A")</span>
+                    <div class="order-info-item mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">Status</span>
+                            @{
+                                var statusClass = Model.Order?.OrderStatus?.ToLower() switch
+                                {
+                                    "completed" => "badge-botanical badge-success",
+                                    "processing" => "badge-botanical badge-warning",
+                                    "shipping" => "badge-botanical badge-info",
+                                    "cancelled" => "badge-botanical badge-danger",
+                                    _ => "badge-botanical badge-secondary"
+                                };
+                            }
+                            <span class="@statusClass">@(Model.Order?.OrderStatus ?? "N/A")</span>
+                        </div>
                     </div>
-                    <hr />
+                    <hr class="divider-botanical" />
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="fw-bold fs-5">Total</span>
                         <span class="fw-bold fs-5 text-primary">@(Model.Order?.TotalAmount?.ToString("C", new System.Globalization.CultureInfo("en-US")) ?? "$0.00")</span>
@@ -78,24 +98,31 @@
 
         <!-- Order Items Card -->
         <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white py-3">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-list-ul me-2"></i> Order Items
-                    </h5>
+            <div class="card-botanical shadow-botanical animate-fade-in-up delay-100">
+                <div class="card-header-botanical">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-wrapper-botanical me-3" style="width: 40px; height: 40px;">
+                            <i class="bi bi-list-ul"></i>
+                        </div>
+                        <h4 class="mb-0 orchid-title">Order Items</h4>
+                    </div>
                 </div>
                 <div class="card-body p-0">
                     @if (Model.Order?.OrderDetails == null || !Model.Order.OrderDetails.Any())
                     {
-                        <div class="p-4 text-center">
-                            <p class="text-muted mb-0">No items found in this order.</p>
+                        <div class="p-5 text-center">
+                            <div class="icon-wrapper-botanical mx-auto mb-4" style="width: 80px; height: 80px; background: var(--light-green); color: var(--primary-green);">
+                                <i class="bi bi-cart-x"></i>
+                            </div>
+                            <h5 class="orchid-title">No items found</h5>
+                            <p class="text-muted mb-0">This order doesn't contain any items</p>
                         </div>
                     }
                     else
                     {
                         <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead class="table-light">
+                            <table class="table table-botanical">
+                                <thead>
                                     <tr>
                                         <th>Product</th>
                                         <th class="text-center">Quantity</th>
@@ -111,36 +138,38 @@
                                                     @if (item.Orchid != null && !string.IsNullOrEmpty(item.Orchid.OrchidUrl))
                                                     {
                                                         <img src="@item.Orchid.OrchidUrl"
-                                                             class="me-3 rounded"
+                                                             class="me-3 rounded-3"
                                                              alt="@item.Orchid.OrchidName"
-                                                             style="width: 50px; height: 50px; object-fit: cover;" />
+                                                             style="width: 60px; height: 60px; object-fit: cover;" />
                                                     }
                                                     else
                                                     {
-                                                        <div class="bg-light me-3 rounded d-flex align-items-center justify-content-center"
-                                                             style="width: 50px; height: 50px;">
-                                                            <i class="bi bi-image text-muted"></i>
+                                                        <div class="bg-botanical-light me-3 rounded-3 d-flex align-items-center justify-content-center"
+                                                             style="width: 60px; height: 60px;">
+                                                            <i class="bi bi-flower1 text-primary"></i>
                                                         </div>
                                                     }
                                                     <div>
-                                                        <h6 class="mb-0">@(item.Orchid?.OrchidName ?? "Unknown Product")</h6>
+                                                        <h6 class="mb-0 fw-medium">@(item.Orchid?.OrchidName ?? "Unknown Product")</h6>
                                                         <small class="text-muted">@(item.Orchid?.Category?.CategoryName ?? "")</small>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="text-center">@(item.Quantity ?? 0)</td>
-                                            <td class="text-end fw-bold">
+                                            <td class="text-center">
+                                                <span class="quantity-badge">@(item.Quantity ?? 0)</span>
+                                            </td>
+                                            <td class="text-end fw-bold text-primary">
                                                 @(item.Price?.ToString("C", new System.Globalization.CultureInfo("en-US")) ?? "$0.00")
                                             </td>
                                         </tr>
                                     }
                                 </tbody>
-                                <tfoot class="table-light">
+                                <tfoot>
                                     <tr>
-                                        <th colspan="2" class="text-end">Total:</th>
-                                        <th class="text-end text-primary">
+                                        <td colspan="2" class="text-end fw-bold">Total:</td>
+                                        <td class="text-end fw-bold text-primary fs-5">
                                             @(Model.Order.TotalAmount?.ToString("C", new System.Globalization.CultureInfo("en-US")) ?? "$0.00")
-                                        </th>
+                                        </td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -154,24 +183,168 @@
 
 @section Styles {
     <style>
-        .card {
+        /* Card styling */
+        .card-botanical {
             border: none;
-            border-radius: 0.75rem;
+            border-radius: 15px;
             overflow: hidden;
         }
-
-        .badge {
+        
+        /* Badge styling */
+        .badge-botanical {
+            padding: 0.5em 1em;
             font-weight: 500;
-            padding: 0.5em 0.75em;
+            border-radius: 50px;
+            font-size: 0.75rem;
+        }
+        
+        .badge-warning {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: #e6a100;
+        }
+        
+        .badge-info {
+            background-color: rgba(23, 162, 184, 0.2);
+            color: #138496;
+        }
+        
+        .badge-success {
+            background-color: rgba(var(--primary-green-rgb), 0.2);
+            color: var(--primary-green);
+        }
+        
+        .badge-danger {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #c82333;
+        }
+        
+        .badge-secondary {
+            background-color: rgba(108, 117, 125, 0.2);
+            color: #5a6268;
+        }
+        
+        /* Table styling */
+        .table-botanical {
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            margin-bottom: 0;
         }
 
-        .table td, .table th {
-            padding: 1rem;
+        .table-botanical thead th {
+            border: none;
+            font-weight: 600;
+            color: var(--dark-color);
+            padding: 1rem 1.5rem;
+            background-color: var(--light-green);
+            opacity: 0.8;
+        }
+        
+        .table-botanical tbody tr {
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .table-botanical tbody tr:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+        
+        .table-botanical tbody td {
+            padding: 1.25rem 1.5rem;
             vertical-align: middle;
+            border: none;
         }
-
-        .table-hover tbody tr:hover {
-            background-color: rgba(var(--bs-primary-rgb), 0.05);
+        
+        .table-botanical tbody td:first-child {
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+        }
+        
+        .table-botanical tbody td:last-child {
+            border-top-right-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+        
+        .table-botanical tfoot td {
+            border: none;
+            padding: 1.25rem 1.5rem;
+        }
+        
+        /* Order info styling */
+        .order-info-item {
+            padding-bottom: 0.75rem;
+            border-bottom: 1px dashed rgba(0,0,0,0.1);
+        }
+        
+        .fw-medium {
+            font-weight: 500;
+        }
+        
+        /* Quantity badge */
+        .quantity-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: var(--light-green);
+            color: var(--primary-green);
+            font-weight: bold;
+        }
+        
+        /* Divider */
+        .divider-botanical {
+            border-top: 1px solid rgba(0,0,0,0.05);
+            margin: 1.5rem 0;
+        }
+        
+        /* Background color for botanical light */
+        .bg-botanical-light {
+            background-color: var(--light-green);
+        }
+        
+        /* Alert styling */
+        .alert-botanical {
+            border: none;
+            border-radius: 15px;
+            padding: 1rem 1.5rem;
+        }
+        
+        .alert-danger-botanical {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #c82333;
+        }
+        
+        /* Animations */
+        @@keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .animate-float {
+            animation: float 6s infinite ease-in-out;
+        }
+        
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .delay-100 {
+            animation-delay: 0.1s;
         }
     </style>
 }

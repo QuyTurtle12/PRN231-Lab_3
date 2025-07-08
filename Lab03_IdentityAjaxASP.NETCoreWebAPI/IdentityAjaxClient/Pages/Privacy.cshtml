@@ -80,7 +80,7 @@
             </div>
             
             <div class="text-center mt-4">
-                <p class="text-muted small">Last updated: @DateTime.Now.ToString("MMMM yyyy")</p>
+                <p class="text-muted small">Last updated: @DateTime.Now.ToString("MMMM yyyy", new System.Globalization.CultureInfo("en-US"))</p>
             </div>
         </div>
     </div>
