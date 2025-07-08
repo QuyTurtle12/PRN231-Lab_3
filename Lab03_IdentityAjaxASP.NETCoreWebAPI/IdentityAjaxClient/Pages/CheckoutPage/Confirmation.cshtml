@@ -7,29 +7,35 @@
 }
 
 <div class="container py-5">
-    <div class="text-center mb-5">
+    <div class="botanical-header text-center mb-5 animate-fade-in-up">
         <div class="success-animation mb-4">
-            <div class="checkmark-circle">
+            <div class="checkmark-circle animate-scale-in">
                 <div class="checkmark-circle-bg"></div>
                 <div class="checkmark draw"></div>
             </div>
         </div>
 
-        <h1 class="display-5 fw-bold mb-2">Thank You For Your Order!</h1>
-        <p class="lead text-muted mb-4">Your order has been placed successfully.</p>
+        <h1 class="display-5 fw-bold mb-2 section-title">Thank You For Your Order!</h1>
+        <p class="section-subtitle mb-4">Your beautiful orchids are on their way to you</p>
+        
+        <div class="floating-flowers">
+            <div class="flower flower-1 animate-float">🌸</div>
+            <div class="flower flower-2 animate-float delay-200">🌺</div>
+            <div class="flower flower-3 animate-float delay-300">🌼</div>
+        </div>
 
         <div class="d-flex justify-content-center">
-            <div class="card border-0 shadow-sm rounded-4 mb-4" style="max-width: 600px;">
+            <div class="card-botanical shadow-botanical mb-4 animate-fade-in-up delay-200" style="max-width: 600px;">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="mb-0">Order #@Model.Order?.Id</h5>
-                        <span class="badge bg-success">@Model.Order?.OrderStatus</span>
+                        <h5 class="mb-0 orchid-title">Order #@Model.Order?.Id</h5>
+                        <span class="badge-botanical badge-natural">@Model.Order?.OrderStatus</span>
                     </div>
 
                     <div class="row text-start mb-4">
                         <div class="col-sm-6 mb-3 mb-sm-0">
                             <p class="text-muted mb-1">Order Date</p>
-                            <p class="fw-semibold mb-0">@Model.Order?.OrderDate?.ToString("MMMM d, yyyy")</p>
+                            <p class="fw-semibold mb-0">@Model.Order?.OrderDate?.ToString("yyyy-MM-dd")</p>
                         </div>
                         <div class="col-sm-6">
                             <p class="text-muted mb-1">Customer</p>
@@ -57,17 +63,17 @@
             </div>
         </div>
 
-        <div class="botanical-message mb-4">
+        <div class="alert-botanical alert-success-botanical mb-4 animate-fade-in-up delay-300 text-center">
             <i class="bi bi-flower3 text-primary me-2"></i>
-            Your beautiful orchids are being prepared for shipping
+            Your beautiful orchids are being prepared with care
             <i class="bi bi-flower3 text-primary ms-2"></i>
         </div>
 
         <div class="d-flex justify-content-center gap-3">
-            <a asp-page="/Index" class="btn btn-primary px-4 py-2">
-                <i class="bi bi-house me-2"></i> Back to Home
+            <a asp-page="/Index" class="btn-botanical btn-primary-botanical animate-fade-in-up delay-400">
+                <i class="bi bi-house me-2"></i> Continue Shopping
             </a>
-            <a asp-page="/OrderPage/Management/Details" asp-route-id="@Model.Order?.Id" class="btn btn-outline-primary px-4 py-2">
+            <a asp-page="/OrderPage/Management/Details" class="btn-botanical btn-primary-botanical animate-fade-in-up delay-400" asp-route-id="@Model.Order?.Id" class="btn-outline-botanical animate-fade-in-up delay-500">
                 <i class="bi bi-bag me-2"></i> View Order Details
             </a>
         </div>
@@ -76,13 +82,6 @@
 
 @section Styles {
     <style>
-        /* Botanical Theme Colors */
-        :root {
-            --primary-green: #5d9c59;
-            --dark-green: #4e8a4a;
-            --light-green: #ebf5ea;
-        }
-
         /* Success Animation */
         .success-animation {
             margin: 0 auto;
@@ -124,44 +123,67 @@
             animation: checkmark 0.5s ease-in-out forwards;
             opacity: 0;
         }
-
-        .rounded-4 {
-            border-radius: 1rem;
-        }
-
-        .botanical-message {
-            font-style: italic;
-            color: #6c757d;
-        }
-
-        .text-primary {
-            color: var(--primary-green) !important;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-green);
-            border-color: var(--primary-green);
-        }
-
-            .btn-primary:hover,
-            .btn-primary:focus {
-                background-color: var(--dark-green);
-                border-color: var(--dark-green);
+        
+        @@keyframes checkmark {
+            0% {
+                opacity: 0;
+                height: 0;
+                width: 0;
             }
-
-        .btn-outline-primary {
-            color: var(--primary-green);
-            border-color: var(--primary-green);
+            40% {
+                opacity: 1;
+                height: 0;
+                width: 28px;
+            }
+            100% {
+                opacity: 1;
+                height: 56px;
+                width: 28px;
+            }
         }
 
-            .btn-outline-primary:hover {
-                background-color: var(--primary-green);
-                border-color: var(--primary-green);
-                color: white;
-            }
+        /* Floating Flowers */
+        .floating-flowers {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
 
-        .bg-success {
-            background-color: var(--primary-green) !important;
+        .flower {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.5;
+        }
+
+        .flower-1 {
+            top: 20%;
+            left: 20%;
+            animation-duration: 6s;
+        }
+
+        .flower-2 {
+            top: 10%;
+            right: 20%;
+            animation-duration: 7s;
+        }
+
+        .flower-3 {
+            bottom: 30%;
+            left: 30%;
+            animation-duration: 8s;
+        }
+        
+        /* Order details styling */
+        .border-top, .border-bottom {
+            border-color: var(--light-green) !important;
+        }
+        
+        .fw-medium {
+            font-weight: 500;
         }
     </style>
 }

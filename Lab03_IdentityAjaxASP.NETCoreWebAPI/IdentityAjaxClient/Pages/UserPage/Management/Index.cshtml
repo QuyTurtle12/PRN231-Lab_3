@@ -5,48 +5,55 @@
     ViewData["Title"] = "User Management";
 }
 
-<div class="container-fluid px-4">
-    <!-- Header Section -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="display-6 mb-0">User Management</h1>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="/">Home</a></li>
-                    <li class="breadcrumb-item active">User Management</li>
-                </ol>
-            </nav>
+<div class="container py-5">
+    <!-- Botanical Header -->
+    <div class="botanical-header text-center mb-5 position-relative">
+        <div class="leaf-decoration left-leaf animate-float"></div>
+        <h1 class="display-5 fw-bold section-title">User Management</h1>
+        <p class="section-subtitle">Manage your shop's user accounts</p>
+        <div class="leaf-decoration right-leaf animate-float"></div>
+        
+        <div class="d-flex align-items-center justify-content-center mt-4">
+            <div class="divider-leaf"></div>
+            <i class="bi bi-flower3 text-primary mx-3"></i>
+            <div class="divider-leaf"></div>
         </div>
-        <a asp-page="Create" class="btn btn-primary btn-lg shadow-sm">
-            <i class="bi bi-person-plus-fill"></i> Create New User
+    </div>
+
+    <div class="d-flex justify-content-end mb-4">
+        <a asp-page="Create" class="btn-botanical btn-primary-botanical">
+            <i class="bi bi-person-plus-fill me-2"></i> Create New User
         </a>
     </div>
 
     <!-- Search Card -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-header bg-white py-3">
-            <h5 class="card-title mb-0">
-                <i class="bi bi-search me-2"></i> Search Filters
-            </h5>
+    <div class="card-botanical shadow-botanical mb-4 animate-fade-in-up">
+        <div class="card-header-botanical">
+            <div class="d-flex align-items-center">
+                <div class="icon-wrapper-botanical me-3" style="width: 40px; height: 40px;">
+                    <i class="bi bi-search"></i>
+                </div>
+                <h4 class="mb-0 orchid-title">Search Filters</h4>
+            </div>
         </div>
-        <div class="card-body">
-            <form method="get">
+        <div class="card-body p-4">
+            <form method="get" class="orchid-form">
                 <div class="row g-3">
                     <div class="col-md-3">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="nameSearch" name="nameSearch" value="@Model.NameSearch" placeholder="Enter name">
+                            <input type="text" class="form-control form-control-botanical" id="nameSearch" name="nameSearch" value="@Model.NameSearch" placeholder="Enter name">
                             <label for="nameSearch">Name</label>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-floating">
-                            <input type="email" class="form-control" id="emailSearch" name="emailSearch" value="@Model.EmailSearch" placeholder="Enter email">
+                            <input type="email" class="form-control form-control-botanical" id="emailSearch" name="emailSearch" value="@Model.EmailSearch" placeholder="Enter email">
                             <label for="emailSearch">Email</label>
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="form-floating">
-                            <select class="form-select" id="roleIdSearch" name="roleIdSearch" asp-for="RoleIdSearch">
+                            <select class="form-select form-control-botanical" id="roleIdSearch" name="roleIdSearch" asp-for="RoleIdSearch">
                                 <option value="">All Roles</option>
                                 @if (Model.RoleList != null)
                                 {
@@ -61,11 +68,11 @@
                     </div>
                     <div class="col-md-4 align-self-end">
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary flex-grow-1">
-                                <i class="bi bi-search"></i> Search
+                            <button type="submit" class="btn-botanical btn-primary-botanical flex-grow-1">
+                                <i class="bi bi-search me-2"></i> Search
                             </button>
-                            <a asp-page="./Index" class="btn btn-outline-secondary flex-grow-1">
-                                <i class="bi bi-x-circle"></i> Clear
+                            <a asp-page="./Index" class="btn-botanical btn-outline-botanical flex-grow-1">
+                                <i class="bi bi-x-circle me-2"></i> Clear
                             </a>
                         </div>
                     </div>
@@ -75,13 +82,16 @@
     </div>
 
     <!-- Results Section -->
-    <div class="card shadow-sm">
-        <div class="card-header bg-white py-3">
+    <div class="card-botanical shadow-botanical animate-fade-in-up delay-100">
+        <div class="card-header-botanical">
             <div class="d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">
-                    <i class="bi bi-people-fill me-2"></i> User List
-                </h5>
-                <span class="badge bg-primary rounded-pill">
+                <div class="d-flex align-items-center">
+                    <div class="icon-wrapper-botanical me-3" style="width: 40px; height: 40px;">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <h4 class="mb-0 orchid-title">User List</h4>
+                </div>
+                <span class="badge-botanical badge-natural">
                     Total: @(Model.Account?.TotalCount ?? 0) users
                 </span>
             </div>
@@ -89,24 +99,24 @@
         <div class="card-body p-0">
             @if (!Model.Account?.Items.Any() ?? true)
             {
-                <div class="p-4 text-center">
-                    <div class="text-muted mb-3">
-                        <i class="bi bi-search" style="font-size: 3rem;"></i>
+                <div class="p-5 text-center">
+                    <div class="icon-wrapper-botanical mx-auto mb-4" style="width: 80px; height: 80px; background: var(--light-green); color: var(--primary-green);">
+                        <i class="bi bi-search"></i>
                     </div>
-                    <h5>No users found matching your criteria</h5>
-                    <p class="text-muted mb-0">Try adjusting your search filters</p>
+                    <h5 class="orchid-title">No users found matching your criteria</h5>
+                    <p class="text-muted mb-4">Try adjusting your search filters</p>
                 </div>
             }
             else
             {
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
+                    <table class="table table-botanical">
+                        <thead>
                             <tr>
-                                <th class="border-bottom">Name</th>
-                                <th class="border-bottom">Email</th>
-                                <th class="border-bottom">Role</th>
-                                <th class="border-bottom text-end">Actions</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th class="text-end">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -115,11 +125,11 @@
                                 <tr>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <div class="avatar-circle bg-primary bg-opacity-10 text-primary me-3">
+                                            <div class="avatar-circle bg-botanical-light text-primary me-3">
                                                 <i class="bi bi-person"></i>
                                             </div>
                                             <div>
-                                                <h6 class="mb-0">@item.AccountName</h6>
+                                                <h6 class="mb-0 fw-medium">@item.AccountName</h6>
                                             </div>
                                         </div>
                                     </td>
@@ -133,13 +143,13 @@
                                         @{
                                             var (badgeClass, roleIcon) = item.Role?.RoleName?.ToLower() switch
                                             {
-                                                "admin" => ("bg-danger", "bi-shield-fill"),
-                                                "staff" => ("bg-info", "bi-person-badge"),
-                                                "customer" => ("bg-success", "bi-person"),
-                                                _ => ("bg-secondary", "bi-person")
+                                                "admin" => ("badge-botanical", "bi-shield-fill"),
+                                                "staff" => ("badge-hybrid", "bi-person-badge"),
+                                                "customer" => ("badge-natural", "bi-person"),
+                                                _ => ("badge-botanical", "bi-person")
                                             };
                                         }
-                                        <span class="badge @badgeClass">
+                                        <span class="@badgeClass">
                                             <i class="bi @roleIcon me-1"></i>
                                             @item.Role?.RoleName
                                         </span>
@@ -148,13 +158,13 @@
                                         <div class="d-flex gap-2 justify-content-end">
                                             <a asp-page="./Edit" 
                                                asp-route-id="@item.AccountId" 
-                                               class="btn btn-sm btn-outline-primary"
+                                               class="btn-botanical btn-outline-botanical btn-sm"
                                                title="Edit User">
                                                 <i class="bi bi-pencil me-1"></i> Edit
                                             </a>
                                             <a asp-page="./Details" 
                                                asp-route-id="@item.AccountId" 
-                                               class="btn btn-sm btn-outline-info"
+                                               class="btn-botanical btn-outline-botanical btn-sm"
                                                title="View Details">
                                                 <i class="bi bi-info-circle me-1"></i> Details
                                             </a>
@@ -169,14 +179,14 @@
                 <!-- Pagination -->
                 @if (Model.Account.TotalPages > 1)
                 {
-                    <div class="d-flex justify-content-between align-items-center p-3 border-top">
+                    <div class="d-flex justify-content-between align-items-center p-4 border-top">
                         <small class="text-muted">
                             Showing @((Model.Account.PageNumber - 1) * Model.Account.PageSize + 1) to 
                             @Math.Min(Model.Account.PageNumber * Model.Account.PageSize, Model.Account.TotalCount) of 
                             @Model.Account.TotalCount users
                         </small>
                         <nav aria-label="Page navigation">
-                            <ul class="pagination pagination-sm mb-0">
+                            <ul class="pagination pagination-botanical mb-0">
                                 <li class="page-item @(Model.Account.PageNumber == 1 ? "disabled" : "")">
                                     <a class="page-link" asp-page="./Index"
                                        asp-route-pageIndex="@(Model.Account.PageNumber - 1)"
@@ -216,6 +226,7 @@
 
 @section Styles {
     <style>
+        /* Avatar styling */
         .avatar-circle {
             width: 40px;
             height: 40px;
@@ -225,59 +236,134 @@
             justify-content: center;
             font-size: 1.2rem;
         }
-
-        .table th {
-            font-weight: 600;
-            font-size: 0.875rem;
+        
+        /* Form control botanical styling */
+        .form-control-botanical {
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control-botanical:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 0.25rem rgba(93, 156, 89, 0.25);
         }
 
-        .table td {
-            font-size: 0.875rem;
+        /* Table botanical styling */
+        .table-botanical {
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            margin-bottom: 0;
         }
 
-        .badge {
-            font-weight: 500;
-            font-size: 0.75rem;
-            padding: 0.5em 0.75em;
-        }
-
-        .btn-sm {
-            padding: 0.25rem 0.5rem;
-        }
-
-        .card {
+        .table-botanical thead th {
             border: none;
-            border-radius: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            padding: 1rem 1.5rem;
+            background-color: var(--light-green);
+            opacity: 0.8;
+        }
+        
+        .table-botanical tbody tr {
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .table-botanical tbody tr:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+        
+        .table-botanical tbody td {
+            padding: 1.25rem 1.5rem;
+            vertical-align: middle;
+            border: none;
+        }
+        
+        .table-botanical tbody td:first-child {
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+        }
+        
+        .table-botanical tbody td:last-child {
+            border-top-right-radius: 15px;
+            border-bottom-right-radius: 15px;
         }
 
-        .card-header {
-            border-bottom: 1px solid rgba(0,0,0,.05);
+        /* Badge styling */
+        .badge-botanical {
+            padding: 0.5em 1em;
+            font-weight: 500;
+            border-radius: 50px;
+            font-size: 0.75rem;
         }
-
-        .form-floating > .form-control,
-        .form-floating > .form-select {
-            height: calc(3.5rem + 2px);
-            line-height: 1.25;
-        }
-
-        .page-link {
-            width: 32px;
-            height: 32px;
+        
+        /* Pagination botanical styling */
+        .pagination-botanical .page-link {
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0;
+            margin: 0 3px;
+            border: none;
+            background-color: var(--light-green);
+            color: var(--primary-green);
+            transition: all 0.3s ease;
         }
-
-        .table tr:hover {
-            background-color: rgba(var(--bs-primary-rgb), 0.02);
+        
+        .pagination-botanical .page-item.active .page-link {
+            background-color: var(--primary-green);
+            color: white;
         }
-
-        .btn-outline-primary:hover,
-        .btn-outline-info:hover,
-        .btn-outline-danger:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.1);
+        
+        /* Button size customizations */
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.875rem;
+        }
+        
+        /* Background color for botanical light */
+        .bg-botanical-light {
+            background-color: var(--light-green);
+        }
+        
+        /* Animations */
+        @@keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .animate-float {
+            animation: float 6s infinite ease-in-out;
+        }
+        
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+        
+        .fw-medium {
+            font-weight: 500;
         }
     </style>
 }

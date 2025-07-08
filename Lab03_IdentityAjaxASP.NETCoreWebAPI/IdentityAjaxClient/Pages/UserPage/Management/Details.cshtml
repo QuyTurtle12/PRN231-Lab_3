@@ -4,55 +4,63 @@
     ViewData["Title"] = "User Details";
 }
 
-<div class="container-fluid px-4">
-    <!-- Header Section -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="display-6 mb-0">User Details</h1>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a asp-page="/Index">Home</a></li>
-                    <li class="breadcrumb-item active">User Details</li>
-                </ol>
-            </nav>
-        </div>
-        <div>
-            <a asp-page="./Edit" asp-route-id="@Model.Account.AccountId" class="btn btn-outline-primary me-2">
-                <i class="bi bi-pencil"></i> Edit
-            </a>
-            <a asp-page="./Index" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left"></i> Back to List
-            </a>
-        </div>
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4 botanical-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-page="/Index" class="text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item"><a asp-page="./Index" class="text-decoration-none">User Management</a></li>
+            <li class="breadcrumb-item active" aria-current="page">User Details</li>
+        </ol>
+    </nav>
+
+    <!-- Botanical Header -->
+    <div class="botanical-header text-center mb-5 position-relative">
+        <div class="leaf-decoration left-leaf animate-float"></div>
+        <h1 class="display-5 fw-bold section-title">User Details</h1>
+        <p class="section-subtitle">View account information for @Model.Account.AccountName</p>
+        <div class="leaf-decoration right-leaf animate-float"></div>
     </div>
 
-    <div class="row">
+    <div class="d-flex justify-content-end mb-4">
+        <a asp-page="./Edit" asp-route-id="@Model.Account.AccountId" class="btn-botanical btn-primary-botanical me-2">
+            <i class="bi bi-pencil me-2"></i> Edit User
+        </a>
+        <a asp-page="./Index" class="btn-botanical btn-outline-botanical">
+            <i class="bi bi-arrow-left me-2"></i> Back to List
+        </a>
+    </div>
+
+    <div class="row g-4">
         <!-- User Profile Card -->
         <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white py-3">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-person-badge me-2"></i> User Profile
-                    </h5>
+            <div class="card-botanical shadow-botanical animate-fade-in-up">
+                <div class="card-header-botanical">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-wrapper-botanical me-3" style="width: 40px; height: 40px;">
+                            <i class="bi bi-person-badge"></i>
+                        </div>
+                        <h4 class="mb-0 orchid-title">User Profile</h4>
+                    </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     <div class="text-center mb-4">
-                        <div class="avatar-circle bg-primary bg-opacity-10 text-primary mx-auto mb-3"
-                             style="width: 80px; height: 80px; font-size: 2.5rem;">
+                        <div class="avatar-circle bg-botanical-light text-primary mx-auto mb-3"
+                             style="width: 100px; height: 100px; font-size: 2.5rem;">
                             <i class="bi bi-person"></i>
                         </div>
-                        <h4 class="mb-0">@Model.Account.AccountName</h4>
+                        <h4 class="mb-0 fw-bold">@Model.Account.AccountName</h4>
 
                         @{
                             var (badgeClass, roleIcon) = Model.Account.Role?.RoleName?.ToLower() switch
                             {
-                                "admin" => ("bg-danger", "bi-shield-fill"),
-                                "staff" => ("bg-info", "bi-person-badge"),
-                                "customer" => ("bg-success", "bi-person"),
-                                _ => ("bg-secondary", "bi-person")
+                                "admin" => ("badge-botanical", "bi-shield-fill"),
+                                "staff" => ("badge-hybrid", "bi-person-badge"),
+                                "customer" => ("badge-natural", "bi-person"),
+                                _ => ("badge-botanical", "bi-person")
                             };
                         }
-                        <span class="badge @badgeClass mt-2">
+                        <span class="@badgeClass mt-2">
                             <i class="bi @roleIcon me-1"></i>
                             @Model.Account.Role?.RoleName
                         </span>
@@ -61,74 +69,87 @@
             </div>
 
             <!-- Role Information Card -->
-            <div class="card shadow-sm mt-4">
-                <div class="card-header bg-white py-3">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-shield me-2"></i> Role Information
-                    </h5>
+            <div class="card-botanical shadow-botanical mt-4 animate-fade-in-up delay-100">
+                <div class="card-header-botanical">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-wrapper-botanical me-3" style="width: 40px; height: 40px;">
+                            <i class="bi bi-shield"></i>
+                        </div>
+                        <h4 class="mb-0 orchid-title">Role Information</h4>
+                    </div>
                 </div>
-                <div class="card-body">
-                    @switch (Model.Account.Role?.RoleName?.ToLower())
-                    {
-                        case "admin":
-                            <p>Administrators have full access to all system features including:</p>
-                            <ul>
-                                <li>User management</li>
-                                <li>System configuration</li>
-                                <li>Product management</li>
-                                <li>Access to all reports</li>
-                            </ul>
-                            break;
-                        case "staff":
-                            <p>Staff members can perform day-to-day operations:</p>
-                            <ul>
-                                <li>Manage products and inventory</li>
-                                <li>Process orders</li>
-                                <li>Handle customer inquiries</li>
-                                <li>Access operational reports</li>
-                            </ul>
-                            break;
-                        case "customer":
-                            <p>Customers can use the online shopping features:</p>
-                            <ul>
-                                <li>Browse and purchase products</li>
-                                <li>Track order history</li>
-                                <li>Manage personal information</li>
-                                <li>Submit reviews and feedback</li>
-                            </ul>
-                            break;
-                        default:
-                            <p>No specific role information available.</p>
-                            break;
-                    }
+                <div class="card-body p-4">
+                    <div class="role-details p-3 rounded-3" style="background-color: var(--light-green);">
+                        @switch (Model.Account.Role?.RoleName?.ToLower())
+                        {
+                            case "admin":
+                                <p>Administrators have full access to all system features including:</p>
+                                <ul class="mb-0">
+                                    <li>User management</li>
+                                    <li>System configuration</li>
+                                    <li>Product management</li>
+                                    <li>Access to all reports</li>
+                                </ul>
+                                break;
+                            case "staff":
+                                <p>Staff members can perform day-to-day operations:</p>
+                                <ul class="mb-0">
+                                    <li>Manage products and inventory</li>
+                                    <li>Process orders</li>
+                                    <li>Handle customer inquiries</li>
+                                    <li>Access operational reports</li>
+                                </ul>
+                                break;
+                            case "customer":
+                                <p>Customers can use the online shopping features:</p>
+                                <ul class="mb-0">
+                                    <li>Browse and purchase products</li>
+                                    <li>Track order history</li>
+                                    <li>Manage personal information</li>
+                                    <li>Submit reviews and feedback</li>
+                                </ul>
+                                break;
+                            default:
+                                <p class="mb-0">No specific role information available.</p>
+                                break;
+                        }
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- User Activity Card -->
         <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white py-3">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-activity me-2"></i> User Account Details
-                    </h5>
+            <div class="card-botanical shadow-botanical animate-fade-in-up delay-200">
+                <div class="card-header-botanical">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-wrapper-botanical me-3" style="width: 40px; height: 40px;">
+                            <i class="bi bi-activity"></i>
+                        </div>
+                        <h4 class="mb-0 orchid-title">User Account Details</h4>
+                    </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     <div class="table-responsive">
-                        <table class="table table-borderless">
+                        <table class="table table-borderless align-middle">
                             <tbody>
                                 <tr>
-                                    <th style="width: 200px;">Account Name</th>
-                                    <td>@Html.DisplayFor(model => model.Account.AccountName)</td>
+                                    <th style="width: 200px;" class="ps-0">Account Name</th>
+                                    <td class="fw-medium">@Model.Account.AccountName</td>
                                 </tr>
                                 <tr>
-                                    <th>Email Address</th>
-                                    <td>@Html.DisplayFor(model => model.Account.Email)</td>
-                                </tr>
-                                <tr>
-                                    <th>Role</th>
+                                    <th class="ps-0">Email Address</th>
                                     <td>
-                                        <span class="badge @badgeClass">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-envelope me-2 text-primary"></i>
+                                            <span class="fw-medium">@Model.Account.Email</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="ps-0">Role</th>
+                                    <td>
+                                        <span class="@badgeClass">
                                             <i class="bi @roleIcon me-1"></i>
                                             @Model.Account.Role?.RoleName
                                         </span>
@@ -145,28 +166,78 @@
 
 @section Styles {
     <style>
+        /* Avatar styling */
         .avatar-circle {
-            width: 40px;
-            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
         }
-
-        .badge {
+        
+        /* Badge styling */
+        .badge-botanical {
+            padding: 0.5em 1em;
             font-weight: 500;
-            padding: 0.5em 0.75em;
+            border-radius: 50px;
+            font-size: 0.75rem;
         }
-
-        .card {
-            border: none;
-            border-radius: 0.5rem;
+        
+        .badge-natural {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
         }
-
-        .card-header {
-            border-bottom: 1px solid rgba(0,0,0,.05);
+        
+        .badge-hybrid {
+            background: linear-gradient(45deg, #3498db, #5dade2);
+            color: white;
+        }
+        
+        /* Botanical light background */
+        .bg-botanical-light {
+            background-color: var(--light-green);
+        }
+        
+        /* Table styling */
+        .table th {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        .fw-medium {
+            font-weight: 500;
+        }
+        
+        /* Animations */
+        @@keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .animate-float {
+            animation: float 6s infinite ease-in-out;
+        }
+        
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+        
+        .delay-200 {
+            animation-delay: 0.2s;
         }
     </style>
 }

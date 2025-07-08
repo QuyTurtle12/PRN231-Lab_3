@@ -48,18 +48,18 @@
                         <label for="orderStatusSearch">Order Status</label>
                     </div>
                 </div>
-                <div class="col-md-2"> 
+                <div class="col-md-2">
                     <div class="form-floating">
                         <input type="date" class="form-control" id="startDateSearch" name="startDateSearch" value="@(Model.StartDateSearch?.ToString("yyyy-MM-dd"))" placeholder="From date">
-                        <label for="startDateSearch">From Date</label> 
-                    </div> 
-                </div> 
-                    <div class="col-md-2">
-                            <div class="form-floating">
-                                <input type="date" class="form-control" id="endDateSearch" name="endDateSearch" value="@(Model.EndDateSearch?.ToString("yyyy-MM-dd"))" placeholder="To date"> 
-                                <label for="endDateSearch">To Date</label>
-                            </div>
+                        <label for="startDateSearch">From Date</label>
                     </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-floating">
+                        <input type="date" class="form-control" id="endDateSearch" name="endDateSearch" value="@(Model.EndDateSearch?.ToString("yyyy-MM-dd"))" placeholder="To date">
+                        <label for="endDateSearch">To Date</label>
+                    </div>
+                </div>
                 <div class="col-md-2 d-flex align-items-end">
                     <div class="d-flex gap-2 w-100">
                         <button type="submit" class="btn btn-primary flex-grow-1">

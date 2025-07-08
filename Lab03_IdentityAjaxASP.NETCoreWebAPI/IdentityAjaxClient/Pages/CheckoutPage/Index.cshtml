@@ -15,13 +15,13 @@
     </nav>
 
     <!-- Page Header -->
-    <div class="text-center mb-5 position-relative">
-        <div class="leaf-decoration left-leaf"></div>
-        <h1 class="display-5 fw-bold mb-2">Complete Your Order</h1>
-        <p class="text-muted">Review and confirm your purchase</p>
-        <div class="leaf-decoration right-leaf"></div>
+    <div class="botanical-header text-center mb-5 position-relative animate-fade-in-up">
+        <div class="leaf-decoration left-leaf animate-float"></div>
+        <h1 class="display-5 fw-bold mb-2 section-title">Complete Your Order</h1>
+        <p class="section-subtitle">Review and confirm your beautiful orchids</p>
+        <div class="leaf-decoration right-leaf animate-float"></div>
 
-        <div class="d-flex align-items-center justify-content-center mt-3">
+        <div class="d-flex align-items-center justify-content-center mt-4">
             <div class="divider-leaf"></div>
             <i class="bi bi-flower3 text-primary mx-3"></i>
             <div class="divider-leaf"></div>
@@ -30,7 +30,7 @@
 
     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
     {
-        <div class="alert alert-danger mb-4">
+        <div class="alert-botanical alert-danger-botanical mb-4">
             <i class="bi bi-exclamation-circle me-2"></i> @Model.ErrorMessage
         </div>
     }
@@ -39,13 +39,13 @@
         <div class="row g-4">
             <!-- Order Summary -->
             <div class="col-lg-5 order-lg-2">
-                <div class="card border-0 shadow-sm rounded-botanical sticky-lg-top" style="top: 2rem;">
-                    <div class="card-header bg-white py-3 border-0">
+                <div class="card-botanical shadow-botanical sticky-lg-top animate-fade-in-up" style="top: 2rem;">
+                    <div class="card-header-botanical">
                         <div class="d-flex align-items-center">
-                            <div class="summary-icon-wrapper me-3">
+                            <div class="icon-wrapper-botanical me-3">
                                 <i class="bi bi-receipt"></i>
                             </div>
-                            <h4 class="mb-0">Order Summary</h4>
+                            <h4 class="mb-0 orchid-title">Order Summary</h4>
                         </div>
                     </div>
                     <div class="card-body p-0">
@@ -100,13 +100,13 @@
 
             <!-- Checkout Details -->
             <div class="col-lg-7 order-lg-1">
-                <div class="card border-0 shadow-sm rounded-botanical mb-4">
-                    <div class="card-header bg-white py-3 border-0">
+                <div class="card-botanical shadow-botanical mb-4 animate-fade-in-up delay-100">
+                    <div class="card-header-botanical">
                         <div class="d-flex align-items-center">
-                            <div class="cart-icon-wrapper me-3">
+                            <div class="icon-wrapper-botanical me-3">
                                 <i class="bi bi-person"></i>
                             </div>
-                            <h4 class="mb-0">Customer Information</h4>
+                            <h4 class="mb-0 orchid-title">Customer Information</h4>
                         </div>
                     </div>
                     <div class="card-body">
@@ -121,13 +121,13 @@
                     </div>
                 </div>
 
-                <div class="card border-0 shadow-sm rounded-botanical">
-                    <div class="card-header bg-white py-3 border-0">
+                <div class="card-botanical shadow-botanical animate-fade-in-up delay-200">
+                    <div class="card-header-botanical">
                         <div class="d-flex align-items-center">
-                            <div class="cart-icon-wrapper me-3">
+                            <div class="icon-wrapper-botanical me-3">
                                 <i class="bi bi-credit-card"></i>
                             </div>
-                            <h4 class="mb-0">Payment</h4>
+                            <h4 class="mb-0 orchid-title">Payment</h4>
                         </div>
                     </div>
                     <div class="card-body">
@@ -141,19 +141,21 @@
                             </div>
                         </div>
 
-                        <div class="care-note mb-4">
-                            <div class="care-icon">
-                                <i class="bi bi-shield-check"></i>
+                        <div class="alert-botanical alert-success-botanical mb-4">
+                            <div class="d-flex">
+                                <div class="icon-wrapper-botanical me-3" style="width: 30px; height: 30px;">
+                                    <i class="bi bi-shield-check"></i>
+                                </div>
+                                <p class="mb-0">All orders are carefully processed and packaged. Your beautiful orchids will be delivered in perfect condition.</p>
                             </div>
-                            <p>All orders are carefully processed and packaged. Your orchids will be delivered in perfect condition.</p>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-lg w-100 checkout-btn">
+                        <button type="submit" class="btn-botanical btn-primary-botanical w-100 animate-pulse">
                             <i class="bi bi-lock me-2"></i> Place Order
                         </button>
 
                         <div class="text-center mt-3">
-                            <a asp-page="/CartPage/Index" class="btn btn-link">
+                            <a asp-page="/CartPage/Index" class="btn-outline-botanical">
                                 <i class="bi bi-arrow-left me-1"></i> Return to Cart
                             </a>
                         </div>
@@ -166,131 +168,63 @@
 
 @section Styles {
     <style>
-        /* Botanical Theme Colors */
-        :root {
-            --primary-green: #5d9c59;
-            --dark-green: #4e8a4a;
-            --light-green: #ebf5ea;
-            --accent-pink: #f8b8c4;
-            --accent-yellow: #fff8e6;
-            --text-color: #3c4043;
-        }
-
-        body {
-            color: var(--text-color);
-        }
-
-        /* Header with Decorative Elements */
-        .leaf-decoration {
-            position: absolute;
-            width: 150px;
-            height: 80px;
-            top: 0;
-            background-repeat: no-repeat;
-            background-size: contain;
-            opacity: 0.1;
-        }
-
-        .left-leaf {
-            left: 10%;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M10,50 Q30,20 50,50 T90,50" stroke="%235d9c59" stroke-width="8" fill="none" /></svg>');
-            transform: rotate(-30deg);
-        }
-
-        .right-leaf {
-            right: 10%;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M10,50 Q30,20 50,50 T90,50" stroke="%235d9c59" stroke-width="8" fill="none" /></svg>');
-            transform: rotate(30deg) scaleX(-1);
-        }
-
-        .divider-leaf {
-            height: 1px;
-            width: 100px;
-            background-color: var(--primary-green);
-            opacity: 0.3;
-        }
-
-        /* Botanical Breadcrumb */
-        .botanical-breadcrumb .breadcrumb-item + .breadcrumb-item::before {
-            content: "•";
-            color: var(--primary-green);
-        }
-
-        /* Rounded Cards */
-        .rounded-botanical {
-            border-radius: 16px !important;
-            overflow: hidden;
-        }
-
-        /* Card Headers with Icons */
-        .cart-icon-wrapper,
-        .summary-icon-wrapper {
-            width: 40px;
-            height: 40px;
-            background-color: var(--light-green);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-green);
-            font-size: 1.2rem;
-        }
-
-        /* Botanical Divider */
-        .botanical-divider {
-            position: relative;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(93, 156, 89, 0.3), transparent);
-        }
-
-        /* Care Note */
-        .care-note {
+        /* Additional checkout-specific styles */
+        .customer-info {
             background-color: var(--light-green);
             border-radius: 12px;
-            padding: 15px;
-            font-size: 0.85rem;
-            position: relative;
-            padding-left: 50px;
-        }
-
-        .care-icon {
-            position: absolute;
-            left: 15px;
-            top: 15px;
-            color: var(--primary-green);
-            font-size: 1.1rem;
-        }
-
-        /* Checkout Button */
-        .checkout-btn {
-            border-radius: 50px;
-            padding: 12px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
+            padding: 20px;
             transition: all 0.3s;
         }
-
-            .checkout-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 15px rgba(93, 156, 89, 0.2);
-            }
-
-        /* Buttons */
-        .btn-primary {
+        
+        /* Botanical form styles */
+        .form-check-input:checked {
             background-color: var(--primary-green);
             border-color: var(--primary-green);
         }
-
-            .btn-primary:hover,
-            .btn-primary:focus {
-                background-color: var(--dark-green);
-                border-color: var(--dark-green);
-                box-shadow: 0 4px 12px rgba(93, 156, 89, 0.2);
-            }
-
-        /* Text Colors */
+        
+        .form-check-label {
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Floating animations for decorative elements */
+        @@keyframes float-slow {
+            0%, 100% { transform: translateY(0) rotate(-30deg); }
+            50% { transform: translateY(-10px) rotate(-25deg); }
+        }
+        
+        @@keyframes float-slow-right {
+            0%, 100% { transform: translateY(0) rotate(30deg) scaleX(-1); }
+            50% { transform: translateY(-10px) rotate(25deg) scaleX(-1); }
+        }
+        
+        .left-leaf {
+            animation: float-slow 6s infinite ease-in-out;
+        }
+        
+        .right-leaf {
+            animation: float-slow-right 6s infinite ease-in-out;
+        }
+        
+        /* Order summary styles */
+        .rounded-3 {
+            border-radius: 12px !important;
+        }
+        
+        /* Text color overrides */
         .text-primary {
             color: var(--primary-green) !important;
+        }
+        
+        /* Animation for checkout button */
+        @@keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .animate-pulse {
+            animation: pulse 2s ease-in-out infinite;
         }
     </style>
 }

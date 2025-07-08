@@ -4,59 +4,83 @@
     ViewData["Title"] = "Delete Category";
 }
 
-<div class="container py-4">
-    <nav aria-label="breadcrumb" class="mb-4">
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4 botanical-breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-page="/Index">Home</a></li>
-            <li class="breadcrumb-item"><a asp-page="./Index">Categories</a></li>
+            <li class="breadcrumb-item"><a asp-page="/Index" class="text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item"><a asp-page="./Index" class="text-decoration-none">Categories</a></li>
             <li class="breadcrumb-item active" aria-current="page">Delete</li>
         </ol>
     </nav>
 
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow-sm border-0 rounded-4">
-                <div class="card-header bg-white py-3 border-0">
-                    <h1 class="fs-4 mb-0 text-danger">
-                        <i class="bi bi-exclamation-triangle-fill me-2"></i> Delete Category
-                    </h1>
+            <div class="botanical-header text-center mb-5 position-relative">
+                <div class="leaf-decoration left-leaf animate-float"></div>
+                <h1 class="display-5 fw-bold section-title">Delete Category</h1>
+                <p class="section-subtitle">Are you sure you want to remove this category?</p>
+                <div class="leaf-decoration right-leaf animate-float"></div>
+            </div>
+            
+            <div class="card-botanical shadow-botanical animate-fade-in-up">
+                <div class="card-header-botanical">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-wrapper-botanical me-3" style="width: 40px; height: 40px; background: var(--primary-color);">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </div>
+                        <h4 class="mb-0 orchid-title">Confirm Deletion</h4>
+                    </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     @if (Model.HasRelatedOrchids)
                     {
-                        <div class="alert alert-warning">
-                            <i class="bi bi-exclamation-triangle me-2"></i>
-                            <strong>Warning:</strong> This category is used by @Model.RelatedOrchidsCount orchid@(Model.RelatedOrchidsCount != 1 ? "s" : "").
-                            You need to reassign or delete these orchids before removing this category.
+                        <div class="alert-botanical alert-danger-botanical mb-4">
+                            <div class="d-flex">
+                                <div class="icon-wrapper-botanical me-3" style="width: 30px; height: 30px; background: var(--primary-color);">
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                </div>
+                                <div>
+                                    <strong>Warning:</strong> This category is used by @Model.RelatedOrchidsCount orchid@(Model.RelatedOrchidsCount != 1 ? "s" : "").
+                                    You need to reassign or delete these orchids before removing this category.
+                                </div>
+                            </div>
                         </div>
                         
-                        <div class="mt-4">
-                            <a asp-page="./Index" class="btn btn-primary">
-                                <i class="bi bi-arrow-left me-1"></i> Back to List
+                        <div class="mt-4 text-center">
+                            <a asp-page="./Index" class="btn-botanical btn-primary-botanical">
+                                <i class="bi bi-arrow-left me-2"></i> Back to Categories
                             </a>
                         </div>
                     }
                     else
                     {
-                        <h5>Are you sure you want to delete this category?</h5>
-                        <div class="alert alert-danger">
-                            <i class="bi bi-exclamation-triangle me-2"></i>
-                            This action cannot be undone.
+                        <div class="alert-botanical alert-danger-botanical mb-4">
+                            <div class="d-flex">
+                                <div class="icon-wrapper-botanical me-3" style="width: 30px; height: 30px; background: var(--primary-color);">
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                </div>
+                                <div>
+                                    This action cannot be undone. The category will be permanently removed from the system.
+                                </div>
+                            </div>
                         </div>
                         
-                        <dl class="row mt-4">
-                            <dt class="col-sm-3">Name</dt>
-                            <dd class="col-sm-9">@Model.Category.CategoryName</dd>
-                        </dl>
+                        <div class="category-details p-4 bg-light rounded-3 mb-4">
+                            <dl class="row mb-0">
+                                <dt class="col-sm-3">Name</dt>
+                                <dd class="col-sm-9 fw-medium">@Model.Category.CategoryName</dd>
+                            </dl>
+                        </div>
                         
                         <form method="post" class="mt-4">
                             <input type="hidden" asp-for="Category.CategoryId" />
                             <div class="d-flex justify-content-between">
-                                <a asp-page="./Index" class="btn btn-outline-secondary">
-                                    <i class="bi bi-arrow-left me-1"></i> Cancel
+                                <a asp-page="./Index" class="btn-botanical btn-outline-botanical">
+                                    <i class="bi bi-arrow-left me-2"></i> Cancel
                                 </a>
-                                <button type="submit" class="btn btn-danger">
-                                    <i class="bi bi-trash me-1"></i> Delete
+                                <button type="submit" class="btn-botanical" style="background: var(--primary-color); border: none; color: white;">
+                                    <i class="bi bi-trash me-2"></i> Delete Category
                                 </button>
                             </div>
                         </form>
@@ -66,3 +90,55 @@
         </div>
     </div>
 </div>
+
+@section Styles {
+    <style>
+        /* Botanical alert styling */
+        .alert-botanical {
+            border: none;
+            border-radius: 15px;
+            padding: 1.25rem;
+        }
+        
+        .alert-danger-botanical {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--primary-color);
+        }
+        
+        /* Details styling */
+        .category-details {
+            background-color: var(--light-green) !important;
+            border-radius: 15px !important;
+        }
+        
+        .fw-medium {
+            font-weight: 500;
+        }
+        
+        /* Floating animation */
+        @@keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .animate-float {
+            animation: float 6s infinite ease-in-out;
+        }
+        
+        /* Fade in animation */
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+    </style>
+}

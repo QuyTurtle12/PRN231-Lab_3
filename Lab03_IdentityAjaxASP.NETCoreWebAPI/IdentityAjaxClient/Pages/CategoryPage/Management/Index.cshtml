@@ -4,30 +4,30 @@
     ViewData["Title"] = "Category Management";
 }
 
-<div class="container-fluid px-4">
-    <!-- Header Section with Glassmorphism -->
-    <div class="card bg-light bg-opacity-75 shadow-sm border-0 mb-4">
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h1 class="display-6 mb-1">Category Management</h1>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item"><a asp-page="/Index">Home</a></li>
-                            <li class="breadcrumb-item active">Category Management</li>
-                        </ol>
-                    </nav>
-                </div>
-                <a asp-page="Create" class="btn btn-primary btn-lg">
-                    <i class="bi bi-plus-lg me-2"></i>New Category
-                </a>
-            </div>
+<div class="container py-5">
+    <!-- Header Section with Botanical Theme -->
+    <div class="botanical-header text-center mb-5 position-relative">
+        <div class="leaf-decoration left-leaf animate-float"></div>
+        <h1 class="display-5 fw-bold section-title">Category Management</h1>
+        <p class="section-subtitle">Organize your orchid collection by categories</p>
+        <div class="leaf-decoration right-leaf animate-float"></div>
+        
+        <div class="d-flex align-items-center justify-content-center mt-4">
+            <div class="divider-leaf"></div>
+            <i class="bi bi-flower3 text-primary mx-3"></i>
+            <div class="divider-leaf"></div>
         </div>
+    </div>
+
+    <div class="d-flex justify-content-end mb-4">
+        <a asp-page="Create" class="btn-botanical btn-primary-botanical">
+            <i class="bi bi-plus-lg me-2"></i>New Category
+        </a>
     </div>
 
     @if (!string.IsNullOrEmpty(Model.StatusMessage))
     {
-        <div class="alert @(Model.StatusMessage.StartsWith("Error") ? "alert-danger" : "alert-success") alert-dismissible fade show shadow-sm" role="alert">
+        <div class="alert-botanical @(Model.StatusMessage.StartsWith("Error") ? "alert-danger-botanical" : "alert-success-botanical") mb-4">
             <i class="bi @(Model.StatusMessage.StartsWith("Error") ? "bi-exclamation-triangle" : "bi-check-circle") me-2"></i>
             @Model.StatusMessage
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -38,13 +38,14 @@
     <div class="row g-4">
         <!-- Stats Card -->
         <div class="col-md-4 col-xl-3">
-            <div class="card border-0 shadow-sm h-100 bg-primary bg-opacity-10 text-primary">
-                <div class="card-body d-flex flex-column">
-                    <div class="d-flex align-items-center mb-3">
-                        <div>
-                            <div class="text-muted">Total Categories</div>
-                            <h3 class="mb-0">@Model.Categories.TotalCount</h3>
-                        </div>
+            <div class="card-botanical shadow-botanical h-100 bg-botanical-light">
+                <div class="card-body d-flex flex-column p-4">
+                    <div class="icon-wrapper-botanical mb-3 mx-0" style="background: var(--primary-green);">
+                        <i class="bi bi-folder2"></i>
+                    </div>
+                    <div class="mb-3">
+                        <div class="text-muted">Total Categories</div>
+                        <h3 class="mb-0 orchid-title">@Model.Categories.TotalCount</h3>
                     </div>
                     <p class="text-muted mt-auto">Organize your orchids with easy-to-manage categories</p>
                 </div>
@@ -56,25 +57,25 @@
             @foreach (var category in Model.Categories.Items)
             {
                 <div class="col-md-4 col-xl-3">
-                    <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body">
+                    <div class="card-botanical shadow-botanical h-100 hover-lift">
+                        <div class="card-body p-4">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="card-title fw-bold">@category.CategoryName</h5>
-                                <span class="badge bg-primary rounded-pill">
+                                <h5 class="card-title orchid-title">@category.CategoryName</h5>
+                                <span class="badge-botanical badge-natural">
                                     @(category.Orchids?.Count ?? 0) orchids
                                 </span>
                             </div>
                         </div>
-                        <div class="card-footer bg-transparent border-0 pt-0">
-                            <div class="btn-group w-100" role="group">
+                        <div class="card-footer bg-transparent border-0 pt-0 p-4">
+                            <div class="d-flex gap-2 w-100">
                                 <a asp-page="./Edit"
                                    asp-route-id="@category.CategoryId"
-                                   class="btn btn-outline-primary">
+                                   class="btn-botanical btn-outline-botanical flex-grow-1">
                                     <i class="bi bi-pencil"></i> Edit
                                 </a>
                                 <a asp-page="./Delete"
                                    asp-route-id="@category.CategoryId"
-                                   class="btn btn-outline-danger">
+                                   class="btn-botanical btn-outline-botanical flex-grow-1">
                                     <i class="bi bi-trash"></i> Delete
                                 </a>
                             </div>
@@ -88,13 +89,15 @@
         @if (Model.Categories?.Items == null || !Model.Categories.Items.Any())
         {
             <div class="col-12">
-                <div class="card border-0 shadow-sm">
+                <div class="card-botanical shadow-botanical">
                     <div class="card-body text-center py-5">
                         <div class="py-5">
-                            <i class="bi bi-folder2-open display-1 text-muted mb-4 opacity-50"></i>
-                            <h3>No Categories Found</h3>
+                            <div class="icon-wrapper-botanical mx-auto mb-4" style="background: var(--light-green); color: var(--primary-green);">
+                                <i class="bi bi-folder2-open"></i>
+                            </div>
+                            <h3 class="orchid-title">No Categories Found</h3>
                             <p class="text-muted mb-4">Start organizing your orchids by creating your first category</p>
-                            <a asp-page="Create" class="btn btn-primary btn-lg px-4">
+                            <a asp-page="Create" class="btn-botanical btn-primary-botanical">
                                 <i class="bi bi-plus-circle me-2"></i> Add New Category
                             </a>
                         </div>
@@ -107,9 +110,9 @@
     <!-- Pagination -->
     @if (Model.Categories?.TotalPages > 1)
     {
-        <div class="d-flex justify-content-center mt-4">
+        <div class="d-flex justify-content-center mt-5">
             <nav aria-label="Page navigation">
-                <ul class="pagination pagination-lg">
+                <ul class="pagination pagination-botanical">
                     <li class="page-item @(Model.Categories.PageNumber == 1 ? "disabled" : "")">
                         <a class="page-link" asp-page="./Index" asp-route-pageIndex="1" aria-label="First">
                             <i class="bi bi-chevron-double-left"></i>
@@ -152,36 +155,67 @@
 
 @section Styles {
     <style>
-        /* Card hover effects */
-        .card {
+        /* Botanical pagination styling */
+        .pagination-botanical .page-item .page-link {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            border: none;
+            background-color: var(--light-green);
+            color: var(--primary-green);
             transition: all 0.3s ease;
-            border-radius: 12px;
-            overflow: hidden;
         }
-
-            .card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 10px 20px rgba(0,0,0,0.12) !important;
-            }
-
-        /* Button styling */
-        .btn-group .btn {
-            border-width: 1.5px;
-            padding: 0.5rem;
-            font-weight: 500;
+        
+        .pagination-botanical .page-item.active .page-link {
+            background-color: var(--primary-green);
+            color: white;
         }
-
-        /* Badge styling */
-        .badge {
-            font-weight: 500;
-            padding: 0.5em 0.8em;
+        
+        .pagination-botanical .page-item .page-link:hover:not(.disabled) {
+            background-color: var(--primary-green);
+            color: white;
+            transform: translateY(-3px);
         }
-
-        /* Pagination styling */
+        
+        .pagination-botanical .page-item.disabled .page-link {
+            background-color: #f8f9fa;
+            color: #adb5bd;
+        }
+        
+        /* Animation for hover effect */
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        /* Floating animation */
+        @@keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .animate-float {
+            animation: float 6s infinite ease-in-out;
+        }
+        
+        /* Add some padding to badge for better appearance */
+        .badge-botanical {
+            padding: 0.5em 1em;
+        }
+        
+        /* Fix pagination for the theme */
         .pagination {
             --bs-pagination-border-radius: 50%;
         }
-
+        
         .page-link {
             margin: 0 3px;
             width: 40px;
@@ -190,11 +224,20 @@
             align-items: center;
             justify-content: center;
             border-radius: 50% !important;
+            border: none;
+            background-color: var(--light-green);
+            color: var(--primary-green);
+            transition: all 0.3s ease;
         }
-
-        /* Stats card */
-        .bg-primary.bg-opacity-10 {
-            background-color: rgba(var(--bs-primary-rgb), 0.1) !important;
+        
+        .page-item.active .page-link {
+            background-color: var(--primary-green);
+            color: white;
+        }
+        
+        .page-link:hover:not(.disabled) {
+            background-color: var(--dark-green);
+            color: white;
         }
     </style>
 }
