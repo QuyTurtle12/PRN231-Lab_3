@@ -111,7 +111,6 @@
                                 <li class="nav-item me-3">
                                     <a class="nav-link cart-link" asp-area="" asp-page="/CartPage/Index">
                                         <i class="bi bi-cart3"></i>
-                                        <span class="cart-badge">0</span>
                                     </a>
                                 </li>
                             }
@@ -207,18 +206,7 @@
 
                     return toast;
                 });
-
-                // Update cart badge if cart exists in session
-                try {
-                    const cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
-                    const cartBadge = document.querySelector('.cart-badge');
-                    if (cartBadge) {
-                        cartBadge.textContent = cart.length || '0';
-                    }
-                } catch (e) {
-                    console.error('Error updating cart badge:', e);
-                }
-        });
+            });
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)
