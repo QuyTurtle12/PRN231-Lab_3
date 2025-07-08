@@ -129,10 +129,10 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>@(item.Price?.ToString("C", new System.Globalization.CultureInfo("en-US")) ?? "$0.00")</td>
+                                            <td>@(item.Orchid.Price?.ToString("C", new System.Globalization.CultureInfo("en-US")) ?? "$0.00")</td>
                                             <td class="text-center">@(item.Quantity ?? 0)</td>
                                             <td class="text-end fw-bold">
-                                                @((item.Price * item.Quantity)?.ToString("C", new System.Globalization.CultureInfo("en-US")) ?? "$0.00")
+                                                @((item.Orchid.Price * item.Quantity)?.ToString("C", new System.Globalization.CultureInfo("en-US")) ?? "$0.00")
                                             </td>
                                         </tr>
                                     }

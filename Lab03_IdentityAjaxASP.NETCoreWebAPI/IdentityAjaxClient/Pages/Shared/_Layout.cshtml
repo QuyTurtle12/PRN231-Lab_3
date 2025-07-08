@@ -193,23 +193,31 @@
     <script src="~/js/site-toasts.js" asp-append-version="true"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize all toasts from the partial
-            var toastElList = [].slice.call(document.querySelectorAll('.toast'));
-            var toastList = toastElList.map(function (toastEl) {
-                return new bootstrap.Toast(toastEl, { delay: 5000 }).show();
-            });
-            
-            // Update cart badge if cart exists in session
-            try {
-                const cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
-                const cartBadge = document.querySelector('.cart-badge');
-                if (cartBadge) {
-                    cartBadge.textContent = cart.length || '0';
+            document.addEventListener('DOMContentLoaded', function() {
+                // Initialize toasts from the partial but only show those with content
+                var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+                var toastList = toastElList.map(function (toastEl) {
+                    var toast = new bootstrap.Toast(toastEl, { delay: 5000 });
+
+                    // Only show toasts that have content in their body
+                    var toastBody = toastEl.querySelector('.toast-body');
+                    if (toastBody && toastBody.textContent.trim() !== '') {
+                        toast.show();
+                    }
+
+                    return toast;
+                });
+
+                // Update cart badge if cart exists in session
+                try {
+                    const cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
+                    const cartBadge = document.querySelector('.cart-badge');
+                    if (cartBadge) {
+                        cartBadge.textContent = cart.length || '0';
+                    }
+                } catch (e) {
+                    console.error('Error updating cart badge:', e);
                 }
-            } catch (e) {
-                console.error('Error updating cart badge:', e);
-            }
         });
     </script>
 
