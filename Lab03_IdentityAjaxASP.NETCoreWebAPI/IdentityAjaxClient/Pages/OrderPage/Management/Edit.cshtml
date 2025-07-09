@@ -88,7 +88,7 @@
                             <select asp-for="OrderStatus" class="form-select form-control-botanical form-select-lg" required>
                                 <option value="Processing">Processing</option>
                                 <option value="Shipping">Shipping</option>
-                                <option value="Completed">Completed</option>
+                                <option value="Delivered">Delivered</option>
                                 <option value="Cancelled">Cancelled</option>
                             </select>
                             <div class="form-text text-muted mt-2">
@@ -96,7 +96,7 @@
                                 @{
                                     var statusClass = Model.Order?.OrderStatus?.ToLower() switch
                                     {
-                                        "completed" => "badge-botanical badge-success",
+                                        "delivered" => "badge-botanical badge-success",
                                         "processing" => "badge-botanical badge-warning",
                                         "shipping" => "badge-botanical badge-info",
                                         "cancelled" => "badge-botanical badge-danger",

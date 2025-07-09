@@ -32,28 +32,28 @@
                     <form method="post">
                         <div class="mb-4">
                             <div class="form-floating">
-                                <input asp-for="RegisterDTO.AccountName" class="form-control form-control-lg register-input" placeholder="Account Name" />
+                                <input asp-for="RegisterDTO.AccountName" class="form-control form-control-lg register-input" placeholder="Account Name" required />
                                 <label asp-for="RegisterDTO.AccountName" class="form-label"><i class="bi bi-person me-2"></i>Account Name</label>
                             </div>
                             <span asp-validation-for="RegisterDTO.AccountName" class="text-danger"></span>
                         </div>
                         <div class="mb-4">
                             <div class="form-floating">
-                                <input asp-for="RegisterDTO.Email" class="form-control form-control-lg register-input" placeholder="Email" />
+                                <input asp-for="RegisterDTO.Email" class="form-control form-control-lg register-input" placeholder="Email" required />
                                 <label asp-for="RegisterDTO.Email" class="form-label"><i class="bi bi-envelope me-2"></i>Email</label>
                             </div>
                             <span asp-validation-for="RegisterDTO.Email" class="text-danger"></span>
                         </div>
                         <div class="mb-4">
                             <div class="form-floating">
-                                <input asp-for="RegisterDTO.Password" class="form-control form-control-lg register-input" type="password" placeholder="Password" />
+                                <input asp-for="RegisterDTO.Password" class="form-control form-control-lg register-input" type="password" placeholder="Password" required />
                                 <label asp-for="RegisterDTO.Password" class="form-label"><i class="bi bi-lock me-2"></i>Password</label>
                             </div>
                             <span asp-validation-for="RegisterDTO.Password" class="text-danger"></span>
                         </div>
                         <div class="mb-4">
                             <div class="form-floating">
-                                <input asp-for="RegisterDTO.ConfirmPassword" class="form-control form-control-lg register-input" type="password" placeholder="Confirm Password" />
+                                <input asp-for="RegisterDTO.ConfirmPassword" class="form-control form-control-lg register-input" type="password" placeholder="Confirm Password" required />
                                 <label asp-for="RegisterDTO.ConfirmPassword" class="form-label"><i class="bi bi-shield-lock me-2"></i>Confirm Password</label>
                             </div>
                             <span asp-validation-for="RegisterDTO.ConfirmPassword" class="text-danger"></span>

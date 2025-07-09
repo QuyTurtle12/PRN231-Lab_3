@@ -41,7 +41,7 @@
                             <label asp-for="Account.AccountName" class="form-label orchid-form-label">Full Name</label>
                             <div class="input-group">
                                 <span class="input-group-text botanical-input-icon"><i class="bi bi-person"></i></span>
-                                <input asp-for="Account.AccountName" class="form-control form-control-botanical" placeholder="Enter user's full name" />
+                                <input asp-for="Account.AccountName" class="form-control form-control-botanical" placeholder="Enter user's full name" required />
                             </div>
                             <span asp-validation-for="Account.AccountName" class="text-danger"></span>
                         </div>
@@ -50,7 +50,7 @@
                             <label asp-for="Account.Email" class="form-label orchid-form-label">Email Address</label>
                             <div class="input-group">
                                 <span class="input-group-text botanical-input-icon"><i class="bi bi-envelope"></i></span>
-                                <input asp-for="Account.Email" class="form-control form-control-botanical" placeholder="Enter email address" />
+                                <input asp-for="Account.Email" class="form-control form-control-botanical" placeholder="Enter email address" required/>
                             </div>
                             <span asp-validation-for="Account.Email" class="text-danger"></span>
                         </div>
@@ -59,7 +59,7 @@
                             <label asp-for="Account.Password" class="form-label orchid-form-label">Password</label>
                             <div class="input-group">
                                 <span class="input-group-text botanical-input-icon"><i class="bi bi-lock"></i></span>
-                                <input asp-for="Account.Password" class="form-control form-control-botanical" placeholder="Enter password" />
+                                <input asp-for="Account.Password" class="form-control form-control-botanical" placeholder="Enter password" required />
                             </div>
                             <span asp-validation-for="Account.Password" class="text-danger"></span>
                         </div>
@@ -68,8 +68,7 @@
                             <label asp-for="Account.RoleId" class="form-label orchid-form-label">User Role</label>
                             <div class="input-group">
                                 <span class="input-group-text botanical-input-icon"><i class="bi bi-shield"></i></span>
-                                <select asp-for="Account.RoleId" class="form-select form-control-botanical" asp-items="Model.RoleList">
-                                    <option value="">-- Select Role --</option>
+                                <select asp-for="Account.RoleId" class="form-select form-control-botanical" asp-items="Model.RoleList" required>
                                 </select>
                             </div>
                             <span asp-validation-for="Account.RoleId" class="text-danger"></span>

@@ -1,4 +1,5 @@
-﻿using BusinessObjects;
+﻿using System.Threading.Tasks;
+using BusinessObjects;
 using DataAccess.Constant.Enum;
 using DataAccess.DTO.Account;
 using DataAccess.Interface;
@@ -102,8 +103,30 @@ namespace Repositories.Repository
 
             return result;
         }
+
+        private async Task<bool> IsExistingEmail(string email)
+        {
+            try
+            {
+                Account? account = await _uow.GetDAO<Account>()
+                    .Entities
+                    .FirstOrDefaultAsync(a => a.Email == email);
+
+                return account == null;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public async Task CreateAccount(CreateAccountDTO account)
         {
+            if (IsExistingEmail(account.Email!).Result)
+            {
+                throw new InvalidOperationException($"Email {account.Email} already exists.");
+            }
+
             // Add DTO data to Business Object
             Account newAccount = new Account
             {
