@@ -73,7 +73,7 @@ namespace Repositories.Repository
                 query = query.Where(o => o.IsNatural == isNatural.Value);
             }
 
-            query.OrderByDescending(o => o.OrchidName);
+            query = query.OrderBy(o => o.OrchidName);
 
             // Convert query to paginated list
             PaginatedList<Orchid> result = await _unitOfWork.GetDAO<Orchid>().GetPagging(query, pageIndex, pageNumber);

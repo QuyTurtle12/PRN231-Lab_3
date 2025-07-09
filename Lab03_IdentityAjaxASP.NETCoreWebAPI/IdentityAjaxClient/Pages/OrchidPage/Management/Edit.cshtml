@@ -41,8 +41,7 @@
 
                 <div class="mb-3">
                     <label asp-for="Orchid.CategoryId" class="form-label">Category</label>
-                    <select asp-for="Orchid.CategoryId" class="form-select" asp-items="Model.CategoryList">
-                        <option value="">-- Select Category --</option>
+                    <select asp-for="Orchid.CategoryId" class="form-select" asp-items="Model.CategoryList" required>
                     </select>
                     <span asp-validation-for="Orchid.CategoryId" class="text-danger"></span>
                 </div>
@@ -51,15 +50,14 @@
                     <label asp-for="Orchid.Price" class="form-label">Price</label>
                     <div class="input-group">
                         <span class="input-group-text">$</span>
-                        <input asp-for="Orchid.Price" class="form-control" type="number" step="0.01" />
+                        <input asp-for="Orchid.Price" class="form-control" type="number" step="0.01" required/>
                     </div>
                     <span asp-validation-for="Orchid.Price" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
                     <label asp-for="Orchid.IsNatural" class="form-label">Type</label>
-                    <select asp-for="Orchid.IsNatural" class="form-select">
-                        <option value="">-- Select Type --</option>
+                    <select asp-for="Orchid.IsNatural" class="form-select" required>
                         <option value="true">Natural</option>
                         <option value="false">Hybrid</option>
                     </select>

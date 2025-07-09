@@ -30,6 +30,12 @@ namespace IdentityAjaxClient.Pages.OrchidPage.Management
         {
             try
             {
+                // Initialize Orchid with default values
+                Orchid = new CreateOrchidDTO
+                {
+                    Price = 1m // Set initial price to 1
+                };
+
                 // Fetch categories for dropdown
                 var categories = await _httpClient.GetFromJsonAsync<PaginationDTO<Category>>("categories");
                 if (categories != null)
