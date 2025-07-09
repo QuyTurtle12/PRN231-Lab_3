@@ -49,13 +49,10 @@ namespace Lab03_IdentityAjaxASP.NETCoreWebAPI.Controllers
 
             try
             {
-                // Hash the password
-                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
-
                 CreateAccountDTO account = new CreateAccountDTO
                 {
                     Email = model.Email,
-                    Password = hashedPassword, // Store hashed password
+                    Password = model.Password,
                     AccountName = model.AccountName ?? model.Email,
                     RoleId = model.RoleId
                 };

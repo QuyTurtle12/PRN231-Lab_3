@@ -112,7 +112,7 @@ namespace Repositories.Repository
                     .Entities
                     .FirstOrDefaultAsync(a => a.Email == email);
 
-                return account == null;
+                return account != null;
             }
             catch
             {
@@ -127,12 +127,15 @@ namespace Repositories.Repository
                 throw new InvalidOperationException($"Email {account.Email} already exists.");
             }
 
+            // Hash the password using BCrypt
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(account.Password);
+
             // Add DTO data to Business Object
             Account newAccount = new Account
             {
                 AccountName = account.AccountName,
                 Email = account.Email,
-                Password = account.Password,
+                Password = hashedPassword,
                 RoleId = account.RoleId
             };
 
